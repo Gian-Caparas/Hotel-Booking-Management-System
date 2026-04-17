@@ -1,5 +1,5 @@
 package com.hotel.wildcat_hotel.controller;
 
-public class AdminController {
+public class AuthController {
     //SHYYEB
 }

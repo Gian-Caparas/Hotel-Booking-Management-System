@@ -1,6 +1,6 @@
 package com.hotel.wildcat_hotel;
 
-import com.hotel.wildcat_hotel.database.DBConnection; // Import your connection utility
+import com.hotel.wildcat_hotel.database.DBConnection; // For connection utility
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -32,3 +32,5 @@ public class MainApp extends Application {
         launch();
     }
 }
+
+//RAY AND GIAN
