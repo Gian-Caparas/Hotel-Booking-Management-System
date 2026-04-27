@@ -31,7 +31,8 @@ If you add new .fxml files, please ensure they are placed in the appropriate sub
 If you encounter a Fatal error compiling: invalid target release: 21, ensure your JAVA_HOME environment variable is pointing to JDK 21 and not an older version (like Java 8).
 
 USE-CASE DIAGRAM:
-<img width="1074" height="600" alt="image" src="https://github.com/user-attachments/assets/5e590872-405a-4995-b1b1-973279bace72" />
+<img width="725" height="671" alt="use-case_diagram drawio (1)" src="https://github.com/user-attachments/assets/cc786861-5770-4024-8fe6-809a3994da52" />
 
 CASE DIAGRAM:
-<img width="631" height="672" alt="image" src="https://github.com/user-attachments/assets/9d6ef1ef-a0c2-40b6-861f-f9fe33d0edca" />
+<img width="722" height="861" alt="Case_Diagram drawio" src="https://github.com/user-attachments/assets/60aa557f-3230-4be4-a45f-5c46e7724efe" />
+
