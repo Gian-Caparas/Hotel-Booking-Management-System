@@ -6,17 +6,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.hotel</groupId>
-    <artifactId>HotelFX</artifactId>
+    <artifactId>WildCat_Hotel</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <javafx.version>21.0.2</javafx.version>
+        <hibernate.version>6.4.4.Final</hibernate.version>
+        <mysql.version>8.3.0</mysql.version>
     </properties>
 
     <dependencies>
-        <!-- JavaFX -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -28,21 +30,18 @@
             <version>${javafx.version}</version>
         </dependency>
 
-        <!-- Hibernate ORM -->
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>6.4.4.Final</version>
+            <version>${hibernate.version}</version>
         </dependency>
 
-        <!-- MySQL Connector -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>8.3.0</version>
+            <version>${mysql.version}</version>
         </dependency>
 
-        <!-- JFoenix (Material Design for JavaFX) -->
         <dependency>
             <groupId>com.jfoenix</groupId>
             <artifactId>jfoenix</artifactId>
@@ -53,11 +52,27 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>project.Main</mainClass>
+                    <mainClass>com.hotel.wildcat_hotel.project.Main</mainClass>
+                    <options>
+                        <option>--add-opens</option>
+                        <option>java.base/java.lang=ALL-UNNAMED</option>
+                        <option>--add-opens</option>
+                        <option>java.base/java.lang.reflect=ALL-UNNAMED</option>
+                    </options>
                 </configuration>
             </plugin>
         </plugins>

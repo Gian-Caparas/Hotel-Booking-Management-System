@@ -1,5 +1,6 @@
 package com.hotel.wildcat_hotel.hotel;
 
-public class RoomFees {
-    
+
+public interface RoomFees {
+    double CustomerRoomFees(Room room);
 }

@@ -4,19 +4,20 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-public class Main {
+public class Main extends Application {
+
     @Override
     public void start(Stage stage) throws Exception {
+        // Ensure Paths.LOGINVIEW points to the correct string path
         Parent root = FXMLLoader.load(getClass().getResource(Paths.LOGINVIEW));
-        Scene scene = new Scene(root);
-        stage.initStyle(StageStyle.UNDECORATED);
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/img/launcher_icon.png")));
+        
+        // Explicitly set the width and height from your FXML (480x420)
+        Scene scene = new Scene(root, 480, 420); 
+        
         stage.setScene(scene);
-        stage.setTitle("Hotel Reservation System");
+        stage.setTitle("WildCat Hotel Reservation System");
         stage.show();
     }
 
