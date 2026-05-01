@@ -3,6 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
+
+
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.hotel.wildcat_hotel.users.UsersController"
             prefWidth="1200" prefHeight="750"
