@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Button?>
+
+<VBox
+    alignment="TOP_CENTER"
+    prefHeight="700"
+    prefWidth="960"
+    spacing="25"
+    style="-fx-background-color: #1e1e38; -fx-padding: 50px;"
+    xmlns="http://javafx.com/javafx/17"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.hotel.wildcat_hotel.checkin.CheckInController">
+
+    <children>
+
+        <!-- HEADER -->
+        <VBox alignment="CENTER" spacing="5">
+            <children>
+                <Label
+                    text="Guest Check-In"
+                    style="-fx-text-fill: #e2b96f; -fx-font-size: 32; -fx-font-weight: bold;" />
+                <Label
+                    text="Register a new guest for check-in"
+                    style="-fx-text-fill: #888899; -fx-font-size: 14;" />
+            </children>
+        </VBox>
+
+        <!-- FORM GRID -->
+        <GridPane alignment="CENTER" hgap="30" vgap="20">
+
+            <columnConstraints>
+                <ColumnConstraints prefWidth="320"/>
+                <ColumnConstraints prefWidth="320"/>
+            </columnConstraints>
+
+            <children>
+
+                <!-- Row 0 -->
+                <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <children>
+                        <Label text="First Name" style="-fx-text-fill: #cccccc;" />
+                        <TextField fx:id="firstNameField" promptText="Enter first name" prefHeight="40"/>
+                    </children>
+                </VBox>
+
+                <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <children>
+                        <Label text="Last Name" style="-fx-text-fill: #cccccc;" />
+                        <TextField fx:id="lastNameField" promptText="Enter last name" prefHeight="40"/>
+                    </children>
+                </VBox>
+
+                <!-- Row 1 -->
+                <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <children>
+                        <Label text="Email Address" style="-fx-text-fill: #cccccc;" />
+                        <TextField fx:id="emailField" promptText="name@example.com" prefHeight="40"/>
+                    </children>
+                </VBox>
+
+                <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <children>
+                        <Label text="Phone Number" style="-fx-text-fill: #cccccc;" />
+                        <TextField fx:id="phoneField" promptText="+63 9XX XXX XXXX" prefHeight="40"/>
+                    </children>
+                </VBox>
+
+                <!-- Row 2 -->
+                <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                    <children>
+                        <Label text="City" style="-fx-text-fill: #cccccc;" />
+                        <TextField fx:id="cityField" promptText="Enter city" prefHeight="40"/>
+                    </children>
+                </VBox>
+
+                <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <children>
+                        <Label text="Nationality" style="-fx-text-fill: #cccccc;" />
+                        <TextField fx:id="nationalityField" promptText="Enter nationality" prefHeight="40"/>
+                    </children>
+                </VBox>
+
+                <!-- Row 3 -->
+                <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                    <children>
+                        <Label text="Check-In Date" style="-fx-text-fill: #cccccc;" />
+                        <DatePicker fx:id="checkInDatePicker" promptText="Pick date" prefHeight="40"/>
+                    </children>
+                </VBox>
+
+                <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                    <children>
+                        <Label text="Check-Out Date" style="-fx-text-fill: #cccccc;" />
+                        <DatePicker fx:id="checkOutDatePicker" promptText="Pick date" prefHeight="40"/>
+                    </children>
+                </VBox>
+
+            </children>
+        </GridPane>
+
+        <!-- BUTTON -->
+        <Region prefHeight="10"/>
+
+        <Button
+            fx:id="checkInButton"
+            text="Complete Check-In"
+            onAction="#handleCheckIn"
+            prefWidth="300"
+            prefHeight="45"
+            style="-fx-background-color: #e2b96f;
+                   -fx-text-fill: #1e1e38;
+                   -fx-font-weight: bold;
+                   -fx-font-size: 16;
+                   -fx-cursor: hand;" />
+
+    </children>
+
+</VBox>
