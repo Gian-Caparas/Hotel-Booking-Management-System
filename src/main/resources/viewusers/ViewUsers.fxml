@@ -8,11 +8,8 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="600" prefWidth="900.0" spacing="15" 
-      style="-fx-background-color: #1e1e38;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.hotel.wildcat_hotel.viewusers.ViewUsersController">
+<VBox alignment="CENTER" prefHeight="600" prefWidth="900.0" spacing="15" style="-fx-background-color: #1e1e38;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hotel.wildcat_hotel.viewusers.ViewUsersController">
 
     <!-- TITLE -->
     <Label style="-fx-text-fill: #f5c16c; -fx-font-size: 24px; -fx-font-weight: bold;" text="WildCat Hotel: View Users" />
@@ -24,10 +21,10 @@
 
 
                 <!-- SEARCH TEXTFIELD -->
-                <TextField fx:id="txtSearch" prefHeight="38" promptText="Enter username..." style="-fx-background-color: #2a2a4a;                                   -fx-text-fill: white;                                   -fx-prompt-text-fill: #666688;                                   -fx-border-color: #4444aa;                                   -fx-border-radius: 6;                                   -fx-background-radius: 6;                                   -fx-font-size: 14;" HBox.hgrow="ALWAYS" />
+                <TextField fx:id="usernamefield" prefHeight="38" promptText="Enter username..." style="-fx-background-color: #2a2a4a;                                   -fx-text-fill: white;                                   -fx-prompt-text-fill: #666688;                                   -fx-border-color: #4444aa;                                   -fx-border-radius: 6;                                   -fx-background-radius: 6;                                   -fx-font-size: 14;" HBox.hgrow="ALWAYS" />
 
                 <!-- SEARCH BUTTON -->
-                <Button fx:id="btnSearch" mnemonicParsing="false" prefHeight="38" prefWidth="120" style="-fx-background-color: #e2b96f;                                -fx-text-fill: #1a1a2e;                                -fx-font-size: 14;                                -fx-font-weight: bold;                                -fx-background-radius: 8;                                -fx-cursor: hand;" text="Search">
+                <Button fx:id="searchButton" mnemonicParsing="false" onAction="#handleSearchUser" prefHeight="38" prefWidth="120" style="-fx-background-color: #e2b96f;                                -fx-text-fill: #1a1a2e;                                -fx-font-size: 14;                                -fx-font-weight: bold;                                -fx-background-radius: 8;                                -fx-cursor: hand;" text="Search">
 
                     <HBox.margin>
                         <Insets left="5" />
@@ -41,11 +38,7 @@
 
 
     <!-- TABLE -->
-    <TableView fx:id="usersTable" maxWidth="-Infinity" prefHeight="350.0" prefWidth="750.0"
-                    style="-fx-background-color: #2a2a4a;                          
-                           -fx-control-inner-background: #2a2a4a;                           
-                           -fx-table-cell-border-color: transparent;                           
-                           -fx-text-background-color: dark-gray;">
+    <TableView fx:id="usersTable" maxWidth="-Infinity" prefHeight="350.0" prefWidth="750.0" style="-fx-background-color: #2a2a4a;                                                      -fx-control-inner-background: #2a2a4a;                                                       -fx-table-cell-border-color: transparent;                                                       -fx-text-background-color: dark-gray;">
         <columns>
             <TableColumn fx:id="userIdColumn" prefWidth="100.0" text="User ID" />
             <TableColumn fx:id="usernameColumn" prefWidth="120.0" text="Username" />

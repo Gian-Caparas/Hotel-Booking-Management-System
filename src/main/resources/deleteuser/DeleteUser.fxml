@@ -24,10 +24,10 @@
             <children>
 
                 <!-- SEARCH TEXTFIELD -->
-                <TextField fx:id="txtSearch" prefHeight="38" promptText="Enter username..." style="-fx-background-color: #2a2a4a;                                   -fx-text-fill: white;                                   -fx-prompt-text-fill: #666688;                                   -fx-border-color: #4444aa;                                   -fx-border-radius: 6;                                   -fx-background-radius: 6;                                   -fx-font-size: 14;" HBox.hgrow="ALWAYS" />
+                <TextField fx:id="usernamefield" prefHeight="38" promptText="Enter username..." style="-fx-background-color: #2a2a4a;                                   -fx-text-fill: white;                                   -fx-prompt-text-fill: #666688;                                   -fx-border-color: #4444aa;                                   -fx-border-radius: 6;                                   -fx-background-radius: 6;                                   -fx-font-size: 14;" HBox.hgrow="ALWAYS" />
 
                 <!-- SEARCH BUTTON -->
-                <Button fx:id="btnSearch" mnemonicParsing="false" prefHeight="38" prefWidth="120" style="-fx-background-color: #e2b96f;                                -fx-text-fill: #1a1a2e;                                -fx-font-size: 14;                                -fx-font-weight: bold;                                -fx-background-radius: 8;                                -fx-cursor: hand;" text="Search">
+                <Button fx:id="searchButton" mnemonicParsing="false" onAction="#handleSearchUser" prefHeight="38" prefWidth="120" style="-fx-background-color: #e2b96f;                                -fx-text-fill: #1a1a2e;                                -fx-font-size: 14;                                -fx-font-weight: bold;                                -fx-background-radius: 8;                                -fx-cursor: hand;" text="Search">
 
                     <HBox.margin>
                         <Insets left="5" />
@@ -57,7 +57,7 @@
         </TableView>
 
         <!-- REMOVE BUTTON -->
-        <Button mnemonicParsing="false" prefHeight="38" prefWidth="120" style="-fx-background-color: #ff4d4d;                        -fx-text-fill: white;                        -fx-font-size: 15;                        -fx-font-weight: bold;                        -fx-background-radius: 8;                        -fx-cursor: hand;" text="Remove" />
+        <Button fx:id="deleteuser" mnemonicParsing="false" onAction="#handleDeleteUser" prefHeight="38" prefWidth="120" style="-fx-background-color: #ff4d4d;                        -fx-text-fill: white;                        -fx-font-size: 15;                        -fx-font-weight: bold;                        -fx-background-radius: 8;                        -fx-cursor: hand;" text="Remove" />
 
     </children>
 
