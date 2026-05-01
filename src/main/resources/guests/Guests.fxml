@@ -8,7 +8,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" prefHeight="700" prefWidth="960" spacing="16" style="-fx-background-color: #1e1e38; -fx-padding: 60;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hotel.wildcat_hotel.guests.GuestsController">
 
@@ -17,24 +16,16 @@
         <!-- TITLE -->
         <Label style="-fx-text-fill: #e2b96f;                       -fx-font-size: 28;                       -fx-font-weight: bold;" text="View Guests" />
 
-        <!-- SEARCH SECTION -->
-        <HBox alignment="CENTER_LEFT" maxWidth="686.0" prefHeight="38.0" prefWidth="686.0" spacing="15">
+        <!-- SEARCH BAR -->
+    <HBox alignment="CENTER_LEFT" maxWidth="749.0" prefHeight="38.0" prefWidth="749.0" spacing="15">
 
             <children>
 
-                <Label text="Search:" textFill="WHITE">
-
-                    <font>
-                        <Font size="16" />
-                    </font>
-
-                </Label>
-
                 <!-- SEARCH TEXTFIELD -->
-                <TextField prefHeight="38" promptText="Enter username..." style="-fx-background-color: #2a2a4a;                                   -fx-text-fill: white;                                   -fx-prompt-text-fill: #666688;                                   -fx-border-color: #4444aa;                                   -fx-border-radius: 6;                                   -fx-background-radius: 6;                                   -fx-font-size: 14;" HBox.hgrow="ALWAYS" />
+                <TextField fx:id="txtSearch" prefHeight="38" promptText="Enter username..." style="-fx-background-color: #2a2a4a;                                   -fx-text-fill: white;                                   -fx-prompt-text-fill: #666688;                                   -fx-border-color: #4444aa;                                   -fx-border-radius: 6;                                   -fx-background-radius: 6;                                   -fx-font-size: 14;" HBox.hgrow="ALWAYS" />
 
                 <!-- SEARCH BUTTON -->
-                <Button mnemonicParsing="false" prefHeight="38" prefWidth="120" style="-fx-background-color: #e2b96f;                                -fx-text-fill: #1a1a2e;                                -fx-font-size: 14;                                -fx-font-weight: bold;                                -fx-background-radius: 8;                                -fx-cursor: hand;" text="Search">
+                <Button fx:id="btnSearch" mnemonicParsing="false" prefHeight="38" prefWidth="120" style="-fx-background-color: #e2b96f;                                -fx-text-fill: #1a1a2e;                                -fx-font-size: 14;                                -fx-font-weight: bold;                                -fx-background-radius: 8;                                -fx-cursor: hand;" text="Search">
 
                     <HBox.margin>
                         <Insets left="5" />
@@ -47,13 +38,13 @@
         </HBox>
 
         <!-- TABLE VIEW -->
-        <TableView fx:id="myTableView" maxWidth="690.0" prefHeight="320" prefWidth="690.0" style="-fx-background-color: #2a2a4a;                           -fx-control-inner-background: #2a2a4a;                           -fx-table-cell-border-color: transparent;                           -fx-text-background-color: dark-gray;">
+        <TableView fx:id="usersTable" maxWidth="-Infinity" prefHeight="350.0" prefWidth="750.0" style="-fx-background-color: #2a2a4a;                                                       -fx-control-inner-background: #2a2a4a;                                                       -fx-table-cell-border-color: transparent;                                                       -fx-text-background-color: dark-gray;">
 
             <columns>
 
-                <TableColumn prefWidth="200.0" text="Room ID" />
+                <TableColumn fx:id="usernameColumn" prefWidth="200.0" text="Room ID" />
 
-                <TableColumn prefWidth="200.0" text="Name" />
+                <TableColumn fx:id="roleColumn" prefWidth="200.0" text="Name" />
             <TableColumn prefWidth="200.0" text="Email" />
             <TableColumn prefWidth="200.0" text="Phone #" />
             <TableColumn prefWidth="200.0" text="Address" />
