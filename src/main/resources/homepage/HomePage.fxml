@@ -48,18 +48,19 @@
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
 
-            <Label text="ADMIN"
+            <!-- ADMIN FEATURES -->
+            <Label fx:id="adminLabel" text="ADMIN"
                    style="-fx-text-fill: #555577; -fx-font-size: 10; -fx-padding: 16 0 4 8;"/>
 
-            <Button text="  Add User"            onAction="#openAddUser"
+            <Button fx:id="addUserButton" text="  Add User"            onAction="#openAddUser"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-            <Button text="  Delete User"         onAction="#openDeleteUser"
+            <Button fx:id="deleteUserButton" text="  Delete User"         onAction="#openDeleteUser"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-            <Button text="  View Users"          onAction="#openViewUsers"
+            <Button fx:id="viewUsersButton" text="  View Users"          onAction="#openViewUsers"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>

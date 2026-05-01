@@ -7,8 +7,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -17,6 +18,12 @@ public class HomePageController implements Initializable {
     @FXML private StackPane contentPane;
     @FXML private Label currentUserLabel;
 
+    //Admin buttons
+    @FXML private Button addUserButton;
+    @FXML private Button deleteUserButton;
+    @FXML private Button viewUsersButton;
+    @FXML private Label adminLabel;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         if (LoginController.currentUser != null) {
@@ -24,7 +31,12 @@ public class HomePageController implements Initializable {
             currentUserLabel.setText("Logged in as: "
                 + LoginController.currentUser.getUsername()
                 + " (" + role + ")");
-        }
+
+                addUserButton.setVisible(LoginController.currentUser.isAdmin());
+                deleteUserButton.setVisible(LoginController.currentUser.isAdmin());
+                viewUsersButton.setVisible(LoginController.currentUser.isAdmin());
+                adminLabel.setVisible(LoginController.currentUser.isAdmin());
+        }       
     }
 
     @FXML private void openCheckIn(ActionEvent e)       { loadView(Paths.CHECKINVIEW); }
