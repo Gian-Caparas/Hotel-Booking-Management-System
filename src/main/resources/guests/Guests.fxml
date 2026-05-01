@@ -9,26 +9,63 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="700" prefWidth="960" spacing="16" style="-fx-background-color: #1e1e38; -fx-padding: 60;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hotel.wildcat_hotel.guests.GuestsController">
+<VBox 
+    alignment="CENTER"
+    prefHeight="700"
+    prefWidth="960"
+    spacing="16"
+    style="-fx-background-color: #1e1e38; -fx-padding: 60;"
+    xmlns="http://javafx.com/javafx/25"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.hotel.wildcat_hotel.guests.GuestsController">
 
     <children>
 
         <!-- TITLE -->
-        <Label style="-fx-text-fill: #e2b96f;                       -fx-font-size: 28;                       -fx-font-weight: bold;" text="View Guests" />
+        <Label 
+            text="View Guests"
+            style="-fx-text-fill: #e2b96f; -fx-font-size: 28; -fx-font-weight: bold;" />
 
         <!-- SEARCH BAR -->
-    <HBox alignment="CENTER_LEFT" maxWidth="749.0" prefHeight="38.0" prefWidth="749.0" spacing="15">
+        <HBox 
+            alignment="CENTER_LEFT"
+            spacing="15"
+            prefWidth="749"
+            prefHeight="38"
+            maxWidth="749">
 
             <children>
 
                 <!-- SEARCH TEXTFIELD -->
-                <TextField fx:id="txtSearch" prefHeight="38" promptText="Enter username..." style="-fx-background-color: #2a2a4a;                                   -fx-text-fill: white;                                   -fx-prompt-text-fill: #666688;                                   -fx-border-color: #4444aa;                                   -fx-border-radius: 6;                                   -fx-background-radius: 6;                                   -fx-font-size: 14;" HBox.hgrow="ALWAYS" />
+                <TextField 
+                    fx:id="txtSearch"
+                    promptText="Enter username..."
+                    prefHeight="38"
+                    HBox.hgrow="ALWAYS"
+                    style="-fx-background-color: #2a2a4a;
+                           -fx-text-fill: white;
+                           -fx-prompt-text-fill: #666688;
+                           -fx-border-color: #4444aa;
+                           -fx-border-radius: 6;
+                           -fx-background-radius: 6;
+                           -fx-font-size: 14;" />
 
                 <!-- SEARCH BUTTON -->
-                <Button fx:id="btnSearch" mnemonicParsing="false" prefHeight="38" prefWidth="120" style="-fx-background-color: #e2b96f;                                -fx-text-fill: #1a1a2e;                                -fx-font-size: 14;                                -fx-font-weight: bold;                                -fx-background-radius: 8;                                -fx-cursor: hand;" text="Search">
+                <Button 
+                    fx:id="btnSearch"
+                    text="Search"
+                    prefHeight="38"
+                    prefWidth="120"
+                    mnemonicParsing="false"
+                    style="-fx-background-color: #e2b96f;
+                           -fx-text-fill: #1a1a2e;
+                           -fx-font-size: 14;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 8;
+                           -fx-cursor: hand;">
 
                     <HBox.margin>
-                        <Insets left="5" />
+                        <Insets left="5"/>
                     </HBox.margin>
 
                 </Button>
@@ -38,23 +75,51 @@
         </HBox>
 
         <!-- TABLE VIEW -->
-        <TableView fx:id="usersTable" maxWidth="-Infinity" prefHeight="350.0" prefWidth="750.0" style="-fx-background-color: #2a2a4a;                                                       -fx-control-inner-background: #2a2a4a;                                                       -fx-table-cell-border-color: transparent;                                                       -fx-text-background-color: dark-gray;">
+        <TableView 
+            fx:id="usersTable"
+            prefHeight="350"
+            prefWidth="750"
+            style="-fx-background-color: #2a2a4a;
+                   -fx-control-inner-background: #2a2a4a;
+                   -fx-table-cell-border-color: transparent;
+                   -fx-text-background-color: dark-gray;">
 
             <columns>
 
-                <TableColumn fx:id="usernameColumn" prefWidth="200.0" text="Room ID" />
+                <TableColumn 
+                    fx:id="usernameColumn"
+                    text="Room ID"
+                    prefWidth="200" />
 
-                <TableColumn fx:id="roleColumn" prefWidth="200.0" text="Name" />
-            <TableColumn prefWidth="200.0" text="Email" />
-            <TableColumn prefWidth="200.0" text="Phone #" />
-            <TableColumn prefWidth="200.0" text="Address" />
-            <TableColumn prefWidth="200.0" text="Nationality" />
-            <TableColumn prefWidth="200.0" text="Room Fees" />
+                <TableColumn 
+                    fx:id="roleColumn"
+                    text="Name"
+                    prefWidth="200" />
+
+                <TableColumn 
+                    text="Email"
+                    prefWidth="200" />
+
+                <TableColumn 
+                    text="Phone #"
+                    prefWidth="200" />
+
+                <TableColumn 
+                    text="Address"
+                    prefWidth="200" />
+
+                <TableColumn 
+                    text="Nationality"
+                    prefWidth="200" />
+
+                <TableColumn 
+                    text="Room Fees"
+                    prefWidth="200" />
 
             </columns>
 
             <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
             </columnResizePolicy>
 
         </TableView>
