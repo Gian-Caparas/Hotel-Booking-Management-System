@@ -1,0 +1,13 @@
+.jfx-date-picker {
+    -jfx-default-color: #e2b96f;
+}
+
+.jfx-date-picker:focused {
+    -jfx-default-color: #e2b96f;
+}
+
+.jfx-date-picker .text-field {
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #666688;
+    -fx-background-color: #2a2a4a;
+}
