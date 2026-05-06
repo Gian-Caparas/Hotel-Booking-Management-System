@@ -8,7 +8,11 @@
             prefWidth="1200" prefHeight="750"
             style="-fx-background-color: #1a1a2e;">
 
+<<<<<<< HEAD
     <!-- LEFT SIDEBAR: Remains constant for navigation -->
+=======
+    <!-- LEFT SIDEBAR -->
+>>>>>>> 71c337a279a1944baa96734f22a1155906d79309
     <left>
         <VBox spacing="4" prefWidth="220"
               style="-fx-background-color: #12122a; -fx-padding: 24 12 24 12;">
@@ -33,7 +37,11 @@
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
             <Button text="  Cancel Booking"      onAction="#openCancelBooking"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
+<<<<<<< HEAD
                     style="-fx-background-color: #1e1e38; -fx-text-fill: #e2b96f;
+=======
+                    style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
+>>>>>>> 71c337a279a1944baa96734f22a1155906d79309
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
 
             <Label text="RECORDS"
@@ -48,6 +56,25 @@
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
 
+<<<<<<< HEAD
+=======
+            <Label text="ADMIN"
+                   style="-fx-text-fill: #555577; -fx-font-size: 10; -fx-padding: 16 0 4 8;"/>
+
+            <Button text="  Add User"            onAction="#openAddUser"
+                    maxWidth="Infinity" alignment="CENTER_LEFT"
+                    style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
+                           -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
+            <Button text="  Delete User"         onAction="#openDeleteUser"
+                    maxWidth="Infinity" alignment="CENTER_LEFT"
+                    style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
+                           -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
+            <Button text="  View Users"          onAction="#openViewUsers"
+                    maxWidth="Infinity" alignment="CENTER_LEFT"
+                    style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
+                           -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
+
+>>>>>>> 71c337a279a1944baa96734f22a1155906d79309
             <Region VBox.vgrow="ALWAYS"/>
 
             <Label fx:id="currentUserLabel" text="Logged in as: ..."
@@ -55,6 +82,7 @@
         </VBox>
     </left>
 
+<<<<<<< HEAD
     <!-- MAIN CONTENT AREA: This part changes based on the operation -->
     <center>
         <StackPane fx:id="contentPane" style="-fx-background-color: #1e1e38; -fx-padding: 40;">
@@ -92,8 +120,24 @@
                                 style="-fx-background-color: #c1121f; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12;"/>
                     </VBox>
                 </children>
+=======
+    <!-- MAIN CONTENT AREA -->
+    <center>
+        <StackPane fx:id="contentPane"
+                   style="-fx-background-color: #1e1e38; -fx-padding: 24;">
+            <!-- Default welcome screen -->
+            <VBox alignment="CENTER" spacing="16">
+                <Label text="CANCEL BOOKING"
+                       style="-fx-text-fill: #e2b96f; -fx-font-size: 28; -fx-font-weight: bold;"/>
+                <Label text="Select an option from the sidebar to get started."
+                       style="-fx-text-fill: #888899; -fx-font-size: 14;"/>
+>>>>>>> 71c337a279a1944baa96734f22a1155906d79309
             </VBox>
         </StackPane>
     </center>
 
+<<<<<<< HEAD
 </BorderPane>
+=======
+</BorderPane>
+>>>>>>> 71c337a279a1944baa96734f22a1155906d79309

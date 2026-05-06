@@ -1,14 +1,16 @@
 package com.hotel.wildcat_hotel.project;
 
-import com.hotel.wildcat_hotel.hotel.Guest;
-import com.hotel.wildcat_hotel.hotel.Room;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
+import com.hotel.wildcat_hotel.hotel.Guest;
+import com.hotel.wildcat_hotel.hotel.Room;
 
 public class DataBase {
 
