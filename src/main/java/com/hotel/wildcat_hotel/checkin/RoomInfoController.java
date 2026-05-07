@@ -1,21 +1,34 @@
 package com.hotel.wildcat_hotel.checkin;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
 
 public class RoomInfoController {
 
-    @FXML private Label lblRoomNumber;
-    @FXML private Label lblRoomType;
-    @FXML private Label lblPrice;
-    @FXML private Label lblStatus;
-    @FXML private Button btnConfirmSelection;
+    @FXML private ComboBox<String> roomTypeComboBox;
+    @FXML private ComboBox<String> availableRoomsComboBox;
+    @FXML private Label pricePerNightLabel;
 
     @FXML
-    void handleConfirmSelection(ActionEvent event) {
-        // This is where we will pass the room data to the next screen
-        System.out.println("Room selected!");
+    public void initialize() {
+        // Initialize room types (Suite, Deluxe, Standard)
+        roomTypeComboBox.getItems().addAll("Standard", "Deluxe", "Wildcat Suite");
+    }
+
+    @FXML
+    private void onRoomTypeSelected(ActionEvent event) {
+        String selectedType = roomTypeComboBox.getValue();
+        // Here you would query your DB for rooms where status = 'Available'
+        System.out.println("Filtering available rooms for: " + selectedType);
+        
+        // Mock logic
+        if(selectedType.equals("Standard")) pricePerNightLabel.setText("₱ 2,500");
+    }
+
+    @FXML
+    private void handleProceedToConfirmation(ActionEvent event) {
+        // Logic to pass selected room data to ConfirmnDataController
     }
 }

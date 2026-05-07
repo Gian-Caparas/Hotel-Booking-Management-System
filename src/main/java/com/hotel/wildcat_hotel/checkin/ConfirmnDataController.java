@@ -7,30 +7,25 @@ import javafx.event.ActionEvent;
 
 public class ConfirmnDataController {
 
-    @FXML
-    private Label lblGuestName;
+    @FXML private Label lblGuestName;
+    @FXML private Label lblRoomDetails;
+    @FXML private Label lblTotalAmount;
+    @FXML private Button btnFinalize;
 
-    @FXML
-    private Label lblRoomDetails;
-
-    @FXML
-    private Label lblTotalAmount;
-
-    @FXML
-    private Button btnFinalize;
-
-    
     public void setConfirmationDetails(String name, String room, String total) {
         lblGuestName.setText(name);
-        lblRoomDetails.setText("Room: " + room);
-        lblTotalAmount.setText("PHP " + total);
+        lblRoomDetails.setText("Room Selection: " + room);
+        lblTotalAmount.setText("Total Due: PHP " + total);
     }
 
     @FXML
     private void handleFinalize(ActionEvent event) {
+        // This is where you would call your Database Manager class
+        System.out.println("Inserting data into MySQL database...");
         
-        System.out.println("Finalized! Saving to MySQL...");
+        // Example: DBConnection.saveBooking(guestObj);
         
-        
+        btnFinalize.setDisable(true);
+        btnFinalize.setText("Checked In");
     }
 }
