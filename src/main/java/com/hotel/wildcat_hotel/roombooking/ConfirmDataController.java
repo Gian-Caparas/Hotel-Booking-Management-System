@@ -2,9 +2,6 @@ package com.hotel.wildcat_hotel.roombooking;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import com.hotel.wildcat_hotel.project.DataBase; // Updated to the correct sub-folder
-import com.hotel.wildcat_hotel.hotel.Guest;      // Needed for saving guest data
-import com.hotel.wildcat_hotel.hotel.Room;       // Needed for room updates
 //Check utro bro
 
 public class ConfirmDataController {

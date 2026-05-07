@@ -24,6 +24,25 @@ public class User {
     @Column(name = "role")
     private String role;
 
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "status")
+    private String status;
+
+    // Add getters for these new fields so TableView can access them
+    public String getEmail() { return email; }
+    public String getPhone() { return phone; }
+    public String getStatus() { return status; }
+    
+    
+    public void setEmail(String email) { this.email = email; }
+    public void setPhone(String phone) { this.phone = phone; }
+    public void setStatus(String status) { this.status = status; }
+
     public User() {}
 
     // CLEANED CONSTRUCTOR

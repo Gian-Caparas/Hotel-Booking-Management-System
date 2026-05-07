@@ -54,17 +54,24 @@
         </HBox>
 
         <!-- TABLE VIEW -->
-        <TableView fx:id="usersTable" maxWidth="750" prefHeight="350" prefWidth="750"
+        <TableView fx:id="usersTable" 
+                   maxWidth="750" 
+                   prefHeight="350"   
+                   prefWidth="750"
                    style="-fx-background-color: #2a2a4a;
                           -fx-control-inner-background: #2a2a4a;
                           -fx-table-cell-border-color: transparent;
                           -fx-text-fill: white;">
             <columns>
-                <TableColumn fx:id="usernameColumn" prefWidth="375" text="Username"
+                <TableColumn fx:id="usernameColumn" 
+                             prefWidth="375" 
+                             text="Username"
                              style="-fx-alignment: CENTER;
                                     -fx-text-fill: white;
                                     -fx-font-size: 13;" />
-                <TableColumn fx:id="roleColumn" prefWidth="375" text="Role"
+                <TableColumn fx:id="roleColumn" 
+                             prefWidth="375" 
+                             text="Role"
                              style="-fx-alignment: CENTER;
                                     -fx-text-fill: white;
                                     -fx-font-size: 13;" />
