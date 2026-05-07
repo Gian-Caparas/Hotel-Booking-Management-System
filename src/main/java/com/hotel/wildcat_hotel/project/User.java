@@ -1,7 +1,11 @@
 package com.hotel.wildcat_hotel.project;
 
-import jakarta.persistence.*;
 import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "user")
@@ -21,59 +25,25 @@ public class User {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
-    @Column(name = "role")
-    private String role;
-
     public User() {}
 
-    // CLEANED CONSTRUCTOR
-    public User(String username, String password, String role) {
+    public User(String username, String password, boolean isAdmin) {
         this.username = username;
         this.password = password;
-        setRole(role);
+        this.isAdmin = isAdmin;
     }
 
-    // ================= GETTERS =================
+    // Getters
+    public String getUsername()  { return username; }
+    public String getPassword()  { return password; }
+    public boolean isAdmin()     { return isAdmin; }
 
-    public int getUserId() {
-        return userId;
-    }
+    // Setters
+    public void setUsername(String username) { this.username = username; }
+    public void setPassword(String password) { this.password = password; }
+    public void setAdmin(boolean isAdmin)    { this.isAdmin = isAdmin; }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    // ================= SETTERS =================
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-
-        // Automatically determine admin status
-        this.isAdmin = role.equalsIgnoreCase("Admin");
-    }
-
-    // ================= AUTH METHODS =================
-
+    // Authentication methods — fixed: Database → DataBase
     public static boolean isUserValid(User user) {
         List<User> users = DataBase.getUsers();
 
@@ -104,10 +74,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", role='" + role + '\'' +
-                ", isAdmin=" + isAdmin +
-                '}';
+        return "User{username=" + username + ", isAdmin=" + isAdmin + "}";
     }
 }
