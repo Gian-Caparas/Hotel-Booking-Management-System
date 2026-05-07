@@ -8,7 +8,11 @@ import java.util.List;
 public class User {
 
     @Id
-    @Column(name = "user_name")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "userId")
+    private int userId;
+
+    @Column(name = "user_name", unique = true)
     private String username;
 
     @Column(name = "user_pass")
@@ -17,49 +21,93 @@ public class User {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
+    @Column(name = "role")
+    private String role;
+
     public User() {}
 
-    public User(String username, String password, boolean isAdmin) {
+    // CLEANED CONSTRUCTOR
+    public User(String username, String password, String role) {
         this.username = username;
         this.password = password;
-        this.isAdmin = isAdmin;
+        setRole(role);
     }
 
-    // Getters
-    public String getUsername()  { return username; }
-    public String getPassword()  { return password; }
-    public boolean isAdmin()     { return isAdmin; }
+    // ================= GETTERS =================
 
-    // Setters
-    public void setUsername(String username) { this.username = username; }
-    public void setPassword(String password) { this.password = password; }
-    public void setAdmin(boolean isAdmin)    { this.isAdmin = isAdmin; }
+    public int getUserId() {
+        return userId;
+    }
 
-    // Authentication methods — fixed: Database → DataBase
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    // ================= SETTERS =================
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+
+        // Automatically determine admin status
+        this.isAdmin = role.equalsIgnoreCase("Admin");
+    }
+
+    // ================= AUTH METHODS =================
+
     public static boolean isUserValid(User user) {
         List<User> users = DataBase.getUsers();
+
         for (User u : users) {
             if (u.getUsername().equals(user.getUsername())
                     && u.getPassword().equals(user.getPassword())) {
+
                 return true;
             }
         }
+
         return false;
     }
 
     public static boolean isUserAdmin(User user) {
         List<User> users = DataBase.getUsers();
+
         for (User u : users) {
             if (u.getUsername().equals(user.getUsername())
                     && u.getPassword().equals(user.getPassword())) {
+
                 return u.isAdmin();
             }
         }
+
         return false;
     }
 
     @Override
     public String toString() {
-        return "User{username=" + username + ", isAdmin=" + isAdmin + "}";
+        return "User{" +
+                "username='" + username + '\'' +
+                ", role='" + role + '\'' +
+                ", isAdmin=" + isAdmin +
+                '}';
     }
 }
