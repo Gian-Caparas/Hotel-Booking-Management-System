@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox
+    alignment="TOP_CENTER"
+    prefHeight="700"
+    prefWidth="960"
+    spacing="25"
+    style="-fx-background-color: #1e1e38; -fx-padding: 50px;"
+    xmlns="http://javafx.com/javafx/17"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.hotel.wildcat_hotel.checkout.CheckOutController">
+
+    <children>
+
+        <!-- HEADER -->
+        <VBox alignment="CENTER" spacing="5">
+            <children>
+                <Label
+                    text="Guest Check-Out"
+                    style="-fx-text-fill: #e2b96f; -fx-font-size: 32; -fx-font-weight: bold;" />
+                <Label
+                    text="Settle accounts and process room departure"
+                    style="-fx-text-fill: #888899; -fx-font-size: 14;" />
+            </children>
+        </VBox>
+
+        <!-- SEARCH SECTION -->
+        <HBox alignment="CENTER" spacing="15">
+            <children>
+                <VBox spacing="8">
+                    <children>
+                        <Label text="Search Room Number" style="-fx-text-fill: #cccccc;" />
+                        <TextField fx:id="roomSearchField" promptText="e.g. 301" prefHeight="40" prefWidth="250"/>
+                    </children>
+                </VBox>
+                <VBox spacing="8" alignment="BOTTOM_CENTER">
+                    <children>
+                        <Button 
+                            text="Search" 
+                            onAction="#handleSearch"
+                            prefHeight="40" 
+                            prefWidth="100"
+                            style="-fx-background-color: #444466; -fx-text-fill: white; -fx-cursor: hand;"/>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+
+        <Separator opacity="0.1" prefWidth="600"/>
+
+        <!-- SUMMARY GRID -->
+        <GridPane alignment="CENTER" hgap="30" vgap="20">
+            <columnConstraints>
+                <ColumnConstraints prefWidth="320"/>
+                <ColumnConstraints prefWidth="320"/>
+            </columnConstraints>
+
+            <children>
+                <!-- Row 0: Guest Info -->
+                <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <children>
+                        <Label text="Guest Name" style="-fx-text-fill: #cccccc;" />
+                        <TextField fx:id="guestNameField" editable="false" style="-fx-opacity: 0.8;" prefHeight="40"/>
+                    </children>
+                </VBox>
+
+                <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <children>
+                        <Label text="Stay Duration" style="-fx-text-fill: #cccccc;" />
+                        <TextField fx:id="stayDurationField" editable="false" style="-fx-opacity: 0.8;" prefHeight="40"/>
+                    </children>
+                </VBox>
+
+                <!-- Row 1: Financials -->
+                <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <children>
+                        <Label text="Room Charges" style="-fx-text-fill: #cccccc;" />
+                        <TextField fx:id="roomChargesField" editable="false" text="₱ 0.00" prefHeight="40"/>
+                    </children>
+                </VBox>
+
+                <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <children>
+                        <Label text="Additional Services / Minibar" style="-fx-text-fill: #cccccc;" />
+                        <TextField fx:id="additionalChargesField" promptText="0.00" prefHeight="40"/>
+                    </children>
+                </VBox>
+
+                <!-- Row 2: Total -->
+                <VBox spacing="8" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                    <children>
+                        <Label text="Total Outstanding Balance" style="-fx-text-fill: #e2b96f; -fx-font-weight: bold;" />
+                        <TextField fx:id="totalBalanceField" editable="false" 
+                                   style="-fx-font-size: 18; -fx-text-fill: #e2b96f; -fx-background-color: #2a2a45;" 
+                                   prefHeight="50"/>
+                    </children>
+                </VBox>
+            </children>
+        </GridPane>
+
+        <!-- FINAL ACTIONS -->
+        <Region prefHeight="10"/>
+
+        <VBox alignment="CENTER" spacing="15">
+            <children>
+                <Button
+                    fx:id="checkOutButton"
+                    text="Finalize Check-Out &amp; Pay"
+                    onAction="#handleCheckOut"
+                    prefWidth="350"
+                    prefHeight="50"
+                    style="-fx-background-color: #e2b96f;
+                           -fx-text-fill: #1e1e38;
+                           -fx-font-weight: bold;
+                           -fx-font-size: 16;
+                           -fx-cursor: hand;" />
+                
+                <Button
+                    text="Cancel"
+                    prefWidth="150"
+                    style="-fx-background-color: transparent; -fx-text-fill: #888899; -fx-border-color: #444466; -fx-border-radius: 5;" />
+            </children>
+        </VBox>
+
+    </children>
+</VBox>

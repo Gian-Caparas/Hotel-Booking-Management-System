@@ -4,7 +4,7 @@
 <hibernate-configuration>
     <session-factory>
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://localhost:3307/hotelDB?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/hotelDB?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true</property>
         <property name="connection.username">root</property>
         <property name="connection.password"></property>
         <property name="dialect">org.hibernate.dialect.MySQLDialect</property>

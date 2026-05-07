@@ -8,16 +8,26 @@ import javafx.event.ActionEvent;
 
 public class CheckOutController {
 
-    @FXML private TextField txtBookingId;
-    @FXML private Label lblGuestName;
-    @FXML private Label lblTotalAmount;
-    @FXML private Button btnProcessCheckOut;
+    @FXML private TextField roomSearchField; 
+    @FXML private TextField guestNameField;
+    @FXML private TextField stayDurationField;
+    @FXML private TextField roomChargesField;
+    @FXML private TextField totalBalanceField;
+
+    @FXML
+    void handleSearch(ActionEvent event) {
+        String roomNumber = roomSearchField.getText();
+        
+        if (roomNumber.isEmpty()) {
+            System.out.println("Please enter a room number to search.");
+            return;
+        }
+
+        System.out.println("Searching database for Room: " + roomNumber);
+    }
 
     @FXML
     void handleCheckOut(ActionEvent event) {
-        //It will get the Booking ID from the text field
-        //It will search your database for that guest
-        //It will update the room status in MySQL to 'Available'
-        System.out.println("Processing check-out for ID: " + txtBookingId.getText());
+        System.out.println("Finalizing check-out for Room: " + roomSearchField.getText());
     }
 }
