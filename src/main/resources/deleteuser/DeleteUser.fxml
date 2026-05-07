@@ -9,128 +9,82 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox 
-    alignment="CENTER"
-    prefHeight="700"
-    prefWidth="960"
-    spacing="16"
-    style="-fx-background-color: #1e1e38; -fx-padding: 60;"
-    xmlns="http://javafx.com/javafx/25"
-    xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.hotel.wildcat_hotel.deleteuser.DeleteUserController">
+<VBox alignment="CENTER" prefHeight="700" prefWidth="960" spacing="16"
+      style="-fx-background-color: #1e1e38; -fx-padding: 60;"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.hotel.wildcat_hotel.deleteuser.DeleteUserController">
 
     <children>
 
         <!-- TITLE -->
-        <Label 
-            text="Delete User"
-            style="-fx-text-fill: #e2b96f; -fx-font-size: 28; -fx-font-weight: bold;" />
-
-        <Label 
-            text="Search and remove staff accounts"
-            style="-fx-text-fill: #888899; -fx-font-size: 13;" />
+        <VBox alignment="CENTER" spacing="5">
+            <children>
+                <Label style="-fx-text-fill: #e2b96f; -fx-font-size: 28; -fx-font-weight: bold;"
+                       text="Delete User" />
+                <Label style="-fx-text-fill: #888899; -fx-font-size: 13;"
+                       text="Search and remove staff accounts" />
+            </children>
+        </VBox>
 
         <!-- SEARCH BAR -->
-        <HBox 
-            alignment="CENTER_LEFT"
-            spacing="15"
-            prefWidth="749"
-            prefHeight="38"
-            maxWidth="749">
-
+        <HBox alignment="CENTER_LEFT" maxWidth="749" prefHeight="38" prefWidth="749" spacing="15">
             <children>
+                <TextField fx:id="usernamefield" prefHeight="38"
+                           promptText="Enter username..."
+                           style="-fx-background-color: #2a2a4a;
+                                  -fx-text-fill: white;
+                                  -fx-prompt-text-fill: #666688;
+                                  -fx-border-color: #4444aa;
+                                  -fx-border-radius: 6;
+                                  -fx-background-radius: 6;
+                                  -fx-font-size: 14;"
+                           HBox.hgrow="ALWAYS" />
 
-                <!-- SEARCH TEXTFIELD -->
-<<<<<<< HEAD
-                <TextField fx:id="usernamefield" prefHeight="38" promptText="Enter username..." style="-fx-background-color: #2a2a4a;                                   -fx-text-fill: white;                                   -fx-prompt-text-fill: #666688;                                   -fx-border-color: #4444aa;                                   -fx-border-radius: 6;                                   -fx-background-radius: 6;                                   -fx-font-size: 14;" HBox.hgrow="ALWAYS" />
-
-                <!-- SEARCH BUTTON -->
-                <Button fx:id="searchButton" mnemonicParsing="false" onAction="#handleSearchUser" prefHeight="38" prefWidth="120" style="-fx-background-color: #e2b96f;                                -fx-text-fill: #1a1a2e;                                -fx-font-size: 14;                                -fx-font-weight: bold;                                -fx-background-radius: 8;                                -fx-cursor: hand;" text="Search">
-=======
-                <TextField 
-                    fx:id="txtSearch"
-                    promptText="Enter username..."
-                    prefHeight="38"
-                    HBox.hgrow="ALWAYS"
-                    style="-fx-background-color: #2a2a4a;
-                           -fx-text-fill: white;
-                           -fx-prompt-text-fill: #666688;
-                           -fx-border-color: #4444aa;
-                           -fx-border-radius: 6;
-                           -fx-background-radius: 6;
-                           -fx-font-size: 14;" />
-
-                <!-- SEARCH BUTTON -->
-                <Button 
-                    fx:id="btnSearch"
-                    text="Search"
-                    prefHeight="38"
-                    prefWidth="120"
-                    mnemonicParsing="false"
-                    style="-fx-background-color: #e2b96f;
-                           -fx-text-fill: #1a1a2e;
-                           -fx-font-size: 14;
-                           -fx-font-weight: bold;
-                           -fx-background-radius: 8;
-                           -fx-cursor: hand;">
->>>>>>> 4dc1b4327652b346513b34f23312cdf02219a5c2
-
-                    <HBox.margin>
-                        <Insets left="5"/>
-                    </HBox.margin>
-
-                </Button>
-
+                <Button fx:id="searchButton" mnemonicParsing="false"
+                        onAction="#handleSearchUser"
+                        prefHeight="38" prefWidth="120"
+                        style="-fx-background-color: #e2b96f;
+                               -fx-text-fill: #1a1a2e;
+                               -fx-font-size: 14;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 8;
+                               -fx-cursor: hand;"
+                        text="Search" />
             </children>
-
         </HBox>
 
         <!-- TABLE VIEW -->
-        <TableView 
-            fx:id="usersTable"
-            prefHeight="350"
-            prefWidth="750"
-            style="-fx-background-color: #2a2a4a;
-                   -fx-control-inner-background: #2a2a4a;
-                   -fx-table-cell-border-color: transparent;
-                   -fx-text-background-color: dark-gray;">
-
+        <TableView fx:id="usersTable" maxWidth="750" prefHeight="350" prefWidth="750"
+                   style="-fx-background-color: #2a2a4a;
+                          -fx-control-inner-background: #2a2a4a;
+                          -fx-table-cell-border-color: transparent;
+                          -fx-text-fill: white;">
             <columns>
-
-                <TableColumn 
-                    fx:id="usernameColumn"
-                    text="Username"
-                    prefWidth="300" />
-
-                <TableColumn 
-                    text="Role"
-                    prefWidth="300" />
-
+                <TableColumn fx:id="usernameColumn" prefWidth="375" text="Username"
+                             style="-fx-alignment: CENTER;
+                                    -fx-text-fill: white;
+                                    -fx-font-size: 13;" />
+                <TableColumn fx:id="roleColumn" prefWidth="375" text="Role"
+                             style="-fx-alignment: CENTER;
+                                    -fx-text-fill: white;
+                                    -fx-font-size: 13;" />
             </columns>
-
             <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
             </columnResizePolicy>
-
         </TableView>
 
         <!-- REMOVE BUTTON -->
-<<<<<<< HEAD
-        <Button fx:id="deleteuser" mnemonicParsing="false" onAction="#handleDeleteUser" prefHeight="38" prefWidth="120" style="-fx-background-color: #ff4d4d;                        -fx-text-fill: white;                        -fx-font-size: 15;                        -fx-font-weight: bold;                        -fx-background-radius: 8;                        -fx-cursor: hand;" text="Remove" />
-=======
-        <Button 
-            text="Remove"
-            prefHeight="38"
-            prefWidth="120"
-            mnemonicParsing="false"
-            style="-fx-background-color: #ff4d4d;
-                   -fx-text-fill: white;
-                   -fx-font-size: 15;
-                   -fx-font-weight: bold;
-                   -fx-background-radius: 8;
-                   -fx-cursor: hand;" />
->>>>>>> 4dc1b4327652b346513b34f23312cdf02219a5c2
+        <Button fx:id="deleteuser" mnemonicParsing="false"
+                onAction="#handleDeleteUser"
+                prefHeight="42" prefWidth="200"
+                style="-fx-background-color: #ff4d4d;
+                       -fx-text-fill: white;
+                       -fx-font-size: 15;
+                       -fx-font-weight: bold;
+                       -fx-background-radius: 8;
+                       -fx-cursor: hand;"
+                text="Remove" />
 
     </children>
-
 </VBox>

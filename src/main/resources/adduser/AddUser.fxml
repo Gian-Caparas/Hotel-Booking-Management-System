@@ -1,184 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<<<<<<< HEAD
 <VBox alignment="CENTER" prefHeight="700" prefWidth="960" spacing="16" style="-fx-background-color: #1e1e38; -fx-padding: 60;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hotel.wildcat_hotel.adduser.AddUserController">
-=======
-<VBox
-    alignment="CENTER"
-    prefHeight="700"
-    prefWidth="960"
-    spacing="16"
-    style="-fx-background-color: #1e1e38; -fx-padding: 60px;"
-    xmlns="http://javafx.com/javafx/17"
-    xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.hotel.wildcat_hotel.adduser.AddUserController">
->>>>>>> 4ccdef9 (Added GUI, and the system is 85% done)
-
     <children>
+        <Label style="-fx-text-fill: #e2b96f; -fx-font-size: 28; -fx-font-weight: bold;" text="Add New User" />
+        <Label style="-fx-text-fill: #888899; -fx-font-size: 13;" text="Create a new staff or admin account" />
 
-        <!-- TITLE -->
-        <Label
-            text="Add New User"
-            style="-fx-text-fill: #e2b96f; -fx-font-size: 28; -fx-font-weight: bold;" />
+        <Region prefHeight="10" />
 
-<<<<<<< HEAD
-    <!-- Username -->
-    <VBox maxWidth="340" spacing="6">
-        <Label style="-fx-text-fill: #cccccc; -fx-font-size: 13;" text="Username" />
-        <TextField fx:id="usernameField" prefHeight="38" prefWidth="340" promptText="Enter username" style="-fx-background-color: #2a2a4a; -fx-text-fill: white;                           -fx-prompt-text-fill: #666688; -fx-border-color: #4444aa;                           -fx-border-radius: 6; -fx-background-radius: 6;                           -fx-padding: 8; -fx-font-size: 14;" />
-    </VBox>
-
-    <!-- Password -->
-    <VBox maxWidth="340" spacing="6">
-        <Label style="-fx-text-fill: #cccccc; -fx-font-size: 13;" text="Password" />
-        <PasswordField fx:id="passwordField" prefHeight="38" prefWidth="340" promptText="Enter password" style="-fx-background-color: #2a2a4a; -fx-text-fill: white;                               -fx-prompt-text-fill: #666688; -fx-border-color: #4444aa;                               -fx-border-radius: 6; -fx-background-radius: 6;                               -fx-padding: 8; -fx-font-size: 14;" />
-    </VBox>
-
-    <!-- Role -->
-    <VBox maxWidth="340" spacing="8">
-        <Label style="-fx-text-fill: #cccccc; -fx-font-size: 13;" text="Role" />
-        <HBox alignment="CENTER_LEFT" spacing="30">
-            <RadioButton fx:id="adminRadio" style="-fx-text-fill: white;" text="Admin">
-                <toggleGroup>
-                    <ToggleGroup fx:id="roleGroup" />
-                </toggleGroup>
-                <font><Font size="14.0" /></font>
-            </RadioButton>
-            <RadioButton fx:id="staffRadio" selected="true" style="-fx-text-fill: white;" text="Staff" toggleGroup="$roleGroup">
-                <font><Font size="14.0" /></font>
-            </RadioButton>
-        </HBox>
-    </VBox>
-=======
-        <Label
-            text="Create a new staff or admin account"
-            style="-fx-text-fill: #888899; -fx-font-size: 13;" />
-
-        <Region prefHeight="10"/>
-
-        <!-- USERNAME -->
         <VBox maxWidth="340" spacing="6">
->>>>>>> 4ccdef9 (Added GUI, and the system is 85% done)
-
             <children>
-
-<<<<<<< HEAD
-    <!-- Button -->
-    <Button fx:id="handleAddUser" onAction="#handleAddUser" prefHeight="42" prefWidth="340" style="-fx-background-color: #e2b96f; -fx-text-fill: #1a1a2e;                    -fx-font-size: 15; -fx-font-weight: bold;                    -fx-background-radius: 8; -fx-cursor: hand;" text="Add User" />
-=======
-                <Label
-                    text="Username"
-                    style="-fx-text-fill: #cccccc; -fx-font-size: 13;" />
->>>>>>> 4ccdef9 (Added GUI, and the system is 85% done)
-
-                <TextField
-                    fx:id="usernameField"
-                    promptText="Enter username"
-                    prefHeight="38"
-                    style="-fx-background-color: #2a2a4a;
-                           -fx-text-fill: white;
-                           -fx-prompt-text-fill: #666688;
-                           -fx-border-color: #4444aa;
-                           -fx-border-radius: 6;
-                           -fx-background-radius: 6;
-                           -fx-padding: 8;
-                           -fx-font-size: 14;" />
-
+                <Label style="-fx-text-fill: #cccccc; -fx-font-size: 13;" text="Username" />
+                <TextField fx:id="usernameField" prefHeight="38" prefWidth="340" promptText="Enter username" style="-fx-background-color: #2a2a4a; -fx-text-fill: white; -fx-prompt-text-fill: #666688; -fx-border-color: #4444aa; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8; -fx-font-size: 14;" />
             </children>
-
         </VBox>
 
-        <!-- PASSWORD -->
         <VBox maxWidth="340" spacing="6">
-
             <children>
-
-                <Label
-                    text="Password"
-                    style="-fx-text-fill: #cccccc; -fx-font-size: 13;" />
-
-                <PasswordField
-                    fx:id="passwordField"
-                    promptText="Enter password"
-                    prefHeight="38"
-                    style="-fx-background-color: #2a2a4a;
-                           -fx-text-fill: white;
-                           -fx-prompt-text-fill: #666688;
-                           -fx-border-color: #4444aa;
-                           -fx-border-radius: 6;
-                           -fx-background-radius: 6;
-                           -fx-padding: 8;
-                           -fx-font-size: 14;" />
-
+                <Label style="-fx-text-fill: #cccccc; -fx-font-size: 13;" text="Password" />
+                <PasswordField fx:id="passwordField" prefHeight="38" prefWidth="340" promptText="Enter password" style="-fx-background-color: #2a2a4a; -fx-text-fill: white; -fx-prompt-text-fill: #666688; -fx-border-color: #4444aa; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8; -fx-font-size: 14;" />
             </children>
-
         </VBox>
 
-        <!-- ROLE -->
         <VBox maxWidth="340" spacing="8">
-
             <children>
-
-                <Label
-                    text="Role"
-                    style="-fx-text-fill: #cccccc; -fx-font-size: 13;" />
-
+                <Label style="-fx-text-fill: #cccccc; -fx-font-size: 13;" text="Role" />
                 <HBox alignment="CENTER_LEFT" spacing="30">
-
                     <children>
-
-                        <RadioButton
-                            text="Admin"
-                            toggleGroup="$roleGroup"
-                            style="-fx-text-fill: white;">
-                            <font><Font size="14"/></font>
+                        <RadioButton fx:id="adminRadio" style="-fx-text-fill: white;" text="Admin">
+                            <toggleGroup>
+                                <ToggleGroup fx:id="roleGroup" />
+                            </toggleGroup>
+                            <font><Font size="14.0" /></font>
                         </RadioButton>
-
-                        <RadioButton
-                            text="Staff"
-                            selected="true"
-                            toggleGroup="$roleGroup"
-                            style="-fx-text-fill: white;">
-                            <font><Font size="14"/></font>
+                        <RadioButton fx:id="staffRadio" selected="true" style="-fx-text-fill: white;" text="Staff" toggleGroup="$roleGroup">
+                            <font><Font size="14.0" /></font>
                         </RadioButton>
-
+                        <RadioButton fx:id="customerRadio" style="-fx-text-fill: white;" text="Customer" toggleGroup="$roleGroup">
+                            <font><Font size="14.0" /></font>
+                        </RadioButton>
                     </children>
-
                 </HBox>
-
             </children>
-
         </VBox>
 
-        <Region prefHeight="10"/>
+        <Region prefHeight="10" />
 
-        <!-- BUTTON -->
-        <Button
-            text="Add User"
-            onAction="#handleAddUser"
-            prefHeight="42"
-            prefWidth="340"
-            style="-fx-background-color: #e2b96f;
-                   -fx-text-fill: #1a1a2e;
-                   -fx-font-size: 15;
-                   -fx-font-weight: bold;
-                   -fx-background-radius: 8;
-                   -fx-cursor: hand;" />
+        <Button onAction="#handleAddUser" prefHeight="42" prefWidth="340" style="-fx-background-color: #e2b96f; -fx-text-fill: #1a1a2e; -fx-font-size: 15; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;" text="Add User" />
 
-        <!-- STATUS -->
-        <Label
-            fx:id="statusLabel"
-            style="-fx-font-size: 13;" />
-
+        <Label fx:id="statusLabel" style="-fx-font-size: 13;" text="" />
     </children>
-
-    <!-- TOGGLE GROUP DECLARATION -->
-    <fx:define>
-        <ToggleGroup fx:id="roleGroup"/>
-    </fx:define>
-
 </VBox>

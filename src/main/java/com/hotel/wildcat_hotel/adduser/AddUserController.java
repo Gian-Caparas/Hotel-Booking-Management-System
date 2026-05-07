@@ -17,64 +17,118 @@ import javafx.scene.control.ToggleGroup;
 
 public class AddUserController implements Initializable {
 
-    @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
-    @FXML private RadioButton adminRadio;
-    @FXML private RadioButton staffRadio;
-    @FXML private ToggleGroup roleGroup;
-    @FXML private Label statusLabel;
+    @FXML
+    private TextField usernameField;
+
+    @FXML
+    private PasswordField passwordField;
+
+    @FXML
+    private RadioButton adminRadio;
+
+    @FXML
+    private RadioButton staffRadio;
+
+    @FXML
+    private RadioButton customerRadio;
+
+    @FXML
+    private ToggleGroup roleGroup;
+
+    @FXML
+    private Label statusLabel;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         statusLabel.setText("");
+
+        // Default selected role
+        staffRadio.setSelected(true);
     }
 
     @FXML
     private void handleAddUser(ActionEvent event) {
+
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
 
-        // Validation
-        if (username.isEmpty()) {
-            setStatus("⚠ Username cannot be empty.", false);
+        // ================= VALIDATION =================
+
+        if (username.isEmpty() || password.isEmpty()) {
+            setStatus("⚠ Fields cannot be empty.", false);
             return;
         }
-        if (password.isEmpty()) {
-            setStatus("⚠ Password cannot be empty.", false);
-            return;
-        }
+
         if (username.length() < 3) {
             setStatus("⚠ Username must be at least 3 characters.", false);
             return;
         }
+
         if (password.length() < 4) {
             setStatus("⚠ Password must be at least 4 characters.", false);
             return;
         }
 
-        boolean isAdmin = adminRadio.isSelected();
-        User newUser = new User(username, password, isAdmin);
+        // ================= ROLE SELECTION =================
+
+        String role;
+
+        if (adminRadio.isSelected()) {
+            role = "Admin";
+        }
+        else if (customerRadio.isSelected()) {
+            role = "Customer";
+        }
+        else {
+            role = "Staff";
+        }
+
+        // ================= CREATE USER =================
+
+        User newUser = new User(username, password, role);
+
+        // ================= SAVE USER =================
+
         boolean success = DataBase.saveUser(newUser);
 
         if (success) {
-            setStatus("✓ User '" + username + "' added as "
-                + (isAdmin ? "Admin" : "Staff") + ".", true);
+
+            setStatus("✓ User '" + username +
+                    "' added as " + role + ".", true);
+
             clearForm();
+
         } else {
-            setStatus("✗ Username '" + username + "' already exists.", false);
+
+            setStatus("✗ Username already exists.", false);
         }
     }
 
+    // ================= CLEAR FORM =================
+
     private void clearForm() {
+
         usernameField.clear();
         passwordField.clear();
+
+        // Reset default role
         staffRadio.setSelected(true);
-        statusLabel.setText("");
     }
 
+    // ================= STATUS MESSAGE =================
+
     private void setStatus(String message, boolean success) {
-        String color = success ? "#4caf50" : "#ff6b6b";
-        statusLabel.setStyle("-fx-text-fill: " + color + "; -fx-font-size: 13;");
+
+        String color = success
+                ? "#4CAF50"
+                : "#FF6B6B";
+
+        statusLabel.setStyle(
+                "-fx-text-fill: " + color + ";" +
+                "-fx-font-size: 13px;" +
+                "-fx-font-weight: bold;"
+        );
+
         statusLabel.setText(message);
     }
 }
