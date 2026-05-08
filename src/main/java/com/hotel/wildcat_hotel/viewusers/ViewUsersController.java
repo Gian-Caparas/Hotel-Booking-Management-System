@@ -13,8 +13,7 @@ public class ViewUsersController {
     @FXML private TextField usernamefield;
     @FXML private TableView<User> usersTable;
     
-    // Only keeping the three columns you need
-    @FXML private TableColumn<User, Integer> userIdColumn;
+    // Keeping columns mapped to existing User properties
     @FXML private TableColumn<User, String> usernameColumn;
     @FXML private TableColumn<User, String> roleColumn;
 
@@ -22,8 +21,7 @@ public class ViewUsersController {
 
     @FXML
     public void initialize() {
-        // Link columns to User entity getters: getUserId(), getUsername(), getRole()
-        userIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        // Link columns to User entity getters: getUsername(), getRole()
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
 

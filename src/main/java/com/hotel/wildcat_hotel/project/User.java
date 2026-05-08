@@ -8,11 +8,7 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userId")
-    private int userId;
-
-    @Column(name = "user_name", unique = true)
+    @Column(name = "user_name", unique = true, nullable = false)
     private String username;
 
     @Column(name = "user_pass")
@@ -53,10 +49,6 @@ public class User {
     }
 
     // ================= GETTERS =================
-
-    public int getUserId() {
-        return userId;
-    }
 
     public String getUsername() {
         return username;

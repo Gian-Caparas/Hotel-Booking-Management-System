@@ -7,87 +7,93 @@ import jakarta.persistence.*;
 public class Guest implements RoomFees {
 
     @Id
-    @Column(name = "passport_Number")
-    private String passportNumber;
+    @Column(name = "guestID")
+    private int guestID;
 
     @Column(name = "room_ID")
     private int roomID;
 
-    @Column(name = "Name")
-    private String name;
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Column(name = "Email")
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "Address")
-    private String address;
+    @Column(name = "phone_no")
+    private String phoneNo;
 
     @Column(name = "city")
     private String city;
 
-    @Column(name = "Nationality")
+    @Column(name = "nationality")
     private String nationality;
 
-    @Column(name = "phoneNo")
-    private String phoneNo;
+    @Column(name = "check_in_date")
+    private String checkInDate;
 
-    @Column(name = "Card_Number")
-    private String cardNumber;
+    @Column(name = "check_out_date")
+    private String checkOutDate;
 
-    @Column(name = "card_Pass")
-    private String cardPass;
-
-    @Column(name = "number_Of_Days")
+    @Column(name = "number_of_days")
     private int numberOfDays;
 
-    @Column(name = "fees")
-    private double fees;
+    @Column(name = "rate_per_night")
+    private double ratePerNight;
 
-    public Guest() {}
+    @Column(name = "total_fees")
+    private double totalFees;
 
-    public Guest(int roomID, int numberOfDays, String name, String email, String address,
-                 String city, String nationality, String passportNumber,
-                 String phoneNo, String cardNumber, String cardPass, double fees) {
+    public Guest(){}//Default constructor
+    public Guest(int guestID, int roomID, String firstName, String lastName, String email, String phoneNo,
+                 String city, String nationality, String checkInDate, String checkOutDate, int numberOfDays, double ratePerNight, double totalFees) {
+        this.guestID = guestID;
         this.roomID = roomID;
-        this.numberOfDays = numberOfDays;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
-        this.address = address;
+        this.phoneNo = phoneNo;
         this.city = city;
         this.nationality = nationality;
-        this.passportNumber = passportNumber;
-        this.phoneNo = phoneNo;
-        this.cardNumber = cardNumber;
-        this.cardPass = cardPass;
-        this.fees = fees;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.numberOfDays = numberOfDays;
+        this.ratePerNight = ratePerNight;
+        this.totalFees = totalFees;
     }
 
-    // Getters & Setters
-    public String getPassportNumber()                       { return passportNumber; }
-    public void setPassportNumber(String passportNumber)    { this.passportNumber = passportNumber; }
-    public int getRoomID()                                  { return roomID; }
-    public void setRoomID(int roomID)                       { this.roomID = roomID; }
-    public String getName()                                 { return name; }
-    public void setName(String name)                        { this.name = name; }
-    public String getEmail()                                { return email; }
-    public void setEmail(String email)                      { this.email = email; }
-    public String getAddress()                              { return address; }
-    public void setAddress(String address)                  { this.address = address; }
-    public String getCity()                                 { return city; }
-    public void setCity(String city)                        { this.city = city; }
-    public String getNationality()                          { return nationality; }
-    public void setNationality(String nationality)          { this.nationality = nationality; }
-    public String getPhoneNo()                              { return phoneNo; }
-    public void setPhoneNo(String phoneNo)                  { this.phoneNo = phoneNo; }
-    public String getCardNumber()                           { return cardNumber; }
-    public void setCardNumber(String cardNumber)            { this.cardNumber = cardNumber; }
-    public String getCardPass()                             { return cardPass; }
-    public void setCardPass(String cardPass)                { this.cardPass = cardPass; }
-    public int getNumberOfDays()                            { return numberOfDays; }
-    public void setNumberOfDays(int numberOfDays)           { this.numberOfDays = numberOfDays; }
-    public double getFees()                                 { return fees; }
-    public void setFees(double fees)                        { this.fees = fees; }
+    //Getters Methods
+    public int getGuestID(){ return guestID;}
+    public int getRoomID() { return roomID; }
+    public String getFirstName() { return firstName; }
+    public String getLastName() { return lastName; }
+    public String getEmail() { return email; }
+    public String getPhoneNo() { return phoneNo; }
+    public String getCity() { return city; }
+    public String getNationality() { return nationality; }
+    public String getCheckInDate() { return checkInDate; }
+    public String getCheckOutDate() { return checkOutDate; }
+    public int getNumberOfDays() { return numberOfDays; }
+    public double getRatePerNight() { return ratePerNight; }
+    public double getTotalFees() { return totalFees; }
 
+    //Setters Methods
+    public void setGuestID(int guestID) { this.guestID = guestID; }
+    public void setRoomID(int roomID) { this.roomID = roomID; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
+    public void setEmail(String email) { this.email = email; }
+    public void setPhoneNo(String phoneNo) { this.phoneNo = phoneNo; }
+    public void setCity(String city) { this.city = city; }
+    public void setNationality(String nationality) { this.nationality = nationality; }
+    public void setCheckInDate(String checkInDate) { this.checkInDate = checkInDate; }
+    public void setCheckOutDate(String checkOutDate) { this.checkOutDate = checkOutDate; }
+    public void setNumberOfDays(int numberOfDays) { this.numberOfDays = numberOfDays; }
+    public void setRatePerNight(double ratePerNight) { this.ratePerNight = ratePerNight; }
+    public void setTotalFees(double totalFees) { this.totalFees = totalFees; }  
+    
     @Override
     public double CustomerRoomFees(Room room) {
         int days = (numberOfDays == 0) ? 1 : numberOfDays;
@@ -96,6 +102,6 @@ public class Guest implements RoomFees {
 
     @Override
     public String toString() {
-        return "Guest{name=" + name + ", room=" + roomID + ", days=" + numberOfDays + "}";
+        return "Guest{name=" + firstName + " " + lastName + ", room=" + roomID + ", days=" + numberOfDays + "}";
     }
 }

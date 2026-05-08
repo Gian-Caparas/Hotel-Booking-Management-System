@@ -14,37 +14,70 @@ import com.hotel.wildcat_hotel.hotel.Room;
 
 public class DataBase {
 
+    // ================= DATABASE INFO =================
+
+    private static final String DB_URL =
+            "jdbc:mysql://localhost:3306/hotelDB"
+                    + "?useSSL=false"
+                    + "&serverTimezone=UTC"
+                    + "&allowPublicKeyRetrieval=true";
+
+    private static final String DB_USER =
+            "root";
+
+    private static final String DB_PASSWORD =
+            "";
+
+    // ================= HIBERNATE =================
+
     private static SessionFactory sessionFactory;
 
     private static SessionFactory getFactory() {
 
-        if (sessionFactory == null || sessionFactory.isClosed()) {
+        if (sessionFactory == null ||
+                sessionFactory.isClosed()) {
 
-            sessionFactory = new Configuration()
-                    .configure("hibernate.cfg.xml")
-                    .addAnnotatedClass(Room.class)
-                    .addAnnotatedClass(Guest.class)
-                    .addAnnotatedClass(User.class)
-                    .buildSessionFactory();
+            sessionFactory =
+                    new Configuration()
+                            .configure("hibernate.cfg.xml")
+                            .addAnnotatedClass(Room.class)
+                            .addAnnotatedClass(Guest.class)
+                            .addAnnotatedClass(User.class)
+                            .buildSessionFactory();
         }
 
         return sessionFactory;
     }
 
-    // ================= JDBC CONNECTION TEST =================
+    public static void closeFactory() {
 
-    public static void checkConnection() throws SQLException {
+        if (sessionFactory != null &&
+                !sessionFactory.isClosed()) {
 
-        String url =
-                "jdbc:mysql://localhost:3306/hotelDB" +
-                "?useSSL=false" +
-                "&serverTimezone=UTC" +
-                "&allowPublicKeyRetrieval=true";
+            sessionFactory.close();
+        }
+    }
 
-        Connection con =
-                DriverManager.getConnection(url, "root", "");
+    // ================= JDBC CONNECTION =================
 
-        System.out.println("Connection success!");
+    public static Connection getConnection()
+            throws SQLException {
+
+        return DriverManager.getConnection(
+                DB_URL,
+                DB_USER,
+                DB_PASSWORD
+        );
+    }
+
+    public static void checkConnection()
+            throws SQLException {
+
+        Connection con = getConnection();
+
+        System.out.println(
+                "Connection success!"
+        );
 
         con.close();
     }
@@ -53,12 +86,16 @@ public class DataBase {
 
     public static List<Room> getRooms() {
 
-        try (Session session = getFactory().openSession()) {
+        try (Session session =
+                     getFactory().openSession()) {
 
             session.beginTransaction();
 
             List<Room> rooms =
-                    session.createQuery("from Room", Room.class)
+                    session.createQuery(
+                                    "from Room",
+                                    Room.class
+                            )
                             .list();
 
             session.getTransaction().commit();
@@ -69,14 +106,16 @@ public class DataBase {
 
     public static List<Room> getAvailableRooms() {
 
-        try (Session session = getFactory().openSession()) {
+        try (Session session =
+                     getFactory().openSession()) {
 
             session.beginTransaction();
 
             List<Room> rooms =
                     session.createQuery(
-                            "from Room r where r.isEmpty = true",
-                            Room.class)
+                                    "from Room r where r.status = 'AVAILABLE'",
+                                    Room.class
+                            )
                             .list();
 
             session.getTransaction().commit();
@@ -85,9 +124,22 @@ public class DataBase {
         }
     }
 
+    public static Room getRoomById(int roomID) {
+
+        try (Session session =
+                     getFactory().openSession()) {
+
+            return session.get(
+                    Room.class,
+                    roomID
+            );
+        }
+    }
+
     public static void saveRoom(Room room) {
 
-        try (Session session = getFactory().openSession()) {
+        try (Session session =
+                     getFactory().openSession()) {
 
             session.beginTransaction();
 
@@ -97,16 +149,33 @@ public class DataBase {
         }
     }
 
+    public static void updateRoom(Room room) {
+
+        try (Session session =
+                     getFactory().openSession()) {
+
+            session.beginTransaction();
+
+            session.merge(room);
+
+            session.getTransaction().commit();
+        }
+    }
+
     // ===================== GUESTS =====================
 
     public static List<Guest> getGuests() {
 
-        try (Session session = getFactory().openSession()) {
+        try (Session session =
+                     getFactory().openSession()) {
 
             session.beginTransaction();
 
             List<Guest> guests =
-                    session.createQuery("from Guest", Guest.class)
+                    session.createQuery(
+                                    "from Guest",
+                                    Guest.class
+                            )
                             .list();
 
             session.getTransaction().commit();
@@ -115,21 +184,64 @@ public class DataBase {
         }
     }
 
+    public static void saveGuest(Guest guest) {
+
+        try (Session session =
+                     getFactory().openSession()) {
+
+            session.beginTransaction();
+
+            session.persist(guest);
+
+            session.getTransaction().commit();
+        }
+    }
+
     // ===================== USERS =====================
 
     public static List<User> getUsers() {
 
-        try (Session session = getFactory().openSession()) {
+        try (Session session =
+                     getFactory().openSession()) {
 
             session.beginTransaction();
 
             List<User> users =
-                    session.createQuery("from User", User.class)
+                    session.createQuery(
+                                    "from User",
+                                    User.class
+                            )
                             .list();
 
             session.getTransaction().commit();
 
             return users;
+        }
+    }
+
+    public static User validateLogin(
+            String username,
+            String password
+    ) {
+
+        try (Session session =
+                     getFactory().openSession()) {
+
+            return session.createQuery(
+                            "from User " +
+                                    "where username = :u " +
+                                    "and password = :p",
+                            User.class
+                    )
+                    .setParameter("u", username)
+                    .setParameter("p", password)
+                    .uniqueResult();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return null;
         }
     }
 
@@ -139,14 +251,19 @@ public class DataBase {
 
         for (User u : users) {
 
-            if (u.getUsername()
-                    .equalsIgnoreCase(user.getUsername())) {
+            if (
+                    u.getUsername()
+                            .equalsIgnoreCase(
+                                    user.getUsername()
+                            )
+            ) {
 
                 return false;
             }
         }
 
-        try (Session session = getFactory().openSession()) {
+        try (Session session =
+                     getFactory().openSession()) {
 
             session.beginTransaction();
 
@@ -158,15 +275,20 @@ public class DataBase {
         return true;
     }
 
-    public static boolean deleteUser(String username) {
+    public static boolean deleteUser(
+            String username
+    ) {
 
-        try (Session session = getFactory().openSession()) {
+        try (Session session =
+                     getFactory().openSession()) {
 
             session.beginTransaction();
 
             int deleted =
                     session.createMutationQuery(
-                                    "delete from User where username = :u")
+                                    "delete from User " +
+                                            "where username = :u"
+                            )
                             .setParameter("u", username)
                             .executeUpdate();
 
@@ -180,9 +302,17 @@ public class DataBase {
 
     public static void main(String[] args) {
 
-        System.out.println("╔══════════════════════════════════════╗");
-        System.out.println("║   WildCat Hotel — DB Connection Test ║");
-        System.out.println("╚══════════════════════════════════════╝");
+        System.out.println(
+                "╔══════════════════════════════════════╗"
+        );
+
+        System.out.println(
+                "║   WildCat Hotel — DB Connection Test ║"
+        );
+
+        System.out.println(
+                "╚══════════════════════════════════════╝"
+        );
 
         // ================= JDBC TEST =================
 
@@ -191,14 +321,18 @@ public class DataBase {
             checkConnection();
 
             System.out.println(
-                    "[PASS] JDBC connection SUCCESS");
+                    "[PASS] JDBC connection SUCCESS"
+            );
 
         } catch (Exception e) {
 
             System.out.println(
-                    "[FAIL] JDBC connection FAILED");
+                    "[FAIL] JDBC connection FAILED"
+            );
 
-            System.out.println(e.getMessage());
+            System.out.println(
+                    e.getMessage()
+            );
 
             return;
         }
@@ -207,97 +341,127 @@ public class DataBase {
 
         try {
 
-            List<Room> rooms = getRooms();
+            List<Room> rooms =
+                    getRooms();
 
             System.out.println(
                     "[PASS] Rooms loaded: "
-                            + rooms.size());
+                            + rooms.size()
+            );
 
             rooms.stream()
                     .limit(5)
                     .forEach(r ->
 
                             System.out.println(
-                                    "Room #" + r.getRoomID()
-                                            + " | " + r.getRoomType()
-                                            + " | Capacity="
+                                    "Room #"
+                                            + r.getRoomID()
+                                            + " | "
+                                            + r.getRoomType()
+                                            + " | "
                                             + r.getRoomCapacity()
-                                            + " | Empty="
-                                            + r.isEmpty()));
+                                            + " | "
+                                            + r.toString()
+                            )
+                    );
 
         } catch (Exception e) {
 
             System.out.println(
-                    "[FAIL] Rooms query FAILED");
+                    "[FAIL] Rooms query FAILED"
+            );
 
-            System.out.println(e.getMessage());
+            System.out.println(
+                    e.getMessage()
+            );
         }
 
         // ================= USER TEST =================
 
         try {
 
-            List<User> users = getUsers();
+            List<User> users =
+                    getUsers();
 
             System.out.println(
                     "[PASS] Users loaded: "
-                            + users.size());
+                            + users.size()
+            );
 
             users.forEach(u ->
 
                     System.out.println(
-                            "User=" + u.getUsername()
+                            "User="
+                                    + u.getUsername()
                                     + " | Role="
                                     + u.getRole()
                                     + " | Admin="
-                                    + u.isAdmin()));
+                                    + u.isAdmin()
+                    )
+            );
 
         } catch (Exception e) {
 
             System.out.println(
-                    "[FAIL] Users query FAILED");
+                    "[FAIL] Users query FAILED"
+            );
 
-            System.out.println(e.getMessage());
+            System.out.println(
+                    e.getMessage()
+            );
         }
 
         // ================= LOGIN TEST =================
 
         try {
 
-            User testUser =
-                    new User(
+            User user =
+                    validateLogin(
                             "admin",
-                            "admin123",
-                            "Admin"
+                            "admin123"
                     );
 
-            boolean valid =
-                    User.isUserValid(testUser);
+            if (user != null) {
 
-            boolean isAdmin =
-                    User.isUserAdmin(testUser);
+                System.out.println(
+                        "[PASS] Login SUCCESS"
+                );
 
-            System.out.println(
-                    "[PASS] Login Test → valid="
-                            + valid
-                            + " | isAdmin="
-                            + isAdmin);
+                System.out.println(
+                        "Welcome "
+                                + user.getUsername()
+                );
+
+            } else {
+
+                System.out.println(
+                        "[FAIL] Invalid credentials"
+                );
+            }
 
         } catch (Exception e) {
 
             System.out.println(
-                    "[FAIL] Login validation FAILED");
+                    "[FAIL] Login test FAILED"
+            );
 
-            System.out.println(e.getMessage());
+            System.out.println(
+                    e.getMessage()
+            );
         }
 
         System.out.println(
-                "══════════════════════════════════════════");
+                "══════════════════════════════════════════"
+        );
 
         System.out.println(
-                "All tests complete!");
+                "All tests complete!"
+        );
 
         System.out.println(
-                "══════════════════════════════════════════");
+                "══════════════════════════════════════════"
+        );
+
+        closeFactory();
     }
 }

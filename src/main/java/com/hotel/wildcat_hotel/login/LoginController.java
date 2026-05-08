@@ -157,7 +157,7 @@ public class LoginController implements Initializable {
 
         alert.setHeaderText(null);
 
-        alert.setContentText(message);
+        alert.setContentText(message);      
 
         alert.showAndWait();
     }

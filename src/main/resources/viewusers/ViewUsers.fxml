@@ -59,21 +59,15 @@
                           -fx-table-cell-border-color: transparent;
                           -fx-text-fill: white;">
             <columns>
-                <TableColumn fx:id="userIdColumn" 
-                             text="User ID" 
-                             prefWidth="150" 
-                             style="-fx-alignment: CENTER;
-                                    -fx-text-fill: white;
-                                    -fx-font-size: 13;" />
                 <TableColumn fx:id="usernameColumn" 
                              text="Username" 
-                             prefWidth="375"
+                     prefWidth="500"
                              style="-fx-alignment: CENTER;
                                     -fx-text-fill: white;
                                     -fx-font-size: 13;" />
                 <TableColumn fx:id="roleColumn" 
                              text="Role" 
-                             prefWidth="200" 
+                     prefWidth="250" 
                              style="-fx-alignment: CENTER;
                                     -fx-text-fill: white;
                                     -fx-font-size: 13;" />
