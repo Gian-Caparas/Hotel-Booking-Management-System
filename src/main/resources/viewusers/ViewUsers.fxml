@@ -14,66 +14,72 @@
       prefWidth="900.0" 
       spacing="15" 
       style="-fx-background-color: #1e1e38;" 
-      xmlns="http://javafx.com/javafx/17" 
+      xmlns="http://javafx.com/javafx/25" 
       xmlns:fx="http://javafx.com/fxml/1" 
       fx:controller="com.hotel.wildcat_hotel.viewusers.ViewUsersController">
 
     <children>
 
-        <Label text="WildCat Hotel: View Users"
-               style="-fx-text-fill: #f5c16c; -fx-font-size: 24; -fx-font-weight: bold;" />
+        <Label style="-fx-text-fill: #f5c16c;                 
+               -fx-font-size: 24;                 
+               -fx-font-weight: bold;" text="WildCat Hotel: View Users" />
 
-        <HBox alignment="CENTER_LEFT"
-              spacing="15"
-              prefWidth="749"
-              prefHeight="38"
-              maxWidth="749">
+        <HBox alignment="CENTER_LEFT" 
+              maxWidth="749" 
+              prefHeight="38" 
+              prefWidth="749" spacing="15">
 
             <children>
                 <TextField fx:id="usernamefield" 
                            prefHeight="38" 
                            promptText="Enter username..." 
-                           HBox.hgrow="ALWAYS"
-                           style="-fx-background-color: #2a2a4a; -fx-text-fill: white; -fx-prompt-text-fill: #666688; -fx-border-color: #4444aa; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-size: 14;" />
+                           style="-fx-background-color: #2a2a4a;                             
+                           -fx-text-fill: white;                             
+                           -fx-prompt-text-fill: #666688;                             
+                           -fx-border-color: #4444aa;                             
+                           -fx-border-radius: 6;                             
+                           -fx-background-radius: 6;                             
+                           -fx-font-size: 14;" HBox.hgrow="ALWAYS" />
 
                 <Button fx:id="searchButton" 
                         mnemonicParsing="false" 
                         onAction="#handleSearchUser" 
                         prefHeight="38" 
                         prefWidth="120" 
-                        text="Search"
-                        style="-fx-background-color: #e2b96f; -fx-text-fill: #1a1a2e; -fx-font-size: 14; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;">
+                        style="-fx-background-color: #e2b96f;                          
+                        -fx-text-fill: #1a1a2e; -fx-font-size: 14;                          
+                        -fx-font-weight: bold;                          
+                        -fx-background-radius: 8;                          
+                        -fx-cursor: hand;" text="Search">
                     <HBox.margin>
-                        <Insets left="5"/>
+                        <Insets left="5" />
                     </HBox.margin>
                 </Button>
             </children>
         </HBox>
 
-        <TableView fx:id="usersTable"
-                   maxWidth="750"
-                   prefHeight="350"
-                   prefWidth="750"
-                   style="-fx-background-color: #2a2a4a;
-                          -fx-control-inner-background: #2a2a4a;
-                          -fx-table-cell-border-color: transparent;
-                          -fx-text-fill: white;">
+        <TableView fx:id="usersTable" 
+                   maxWidth="750" 
+                   prefHeight="350" 
+                   prefWidth="750" 
+                   style="-fx-background-color: #2a2a4a;                                               
+                   -fx-control-inner-background: #2a2a4a;                                               
+                   -fx-table-cell-border-color: transparent;                                               
+                   -fx-text-fill: white;">
             <columns>
                 <TableColumn fx:id="usernameColumn" 
-                             text="Username" 
-                     prefWidth="500"
-                             style="-fx-alignment: CENTER;
-                                    -fx-text-fill: white;
-                                    -fx-font-size: 13;" />
+                             prefWidth="369.5999862551689" 
+                             style="-fx-alignment: CENTER;                                                                   
+                             -fx-text-fill: white;                                                                   
+                             -fx-font-size: 13;" text="Username" />
                 <TableColumn fx:id="roleColumn" 
-                             text="Role" 
-                     prefWidth="250" 
-                             style="-fx-alignment: CENTER;
-                                    -fx-text-fill: white;
-                                    -fx-font-size: 13;" />
+                             prefWidth="369.5999862551689" 
+                             style="-fx-alignment: CENTER;                                                                  
+                             -fx-text-fill: white;                                                                  
+                             -fx-font-size: 13;" text="Role" />
             </columns>
             <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
             </columnResizePolicy>
         </TableView>
     </children>

@@ -1,7 +1,11 @@
 package com.hotel.wildcat_hotel.project;
 
-import jakarta.persistence.*;
 import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "user")
@@ -46,6 +50,9 @@ public class User {
         this.username = username;
         this.password = password;
         setRole(role);
+        this.email = email;
+        this.phone = phone;
+        this.status = "Active";
     }
 
     // ================= GETTERS =================

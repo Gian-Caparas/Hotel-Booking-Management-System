@@ -11,42 +11,123 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="700" prefWidth="960" spacing="16" style="-fx-background-color: #1e1e38; -fx-padding: 60;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hotel.wildcat_hotel.adduser.AddUserController">
+<VBox alignment="CENTER" prefHeight="800"
+      prefWidth="960"
+      spacing="16"
+      style="-fx-background-color: #1e1e38;
+      -fx-padding: 60;"
+      xmlns="http://javafx.com/javafx/25"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.hotel.wildcat_hotel.adduser.AddUserController">
+
     <children>
-        <Label style="-fx-text-fill: #e2b96f; -fx-font-size: 28; -fx-font-weight: bold;" text="Add New User" />
-        <Label style="-fx-text-fill: #888899; -fx-font-size: 13;" text="Create a new staff or admin account" />
+        <Label style="-fx-text-fill: #e2b96f;
+               -fx-font-size: 28;
+               -fx-font-weight: bold;"
+               text="Add New User" />
+        <Label style="-fx-text-fill: #888899;
+               -fx-font-size: 13;"
+               text="Create a new staff or admin account" />
 
         <Region prefHeight="10" />
 
+        <!-- Username -->
         <VBox maxWidth="340" spacing="6">
             <children>
                 <Label style="-fx-text-fill: #cccccc; -fx-font-size: 13;" text="Username" />
-                <TextField fx:id="usernameField" prefHeight="38" prefWidth="340" promptText="Enter username" style="-fx-background-color: #2a2a4a; -fx-text-fill: white; -fx-prompt-text-fill: #666688; -fx-border-color: #4444aa; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8; -fx-font-size: 14;" />
+                <TextField fx:id="usernameField"
+                           prefHeight="38" prefWidth="340"
+                           promptText="Enter username"
+                           style="-fx-background-color: #2a2a4a;
+                           -fx-text-fill: white;
+                           -fx-prompt-text-fill: #666688;
+                           -fx-border-color: #4444aa;
+                           -fx-border-radius: 6;
+                           -fx-background-radius: 6;
+                           -fx-padding: 8; -fx-font-size: 14;" />
             </children>
         </VBox>
 
+        <!-- Password -->
         <VBox maxWidth="340" spacing="6">
             <children>
-                <Label style="-fx-text-fill: #cccccc; -fx-font-size: 13;" text="Password" />
-                <PasswordField fx:id="passwordField" prefHeight="38" prefWidth="340" promptText="Enter password" style="-fx-background-color: #2a2a4a; -fx-text-fill: white; -fx-prompt-text-fill: #666688; -fx-border-color: #4444aa; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8; -fx-font-size: 14;" />
+                <Label style="-fx-text-fill: #cccccc;
+                -fx-font-size: 13;" text="Password" />
+                <PasswordField fx:id="passwordField"
+                               prefHeight="38"
+                               prefWidth="340"
+                               promptText="Enter password"
+                               style="-fx-background-color: #2a2a4a;
+                               -fx-text-fill: white;
+                               -fx-prompt-text-fill: #666688;
+                               -fx-border-color: #4444aa;
+                               -fx-border-radius: 6;
+                               -fx-background-radius: 6;
+                               -fx-padding: 8; -fx-font-size: 14;" />
             </children>
         </VBox>
 
+        <!-- Email -->
+        <VBox maxWidth="340" spacing="6">
+            <children>
+                <Label style="-fx-text-fill: #cccccc; -fx-font-size: 13;" text="Email" />
+                <TextField fx:id="emailField"
+                           prefHeight="38" prefWidth="340"
+                           promptText="Enter email address"
+                           style="-fx-background-color: #2a2a4a;
+                           -fx-text-fill: white;
+                           -fx-prompt-text-fill: #666688;
+                           -fx-border-color: #4444aa;
+                           -fx-border-radius: 6;
+                           -fx-background-radius: 6;
+                           -fx-padding: 8; -fx-font-size: 14;" />
+            </children>
+        </VBox>
+
+        <!-- Phone Number -->
+        <VBox maxWidth="340" spacing="6">
+            <children>
+                <Label style="-fx-text-fill: #cccccc; -fx-font-size: 13;" text="Phone Number" />
+                <TextField fx:id="phoneField"
+                           prefHeight="38" prefWidth="340"
+                           promptText="Enter phone number"
+                           style="-fx-background-color: #2a2a4a;
+                           -fx-text-fill: white;
+                           -fx-prompt-text-fill: #666688;
+                           -fx-border-color: #4444aa;
+                           -fx-border-radius: 6;
+                           -fx-background-radius: 6;
+                           -fx-padding: 8; -fx-font-size: 14;" />
+            </children>
+        </VBox>
+
+        <!-- Role -->
         <VBox maxWidth="340" spacing="8">
             <children>
-                <Label style="-fx-text-fill: #cccccc; -fx-font-size: 13;" text="Role" />
+                <Label style="-fx-text-fill: #cccccc;
+                       -fx-font-size: 13;"
+                       text="Role" />
                 <HBox alignment="CENTER_LEFT" spacing="30">
                     <children>
-                        <RadioButton fx:id="adminRadio" style="-fx-text-fill: white;" text="Admin">
+                        <RadioButton fx:id="adminRadio"
+                                     style="-fx-text-fill: white;"
+                                     text="Admin">
                             <toggleGroup>
                                 <ToggleGroup fx:id="roleGroup" />
                             </toggleGroup>
                             <font><Font size="14.0" /></font>
                         </RadioButton>
-                        <RadioButton fx:id="staffRadio" selected="true" style="-fx-text-fill: white;" text="Staff" toggleGroup="$roleGroup">
+                        <RadioButton fx:id="staffRadio"
+                                     selected="true"
+                                     style="-fx-text-fill: white;"
+                                     text="Staff"
+                                     toggleGroup="$roleGroup">
                             <font><Font size="14.0" /></font>
                         </RadioButton>
-                        <RadioButton fx:id="customerRadio" style="-fx-text-fill: white;" text="Customer" toggleGroup="$roleGroup">
+                        <RadioButton fx:id="customerRadio"
+                                     style="-fx-text-fill: white;"
+                                     text="Customer"
+                                     toggleGroup="$roleGroup">
                             <font><Font size="14.0" /></font>
                         </RadioButton>
                     </children>
@@ -56,7 +137,17 @@
 
         <Region prefHeight="10" />
 
-        <Button onAction="#handleAddUser" prefHeight="42" prefWidth="340" style="-fx-background-color: #e2b96f; -fx-text-fill: #1a1a2e; -fx-font-size: 15; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;" text="Add User" />
+        <!-- Add User Button -->
+        <Button onAction="#handleAddUser"
+                prefHeight="42"
+                prefWidth="340"
+                style="-fx-background-color: #e2b96f;
+                -fx-text-fill: #1a1a2e;
+                -fx-font-size: 15;
+                -fx-font-weight: bold;
+                -fx-background-radius: 8;
+                -fx-cursor: hand;"
+                text="Add User" />
 
         <Label fx:id="statusLabel" style="-fx-font-size: 13;" text="" />
     </children>

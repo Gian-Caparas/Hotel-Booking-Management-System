@@ -17,7 +17,7 @@ public class DataBase {
     // ================= DATABASE INFO =================
 
     private static final String DB_URL =
-            "jdbc:mysql://localhost:3306/hotelDB"
+            "jdbc:mysql://localhost:3307/hoteldb"
                     + "?useSSL=false"
                     + "&serverTimezone=UTC"
                     + "&allowPublicKeyRetrieval=true";
