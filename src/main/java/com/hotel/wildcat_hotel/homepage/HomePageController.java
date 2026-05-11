@@ -7,9 +7,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -60,6 +62,19 @@ public class HomePageController implements Initializable {
                 + "\n" + e.getMessage());
             err.setStyle("-fx-text-fill: #ff6b6b; -fx-font-size: 13;");
             contentPane.getChildren().setAll(err);
+        }
+    }
+
+    @FXML private void logoutAction(ActionEvent event) {
+        // Clear current user and return to login screen
+        LoginController.currentUser = null;
+        try {
+            Parent loginView = FXMLLoader.load(getClass().getResource(Paths.LOGINVIEW));
+            Stage stage = (Stage) contentPane.getScene().getWindow();
+            stage.setScene(new Scene(loginView, 480, 420));
+            stage.setTitle("WildCat Hotel Reservation System");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

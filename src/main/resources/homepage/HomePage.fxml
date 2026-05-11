@@ -69,6 +69,13 @@
 
             <Label fx:id="currentUserLabel" text="Logged in as: ..."
                    style="-fx-text-fill: #555577; -fx-font-size: 11; -fx-padding: 0 0 0 8;"/>
+
+            <Button text="  Logout"
+                    onAction="#logoutAction"
+                    maxWidth="Infinity" alignment="CENTER_LEFT"
+                    style="-fx-background-color: #c41e3a; -fx-text-fill: white;
+                           -fx-font-size: 12; -fx-cursor: hand; -fx-padding: 10 8;
+                           -fx-border-radius: 4; -fx-background-radius: 4;"/>
         </VBox>
     </left>
 
