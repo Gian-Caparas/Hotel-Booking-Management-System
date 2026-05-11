@@ -20,10 +20,10 @@ public class CheckInController {
     @FXML private TextField phoneField;
     @FXML private TextField cityField;
     @FXML private TextField nationalityField;
-
+    @FXML private ComboBox<String> roomTypeComboBox;
+    @FXML private ComboBox<String> roomCapacityComboBox;
     @FXML private DatePicker checkInDatePicker;
     @FXML private DatePicker checkOutDatePicker;
-
     @FXML private Button checkInButton;
 
     @FXML
@@ -34,6 +34,8 @@ public class CheckInController {
         String phone = phoneField.getText().trim();
         String city = cityField.getText().trim();
         String nationality = nationalityField.getText().trim();
+        String roomType = roomTypeComboBox.getValue();
+        String roomCapacity = roomCapacityComboBox.getValue();
         LocalDate checkInDate = checkInDatePicker.getValue();
         LocalDate checkOutDate = checkOutDatePicker.getValue();
 
@@ -45,6 +47,8 @@ public class CheckInController {
                 phone.isEmpty() ||
                 city.isEmpty() ||
                 nationality.isEmpty() ||
+                roomType == null ||
+                roomCapacity == null ||
                 checkInDate == null ||
                 checkOutDate == null
         ) {
@@ -68,11 +72,14 @@ public class CheckInController {
             String roomSQL =
                     "SELECT * FROM room " +
                     "WHERE status = 'AVAILABLE' " +
+                    "AND room_type = ? " +
+                    "AND room_capacity = ? " +
                     "LIMIT 1";
-            PreparedStatement roomStmt =
-                    con.prepareStatement(roomSQL);
-            ResultSet rs =
-                    roomStmt.executeQuery();
+            PreparedStatement roomStmt = con.prepareStatement(roomSQL);
+            roomStmt.setString(1, roomType);
+            roomStmt.setString(2, roomCapacity);
+
+            ResultSet rs = roomStmt.executeQuery();
             if (!rs.next()) {
                 showNotification(
                         "No Rooms",
@@ -91,21 +98,13 @@ public class CheckInController {
                     ratePerNight * numberOfDays;
             // ================= INSERT GUEST =================
 
-            String insertSQL =
-                    "INSERT INTO guest (" +
-                    "room_ID," +
-                    "first_name," +
-                    "last_name," +
-                    "email," +
-                    "phone_no," +
-                    "city," +
-                    "nationality," +
-                    "check_in_date," +
-                    "check_out_date," +
-                    "number_of_days," +
-                    "rate_per_night," +
-                    "total_fees" +
-                    ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+           // Add room_type and room_capacity to the list (14 columns total)
+           String insertSQL =
+                "INSERT INTO guest (" +
+                "room_ID, first_name, last_name, email, phone_no, city, nationality, " +
+                "room_type, room_capacity, check_in_date, check_out_date, " + 
+                "number_of_days, rate_per_night, total_fees" +
+                ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"; // Use 14 placeholders
 
             PreparedStatement insertStmt = con.prepareStatement(insertSQL);
             insertStmt.setInt(1, roomID);
@@ -115,11 +114,13 @@ public class CheckInController {
             insertStmt.setString(5, phone);
             insertStmt.setString(6, city);
             insertStmt.setString(7, nationality);
-            insertStmt.setDate(8, java.sql.Date.valueOf(checkInDate));
-            insertStmt.setDate(9, java.sql.Date.valueOf(checkOutDate));
-            insertStmt.setLong(10, numberOfDays);
-            insertStmt.setDouble(11, ratePerNight);
-            insertStmt.setDouble(12, totalFees);
+            insertStmt.setString(8, roomType);
+            insertStmt.setString(9, roomCapacity);
+            insertStmt.setDate(10, java.sql.Date.valueOf(checkInDate));
+            insertStmt.setDate(11, java.sql.Date.valueOf(checkOutDate));
+            insertStmt.setLong(12, numberOfDays);
+            insertStmt.setDouble(13, ratePerNight);
+            insertStmt.setDouble(14, totalFees);
             insertStmt.executeUpdate();
 
             // ================= UPDATE ROOM STATUS =================
@@ -170,6 +171,8 @@ public class CheckInController {
         phoneField.clear();
         cityField.clear();
         nationalityField.clear();
+        roomTypeComboBox.setValue(null);
+        roomCapacityComboBox.setValue(null);
         checkInDatePicker.setValue(null);
         checkOutDatePicker.setValue(null);
     }
@@ -207,5 +210,13 @@ public class CheckInController {
         throw new IllegalStateException(
                 "No compatible database connection method found in DataBase class."
                 );
+        }
+
+        @FXML public void initialize() {
+        // Populate Room Type ComboBox
+        roomTypeComboBox.getItems().addAll("Economy", "Normal", "Vip");
+
+        // Populate Room Capacity ComboBox
+        roomCapacityComboBox.getItems().addAll("Single", "Double", "Triple");
         }
 }

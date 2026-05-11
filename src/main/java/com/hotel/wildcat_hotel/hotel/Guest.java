@@ -31,6 +31,12 @@ public class Guest implements RoomFees {
     @Column(name = "nationality")
     private String nationality;
 
+    @Column(name = "room_type")
+    private String roomType;
+
+    @Column(name = "room_capacity")
+    private String roomCapacity;
+
     @Column(name = "check_in_date")
     private String checkInDate;
 
@@ -48,7 +54,7 @@ public class Guest implements RoomFees {
 
     public Guest(){}//Default constructor
     public Guest(int guestID, int roomID, String firstName, String lastName, String email, String phoneNo,
-                 String city, String nationality, String checkInDate, String checkOutDate, int numberOfDays, double ratePerNight, double totalFees) {
+                 String city, String nationality, String roomType, String roomCapacity, String checkInDate, String checkOutDate, int numberOfDays, double ratePerNight, double totalFees) {
         this.guestID = guestID;
         this.roomID = roomID;
         this.firstName = firstName;
@@ -57,6 +63,8 @@ public class Guest implements RoomFees {
         this.phoneNo = phoneNo;
         this.city = city;
         this.nationality = nationality;
+        this.roomType = roomType;
+        this.roomCapacity = roomCapacity;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.numberOfDays = numberOfDays;
@@ -73,6 +81,8 @@ public class Guest implements RoomFees {
     public String getPhoneNo() { return phoneNo; }
     public String getCity() { return city; }
     public String getNationality() { return nationality; }
+    public String getRoomType() { return roomType; }
+    public String getRoomCapacity() { return roomCapacity; }
     public String getCheckInDate() { return checkInDate; }
     public String getCheckOutDate() { return checkOutDate; }
     public int getNumberOfDays() { return numberOfDays; }
@@ -88,6 +98,8 @@ public class Guest implements RoomFees {
     public void setPhoneNo(String phoneNo) { this.phoneNo = phoneNo; }
     public void setCity(String city) { this.city = city; }
     public void setNationality(String nationality) { this.nationality = nationality; }
+    public void setRoomType(String roomType) { this.roomType = roomType; }
+    public void setRoomCapacity(String roomCapacity) { this.roomCapacity = roomCapacity; }
     public void setCheckInDate(String checkInDate) { this.checkInDate = checkInDate; }
     public void setCheckOutDate(String checkOutDate) { this.checkOutDate = checkOutDate; }
     public void setNumberOfDays(int numberOfDays) { this.numberOfDays = numberOfDays; }

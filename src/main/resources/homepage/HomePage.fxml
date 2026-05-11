@@ -16,6 +16,7 @@
             <Label text="🐱 WildCat Hotel"
                    style="-fx-text-fill: #e2b96f; -fx-font-size: 18; -fx-font-weight: bold; -fx-padding: 0 0 16 8;"/>
 
+             <!-- STAFF FEATURES -->
             <Label text="OPERATIONS"
                    style="-fx-text-fill: #555577; -fx-font-size: 10; -fx-padding: 8 0 4 8;"/>
 
@@ -27,16 +28,8 @@
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-            <Button text="  Book a Room"         onAction="#openRoomBooking"
-                    maxWidth="Infinity" alignment="CENTER_LEFT"
-                    style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
-                           -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-            <Button text="  Cancel Booking"      onAction="#openCancelBooking"
-                    maxWidth="Infinity" alignment="CENTER_LEFT"
-                    style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
-                           -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
 
-            <Label text="RECORDS"
+           <Label text="RECORDS"
                    style="-fx-text-fill: #555577; -fx-font-size: 10; -fx-padding: 16 0 4 8;"/>
 
             <Button text="  View Guests"         onAction="#openGuests"
@@ -47,20 +40,33 @@
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
+            
+            <Label text="CUSTOMER - SELF SERVICE"
+                   style="-fx-text-fill: #555577; -fx-font-size: 10; -fx-padding: 16 0 4 8;"/>
 
+            <!-- CUSTOMER FEATURES -->
+            <Button text="  Book a Room"         onAction="#openRoomBooking"
+                    maxWidth="Infinity" alignment="CENTER_LEFT"
+                    style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
+                           -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
+            <Button text="  Cancel Booking"      onAction="#openCancelBooking"
+                    maxWidth="Infinity" alignment="CENTER_LEFT"
+                    style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
+                           -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
+           
             <!-- ADMIN FEATURES -->
             <Label fx:id="adminLabel" text="ADMIN"
                    style="-fx-text-fill: #555577; -fx-font-size: 10; -fx-padding: 16 0 4 8;"/>
 
-            <Button fx:id="addUserButton" text="  Add User"            onAction="#openAddUser"
+            <Button fx:id="addUserButton" text="  Add User"           onAction="#openAddUser"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-            <Button fx:id="deleteUserButton" text="  Delete User"         onAction="#openDeleteUser"
+            <Button fx:id="deleteUserButton" text="  Delete User"        onAction="#openDeleteUser"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-            <Button fx:id="viewUsersButton" text="  View Users"          onAction="#openViewUsers"
+            <Button fx:id="viewUsersButton" text="  View Users"         onAction="#openViewUsers"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
