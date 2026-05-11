@@ -28,33 +28,16 @@ public class CheckInController {
 
     @FXML
     private void handleCheckIn(ActionEvent event) {
-
-        String firstName =
-                firstNameField.getText().trim();
-
-        String lastName =
-                lastNameField.getText().trim();
-
-        String email =
-                emailField.getText().trim();
-
-        String phone =
-                phoneField.getText().trim();
-
-        String city =
-                cityField.getText().trim();
-
-        String nationality =
-                nationalityField.getText().trim();
-
-        LocalDate checkInDate =
-                checkInDatePicker.getValue();
-
-        LocalDate checkOutDate =
-                checkOutDatePicker.getValue();
+        String firstName = firstNameField.getText().trim();
+        String lastName = lastNameField.getText().trim();
+        String email = emailField.getText().trim();
+        String phone = phoneField.getText().trim();
+        String city = cityField.getText().trim();
+        String nationality = nationalityField.getText().trim();
+        LocalDate checkInDate = checkInDatePicker.getValue();
+        LocalDate checkOutDate = checkOutDatePicker.getValue();
 
         // ================= VALIDATION =================
-
         if (
                 firstName.isEmpty() ||
                 lastName.isEmpty() ||
@@ -65,73 +48,47 @@ public class CheckInController {
                 checkInDate == null ||
                 checkOutDate == null
         ) {
-
             showNotification(
                     "Missing Information",
                     "Please fill out all fields."
             );
-
             return;
         }
 
         if (checkOutDate.isBefore(checkInDate)) {
-
             showNotification(
                     "Date Error",
                     "Check-out date cannot be before check-in date."
             );
-
             return;
         }
-
         try {
-
-            Connection con =
-                                        getDatabaseConnection();
-
+            Connection con = getDatabaseConnection();
             // ================= GET AVAILABLE ROOM =================
-
             String roomSQL =
                     "SELECT * FROM room " +
                     "WHERE status = 'AVAILABLE' " +
                     "LIMIT 1";
-
             PreparedStatement roomStmt =
                     con.prepareStatement(roomSQL);
-
             ResultSet rs =
                     roomStmt.executeQuery();
-
             if (!rs.next()) {
-
                 showNotification(
                         "No Rooms",
                         "No available rooms found."
                 );
-
                 return;
             }
 
-            int roomID =
-                    rs.getInt("roomID");
-
-            double ratePerNight =
-                    rs.getDouble("rate_per_night");
-
-            long numberOfDays =
-                    ChronoUnit.DAYS.between(
-                            checkInDate,
-                            checkOutDate
-                    );
-
+            int roomID = rs.getInt("roomID");
+            double ratePerNight = rs.getDouble("rate_per_night");
+            long numberOfDays = ChronoUnit.DAYS.between( checkInDate, checkOutDate);
             if (numberOfDays <= 0) {
-
                 numberOfDays = 1;
             }
-
             double totalFees =
                     ratePerNight * numberOfDays;
-
             // ================= INSERT GUEST =================
 
             String insertSQL =
@@ -150,9 +107,7 @@ public class CheckInController {
                     "total_fees" +
                     ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 
-            PreparedStatement insertStmt =
-                    con.prepareStatement(insertSQL);
-
+            PreparedStatement insertStmt = con.prepareStatement(insertSQL);
             insertStmt.setInt(1, roomID);
             insertStmt.setString(2, firstName);
             insertStmt.setString(3, lastName);
@@ -165,7 +120,6 @@ public class CheckInController {
             insertStmt.setLong(10, numberOfDays);
             insertStmt.setDouble(11, ratePerNight);
             insertStmt.setDouble(12, totalFees);
-
             insertStmt.executeUpdate();
 
             // ================= UPDATE ROOM STATUS =================
@@ -177,25 +131,13 @@ public class CheckInController {
                     "Check_Out_Date = ? " +
                     "WHERE roomID = ?";
 
-            PreparedStatement updateStmt =
-                    con.prepareStatement(updateRoomSQL);
-
-            updateStmt.setDate(
-                    1,
-                    java.sql.Date.valueOf(checkInDate)
-            );
-
-            updateStmt.setDate(
-                    2,
-                    java.sql.Date.valueOf(checkOutDate)
-            );
-
+            PreparedStatement updateStmt = con.prepareStatement(updateRoomSQL);
+            updateStmt.setDate(1, java.sql.Date.valueOf(checkInDate));
+            updateStmt.setDate(2, java.sql.Date.valueOf(checkOutDate));
             updateStmt.setInt(3, roomID);
-
             updateStmt.executeUpdate();
 
             // ================= SUCCESS =================
-
             showNotification(
                     "Check-In Successful",
                     "Guest checked into Room #" +
@@ -205,7 +147,6 @@ public class CheckInController {
             );
 
             clearFields();
-
             rs.close();
             roomStmt.close();
             insertStmt.close();
@@ -213,9 +154,7 @@ public class CheckInController {
             con.close();
 
         } catch (Exception e) {
-
             e.printStackTrace();
-
             showNotification(
                     "Database Error",
                     e.getMessage()
@@ -224,74 +163,49 @@ public class CheckInController {
     }
 
     // ================= CLEAR =================
-
     private void clearFields() {
-
         firstNameField.clear();
         lastNameField.clear();
         emailField.clear();
         phoneField.clear();
         cityField.clear();
         nationalityField.clear();
-
         checkInDatePicker.setValue(null);
         checkOutDatePicker.setValue(null);
     }
 
     // ================= ALERT =================
 
-    private void showNotification(
-            String title,
-            String message
-    ) {
-
-        Alert alert =
-                new Alert(Alert.AlertType.INFORMATION);
-
+    private void showNotification(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
-
         alert.setHeaderText(null);
-
         alert.setContentText(message);
-
         alert.showAndWait();
     }
-
-        private Connection getDatabaseConnection() throws Exception {
-
-                DataBase dataBase = new DataBase();
-
-                String[] methodNames = {
-                                "getConnection",
-                                "getConnectionDB",
-                                "connect",
-                                "getConnect",
-                                "getConn"
-                };
-
-                for (String methodName : methodNames) {
-
-                        try {
-
-                                Object result =
-                                                DataBase.class
-                                                                .getMethod(methodName)
-                                                                .invoke(dataBase);
-
-                                if (result instanceof Connection) {
-
-                                        return (Connection) result;
-                                }
-
-                        } catch (NoSuchMethodException ignored) {
-
-                                // Try the next possible method name.
-
+    
+    private Connection getDatabaseConnection() throws Exception {
+        DataBase dataBase = new DataBase();
+        String[] methodNames = {
+                "getConnection",
+                "getConnectionDB",
+                "connect",
+                "getConnect",
+                "getConn"
+        };
+        for (String methodName : methodNames) {
+                try {
+                Object result = DataBase.class.getMethod(methodName).invoke(dataBase);
+                        if (result instanceof Connection) {
+                                return (Connection) result;
                         }
-                }
+                } catch (NoSuchMethodException ignored) {
+                        // Try the next possible method name.
 
-                throw new IllegalStateException(
-                                "No compatible database connection method found in DataBase class."
+                }
+        }
+        throw new IllegalStateException(
+                "No compatible database connection method found in DataBase class."
                 );
         }
 }

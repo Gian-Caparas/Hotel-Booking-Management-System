@@ -9,24 +9,16 @@ import javafx.event.ActionEvent;
 
 public class CancelBookingController {
 
-    @FXML
-    private TextField txtBookingId; 
-
-    @FXML
-    private Button btnCancel;
-
-    @FXML
-    private void handleCancelBooking(ActionEvent event) {
+    @FXML private TextField txtBookingId; 
+    @FXML private Button btnCancel;
+    @FXML private void handleCancelBooking(ActionEvent event) {
         String bookingId = txtBookingId.getText();
-
         if (bookingId.isEmpty()) {
             showAlert("Error", "Please enter a Booking ID to cancel.");
             return;
         }
-
         // Logic to delete from MySQL via Hibernate will go here
         System.out.println("Canceling booking ID: " + bookingId);
-        
         // After deleting, show success
         showAlert("Success", "Booking #" + bookingId + " has been canceled.");
         txtBookingId.clear();

@@ -29,10 +29,9 @@ public class HomePageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         if (LoginController.currentUser != null) {
-            String role = LoginController.currentUser.isAdmin() ? "Admin" : "Staff";
             currentUserLabel.setText("Logged in as: "
                 + LoginController.currentUser.getUsername()
-                + " (" + role + ")");
+                + " (" + LoginController.currentUser.getRole() + ")");
 
                 addUserButton.setVisible(LoginController.currentUser.isAdmin());
                 deleteUserButton.setVisible(LoginController.currentUser.isAdmin());
