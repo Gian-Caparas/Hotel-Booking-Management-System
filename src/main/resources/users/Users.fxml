@@ -13,9 +13,18 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="700.0" prefWidth="960.0" style="-fx-background-color: linear-gradient(to bottom right, #1e1e38, #2b2b52);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane prefHeight="700.0" 
+           prefWidth="960.0" 
+           style="-fx-background-color: linear-gradient(to bottom right, #1e1e38, #2b2b52);" 
+           xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" spacing="40.0" style="-fx-background-color: #3b3b3b; -fx-background-radius: 25; -fx-border-color: #FFD700; -fx-border-radius: 25; -fx-border-width: 2; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 10);">
+        <VBox alignment="CENTER" 
+              maxHeight="-Infinity" 
+              maxWidth="-Infinity" 
+              spacing="40.0" style="-fx-background-color: #3b3b3b; 
+              -fx-background-radius: 25; -fx-border-color: #FFD700; 
+              -fx-border-radius: 25; -fx-border-width: 2; 
+              -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 10);">
             
             <padding>
                 <Insets bottom="50.0" left="60.0" right="60.0" top="50.0" />
@@ -26,8 +35,13 @@
                     <children>
                         <StackPane>
                             <children>
-                                <Circle fill="transparent" radius="68.0" stroke="#FFD700" strokeWidth="4.0" />
-                                <ImageView fitHeight="120.0" fitWidth="120.0" preserveRatio="false" style="-fx-effect: dropshadow(gaussian, rgba(255,215,0,0.5), 20, 0.5, 0, 0);">
+                                <Circle fill="transparent" 
+                                        radius="68.0" 
+                                        stroke="#FFD700" strokeWidth="4.0" />
+                                <ImageView fitHeight="120.0" 
+                                           fitWidth="120.0" 
+                                           preserveRatio="false" 
+                                           style="-fx-effect: dropshadow(gaussian, rgba(255,215,0,0.5), 20, 0.5, 0, 0);">
                                     <image>
                                         <Image url="@pp.jpg" />
                                     </image>
@@ -39,12 +53,14 @@
                         </StackPane>
                         <VBox alignment="CENTER_LEFT">
                             <children>
-                                <Label style="-fx-font-weight: bold;" text="User Profile" textFill="#e2b96f">
+                                <Label style="-fx-font-weight: bold;" 
+                                       text="User Profile" textFill="#e2b96f">
                                     <font>
                                         <Font size="34.0" />
                                     </font>
                                 </Label>
-                                <Label style="-fx-font-style: italic;" text="User Information Overview" textFill="#d6d6d6">
+                                <Label style="-fx-font-style: italic;" 
+                                       text="User Information Overview" textFill="#d6d6d6">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
@@ -56,31 +72,95 @@
 
                 <GridPane alignment="CENTER" hgap="30.0" vgap="18.0">
                     <columnConstraints>
-                        <ColumnConstraints halignment="LEFT" minWidth="150.0" />
-                        <ColumnConstraints hgrow="ALWAYS" maxWidth="450.0" minWidth="300.0" />
+                        <ColumnConstraints halignment="LEFT" 
+                                           minWidth="150.0" />
+                        <ColumnConstraints hgrow="ALWAYS" 
+                                           maxWidth="450.0" 
+                                           minWidth="300.0" />
                     </columnConstraints>
                     <children>
-                        <Label style="-fx-font-weight: bold;" text="User ID" textFill="#FFD700" GridPane.rowIndex="0">
+                        <Label style="-fx-font-weight: bold;" 
+                               text="User ID" 
+                               textFill="#FFD700" 
+                               GridPane.rowIndex="0">
                             <font><Font size="15.0" /></font>
                         </Label>
-                        <Label style="-fx-font-weight: bold;" text="Name" textFill="#FFD700" GridPane.rowIndex="1">
+                        <Label style="-fx-font-weight: bold;" 
+                               text="Name" textFill="#FFD700" 
+                               GridPane.rowIndex="1">
                             <font><Font size="15.0" /></font>
                         </Label>
-                        <Label style="-fx-font-weight: bold;" text="Email" textFill="#FFD700" GridPane.rowIndex="2">
+                        <Label style="-fx-font-weight: bold;" 
+                               text="Email" textFill="#FFD700" 
+                               GridPane.rowIndex="2">
                             <font><Font size="15.0" /></font>
                         </Label>
-                        <Label style="-fx-font-weight: bold;" text="Phone Number" textFill="#FFD700" GridPane.rowIndex="3">
+                        <Label style="-fx-font-weight: bold;" 
+                               text="Phone Number" textFill="#FFD700" 
+                               GridPane.rowIndex="3">
                             <font><Font size="15.0" /></font>
                         </Label>
-                        <Label style="-fx-font-weight: bold;" text="Role" textFill="#FFD700" GridPane.rowIndex="4">
+                        <Label style="-fx-font-weight: bold;" 
+                               text="Role" textFill="#FFD700" 
+                               GridPane.rowIndex="4">
                             <font><Font size="15.0" /></font>
                         </Label>
 
-                        <Label maxWidth="Infinity" style="-fx-background-color: #2b2b2b; -fx-background-radius: 12; -fx-border-color: #FFD700; -fx-border-radius: 12; -fx-padding: 8 15 8 15; -fx-font-size: 14;" text="userID" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                        <Label maxWidth="Infinity" style="-fx-background-color: #2b2b2b; -fx-background-radius: 12; -fx-border-color: #FFD700; -fx-border-radius: 12; -fx-padding: 8 15 8 15; -fx-font-size: 14;" text="name" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label maxWidth="Infinity" style="-fx-background-color: #2b2b2b; -fx-background-radius: 12; -fx-border-color: #FFD700; -fx-border-radius: 12; -fx-padding: 8 15 8 15; -fx-font-size: 14;" text="email" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label maxWidth="Infinity" style="-fx-background-color: #2b2b2b; -fx-background-radius: 12; -fx-border-color: #FFD700; -fx-border-radius: 12; -fx-padding: 8 15 8 15; -fx-font-size: 14;" text="phone" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Label maxWidth="Infinity" style="-fx-background-color: #2b2b2b; -fx-background-radius: 12; -fx-border-color: #FFD700; -fx-border-radius: 12; -fx-padding: 8 15 8 15; -fx-font-size: 14;" text="Administrator" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label maxWidth="Infinity" 
+                               style="-fx-background-color: #2b2b2b; 
+                               -fx-background-radius: 12; 
+                               -fx-border-color: #FFD700; 
+                               -fx-border-radius: 12; -fx-padding: 8 15 8 15; 
+                               -fx-font-size: 14;" 
+                               text="userID" 
+                               textFill="WHITE" 
+                               GridPane.columnIndex="1" 
+                               GridPane.rowIndex="0" />
+
+                        <Label maxWidth="Infinity" 
+                               style="-fx-background-color: #2b2b2b; 
+                               -fx-background-radius: 12; 
+                               -fx-border-color: #FFD700; 
+                               -fx-border-radius: 12; 
+                               -fx-padding: 8 15 8 15; 
+                               -fx-font-size: 14;" 
+                               text="name" 
+                               textFill="WHITE" 
+                               GridPane.columnIndex="1" 
+                               GridPane.rowIndex="1" />
+                        <Label maxWidth="Infinity" 
+                               style="-fx-background-color: #2b2b2b; 
+                               -fx-background-radius: 12; 
+                               -fx-border-color: #FFD700; 
+                               -fx-border-radius: 12; 
+                               -fx-padding: 8 15 8 15; 
+                               -fx-font-size: 14;" 
+                               text="email" 
+                               textFill="WHITE" 
+                               GridPane.columnIndex="1" 
+                               GridPane.rowIndex="2" />
+                        <Label maxWidth="Infinity" 
+                               style="-fx-background-color: #2b2b2b; 
+                               -fx-background-radius: 12; 
+                               -fx-border-color: #FFD700; 
+                               -fx-border-radius: 12; 
+                               -fx-padding: 8 15 8 15; 
+                               -fx-font-size: 14;" 
+                               text="phone" 
+                               textFill="WHITE" 
+                               GridPane.columnIndex="1" 
+                               GridPane.rowIndex="3" />
+                        <Label maxWidth="Infinity" 
+                               style="-fx-background-color: #2b2b2b; 
+                               -fx-background-radius: 12; 
+                               -fx-border-color: #FFD700; 
+                               -fx-border-radius: 12; 
+                               -fx-padding: 8 15 8 15; 
+                               -fx-font-size: 14;" 
+                               text="Administrator" 
+                               textFill="WHITE" 
+                               GridPane.columnIndex="1" 
+                               GridPane.rowIndex="4" />
                     </children>
                
                 </GridPane>

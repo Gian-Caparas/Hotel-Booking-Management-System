@@ -1,38 +1,43 @@
 package com.hotel.wildcat_hotel.viewusers;
 
+import java.util.List;
+
+import com.hotel.wildcat_hotel.project.DataBase;
 import com.hotel.wildcat_hotel.project.User;
-import com.hotel.wildcat_hotel.project.DataBase; 
+
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.control.*;
-import java.util.List;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 
 public class ViewUsersController {
 
     @FXML private TextField usernamefield;
     @FXML private TableView<User> usersTable;
-    
-    // Keeping columns mapped to existing User properties
     @FXML private TableColumn<User, String> usernameColumn;
     @FXML private TableColumn<User, String> roleColumn;
+    @FXML private TableColumn<User, String> usernameColumn1; // Phone Number
+    @FXML private TableColumn<User, String> usernameColumn2; // Email
 
     private ObservableList<User> masterData = FXCollections.observableArrayList();
 
-    @FXML
-    public void initialize() {
-        // Use explicit property extraction so table rendering does not depend on reflection.
+    @FXML public void initialize() {
         usernameColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getUsername()));
         roleColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getRole()));
+        usernameColumn1.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getPhoneNo())); // ← getPhoneNo()
+        usernameColumn2.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getEmail()));
 
         loadInitialData();
     }
 
     private void loadInitialData() {
-        // Keep the page visible even if the database is unreachable.
         try {
             List<User> users = DataBase.getUsers();
             if (users != null) {
@@ -47,10 +52,9 @@ public class ViewUsersController {
         usersTable.setItems(masterData);
     }
 
-    @FXML 
-    private void handleSearchUser() {
+    @FXML private void handleSearchUser() {
         String query = usernamefield.getText().trim().toLowerCase();
-        
+
         if (query.isEmpty()) {
             usersTable.setItems(masterData);
         } else {
