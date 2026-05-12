@@ -1,7 +1,10 @@
 package com.hotel.wildcat_hotel.guests;
 
+import java.util.List;
+
 import com.hotel.wildcat_hotel.hotel.Guest;
 import com.hotel.wildcat_hotel.project.DataBase;
+
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -10,8 +13,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-
-import java.util.List;
 
 public class GuestsController {
 

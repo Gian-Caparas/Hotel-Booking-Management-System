@@ -53,6 +53,10 @@
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
+              <Button fx:id="availableRoomButton" text="  Available Rooms"      onAction="#openAvailableRooms"
+                    maxWidth="Infinity" alignment="CENTER_LEFT" 
+                    style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
+                           -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
            
             <!-- ADMIN FEATURES -->
             <Label fx:id="adminLabel" text="ADMIN"

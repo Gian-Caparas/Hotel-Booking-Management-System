@@ -10,6 +10,8 @@ public class Paths {
     public static final String CANCELBOOKINGVIEW = "/cancelbooking/CancelBooking.fxml";
     public static final String ROOMSVIEW         = "/rooms/Rooms.fxml";
     public static final String GUESTSVIEW        = "/guests/Guests.fxml";
+    public static final String FINDROOMVIEW       = "/findroom/FindRoom.fxml";
+    public static final String AVAILABLEROOMVIEW = "/availableroom/AvailableRoom.fxml";
     public static final String ADDUSERVIEW       = "/adduser/AddUser.fxml";
     public static final String USERSVIEW         = "/users/Users.fxml";
     public static final String VIEWUSERSVIEW     = "/viewusers/ViewUsers.fxml";

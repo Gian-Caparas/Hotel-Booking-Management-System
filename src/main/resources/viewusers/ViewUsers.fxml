@@ -19,38 +19,17 @@
       fx:controller="com.hotel.wildcat_hotel.viewusers.ViewUsersController">
 
     <children>
-
-        <Label style="-fx-text-fill: #f5c16c;                 
-               -fx-font-size: 24;                 
+        <Label style="-fx-text-fill: #f5c16c;                                 
+               -fx-font-size: 24;                                 
                -fx-font-weight: bold;" text="WildCat Hotel: View Users" />
-
-        <HBox alignment="CENTER_LEFT" 
-              maxWidth="749" 
-              prefHeight="38" 
-              prefWidth="749" spacing="15">
-
+        <HBox alignment="CENTER_LEFT" maxWidth="749" prefHeight="38" prefWidth="749" spacing="15">
             <children>
                 <TextField fx:id="usernamefield" 
                            prefHeight="38" 
                            promptText="Enter username..." 
-                           style="-fx-background-color: #2a2a4a;                             
-                           -fx-text-fill: white;                             
-                           -fx-prompt-text-fill: #666688;                             
-                           -fx-border-color: #4444aa;                             
-                           -fx-border-radius: 6;                             
-                           -fx-background-radius: 6;                             
-                           -fx-font-size: 14;" HBox.hgrow="ALWAYS" />
+                           style="-fx-background-color: #2a2a4a;                                                         -fx-text-fill: white;                                                         -fx-prompt-text-fill: #666688;                                                         -fx-border-color: #4444aa;                                                         -fx-border-radius: 6;                                                         -fx-background-radius: 6;                                                         -fx-font-size: 14;" HBox.hgrow="ALWAYS" />
 
-                <Button fx:id="searchButton" 
-                        mnemonicParsing="false" 
-                        onAction="#handleSearchUser" 
-                        prefHeight="38" 
-                        prefWidth="120" 
-                        style="-fx-background-color: #e2b96f;                          
-                        -fx-text-fill: #1a1a2e; -fx-font-size: 14;                          
-                        -fx-font-weight: bold;                          
-                        -fx-background-radius: 8;                          
-                        -fx-cursor: hand;" text="Search">
+                <Button fx:id="searchButton" mnemonicParsing="false" onAction="#handleSearchUser" prefHeight="38" prefWidth="120" style="-fx-background-color: #e2b96f;                                                   -fx-text-fill: #1a1a2e; -fx-font-size: 14;                                                   -fx-font-weight: bold;                                                   -fx-background-radius: 8;                                                   -fx-cursor: hand;" text="Search">
                     <HBox.margin>
                         <Insets left="5" />
                     </HBox.margin>
@@ -58,26 +37,12 @@
             </children>
         </HBox>
 
-        <TableView fx:id="usersTable" 
-                   maxWidth="750" 
-                   prefHeight="350" 
-                   prefWidth="750" 
-                   style="-fx-background-color: #2a2a4a;                                               
-                   -fx-control-inner-background: #2a2a4a;                                               
-                   -fx-table-cell-border-color: transparent;                                               
-                   -fx-text-fill: white;
-                   -fx-text-background-color: white;">
+        <TableView fx:id="usersTable" maxWidth="750" prefHeight="350" prefWidth="750" style="-fx-background-color: #2a2a4a;                                                                   -fx-control-inner-background: #2a2a4a;                                                                   -fx-table-cell-border-color: transparent;                                                                   -fx-text-fill: white;">
             <columns>
-                <TableColumn fx:id="usernameColumn" 
-                             prefWidth="369.5999862551689" 
-                             style="-fx-alignment: CENTER;                                                                   
-                             -fx-text-fill: white;                                                                   
-                             -fx-font-size: 13;" text="Username" />
-                <TableColumn fx:id="roleColumn" 
-                             prefWidth="369.5999862551689" 
-                             style="-fx-alignment: CENTER;                                                                  
-                             -fx-text-fill: white;                                                                  
-                             -fx-font-size: 13;" text="Role" />
+                <TableColumn fx:id="usernameColumn" prefWidth="369.5999862551689" style="-fx-alignment: CENTER;                                                                                                 -fx-text-fill: white;                                                                                                 -fx-font-size: 13;" text="Username" />
+                <TableColumn fx:id="roleColumn" prefWidth="369.5999862551689" style="-fx-alignment: CENTER;                                                                                                -fx-text-fill: white;                                                                                                -fx-font-size: 13;" text="Role" />
+            <TableColumn fx:id="usernameColumn1" prefWidth="369.5999862551689" style="-fx-alignment: CENTER;                                                                                                 -fx-text-fill: white;                                                                                                 -fx-font-size: 13;" text="Phone Number" />
+            <TableColumn fx:id="usernameColumn2" prefWidth="369.5999862551689" style="-fx-alignment: CENTER;                                                                                                 -fx-text-fill: white;                                                                                                 -fx-font-size: 13;" text="Email" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

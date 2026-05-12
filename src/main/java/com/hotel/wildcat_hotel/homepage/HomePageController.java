@@ -1,7 +1,11 @@
 package com.hotel.wildcat_hotel.homepage;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import com.hotel.wildcat_hotel.login.LoginController;
 import com.hotel.wildcat_hotel.project.Paths;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,9 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class HomePageController implements Initializable {
 
@@ -33,6 +34,7 @@ public class HomePageController implements Initializable {
     @FXML private Label  customerLabel;
     @FXML private Button bookRoomButton;
     @FXML private Button cancelBookingButton;
+    @FXML private Button availableRoomButton;
 
     // Admin-only controls
     @FXML private Label  adminLabel;
@@ -98,6 +100,7 @@ public class HomePageController implements Initializable {
         customerLabel.setVisible(false);
         bookRoomButton.setVisible(false);
         cancelBookingButton.setVisible(false);
+        availableRoomButton.setVisible(false);
     }
 
     private void showAdminControls() {
@@ -120,6 +123,7 @@ public class HomePageController implements Initializable {
         customerLabel.setVisible(true);
         bookRoomButton.setVisible(true);
         cancelBookingButton.setVisible(true);
+        availableRoomButton.setVisible(true);
     }
 
     // ── Navigation handlers ───────────────────────────────────────────────────
@@ -130,6 +134,7 @@ public class HomePageController implements Initializable {
     @FXML private void openCancelBooking(ActionEvent e) { loadView(Paths.CANCELBOOKINGVIEW); }
     @FXML private void openGuests(ActionEvent e)        { loadView(Paths.GUESTSVIEW); }
     @FXML private void openRooms(ActionEvent e)         { loadView(Paths.ROOMSVIEW); }
+    @FXML private void openAvailableRooms(ActionEvent e) { loadView(Paths.AVAILABLEROOMVIEW); }
     @FXML private void openAddUser(ActionEvent e)       { loadView(Paths.ADDUSERVIEW); }
     @FXML private void openDeleteUser(ActionEvent e)    { loadView(Paths.DELETEUSERVIEW); }
     @FXML private void openViewUsers(ActionEvent e)     { loadView(Paths.VIEWUSERSVIEW); }
