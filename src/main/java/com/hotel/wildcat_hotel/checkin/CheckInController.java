@@ -5,6 +5,7 @@ import com.hotel.wildcat_hotel.project.DataBase;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
+import javafx.util.Callback;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,6 +35,52 @@ public class CheckInController {
     public void initialize() {
         roomTypeComboBox.getItems().addAll("Economy", "Normal", "Vip");
         roomCapacityComboBox.getItems().addAll("Single", "Double", "Triple");
+
+        // Block past dates on the Check-In DatePicker
+        checkInDatePicker.setDayCellFactory(buildPastDateBlocker());
+
+        // Whenever the check-in date changes, also update the
+        // check-out picker so it can never be before or equal to check-in.
+        checkInDatePicker.valueProperty().addListener((obs, oldDate, newCheckIn) -> {
+            if (newCheckIn != null) {
+                // Reset check-out if it is no longer valid
+                LocalDate currentCheckOut = checkOutDatePicker.getValue();
+                if (currentCheckOut != null && !currentCheckOut.isAfter(newCheckIn)) {
+                    checkOutDatePicker.setValue(null);
+                }
+                // Block check-out dates that are <= check-in date
+                checkOutDatePicker.setDayCellFactory(picker -> new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate date, boolean empty) {
+                        super.updateItem(date, empty);
+                        if (date != null && !date.isAfter(newCheckIn)) {
+                            setDisable(true);
+                            setStyle("-fx-background-color: #d3d3d3; -fx-text-fill: #a0a0a0;");
+                        }
+                    }
+                });
+            }
+        });
+
+        // Block past dates on the Check-Out DatePicker as a baseline
+        checkOutDatePicker.setDayCellFactory(buildPastDateBlocker());
+    }
+
+    /**
+     * Returns a DayCellFactory that disables and grays out every date
+     * strictly before today (LocalDate.now()).
+     */
+    private Callback<DatePicker, DateCell> buildPastDateBlocker() {
+        return picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                if (date != null && date.isBefore(LocalDate.now())) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #d3d3d3; -fx-text-fill: #a0a0a0;");
+                }
+            }
+        };
     }
 
     // ── Handle Check-In ───────────────────────────────────────────────────────
@@ -64,6 +111,13 @@ public class CheckInController {
 
         if (!checkOut.isAfter(checkIn)) {
             showAlert("Date Error", "Check-out date must be after check-in date.");
+            return;
+        }
+
+        // Guard: reject a check-in date that is in the past
+        if (checkIn.isBefore(LocalDate.now())) {
+            showAlert("Invalid Check-In Date",
+                    "Check-in date cannot be in the past.\nPlease select today or a future date.");
             return;
         }
 

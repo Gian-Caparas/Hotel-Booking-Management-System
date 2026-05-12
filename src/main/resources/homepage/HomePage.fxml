@@ -3,85 +3,101 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
+<!--
+    BorderPane fills 100% of the Stage automatically.
+    minWidth/minHeight prevent the layout from collapsing below a usable size.
+    No prefWidth/prefHeight here — the Stage drives the size.
+-->
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.hotel.wildcat_hotel.homepage.HomePageController"
-            prefWidth="1200" prefHeight="750"
+            minWidth="700" minHeight="500"
             style="-fx-background-color: #1a1a2e;">
 
-    <!-- LEFT SIDEBAR -->
+    <!-- ═══════════════════════════════════════════════════════════
+         LEFT SIDEBAR
+         • Fixed width (220 px) — sidebar does NOT stretch horizontally.
+         • VBox.vgrow is handled by BorderPane automatically (left
+           region always matches the center height).
+         • The inner Region with VBox.vgrow="ALWAYS" pushes the
+           logout block to the bottom regardless of window height.
+         ═══════════════════════════════════════════════════════════ -->
     <left>
-        <VBox spacing="4" prefWidth="220"
+        <VBox spacing="4"
+              prefWidth="220" minWidth="180" maxWidth="220"
               style="-fx-background-color: #12122a; -fx-padding: 24 12 24 12;">
 
+            <!-- Brand -->
             <Label text="🐱 WildCat Hotel"
-                   style="-fx-text-fill: #e2b96f; -fx-font-size: 18; -fx-font-weight: bold; -fx-padding: 0 0 16 8;"/>
+                   style="-fx-text-fill: #e2b96f; -fx-font-size: 18;
+                          -fx-font-weight: bold; -fx-padding: 0 0 16 8;"/>
 
-             <!-- STAFF FEATURES -->
+            <!-- OPERATIONS -->
             <Label fx:id="operationsLabel" text="OPERATIONS"
                    style="-fx-text-fill: #555577; -fx-font-size: 10; -fx-padding: 8 0 4 8;"/>
 
-            <Button fx:id="checkInButton" text="  Check-in Guest"      onAction="#openCheckIn"
+            <Button fx:id="checkInButton"  text="  Check-in Guest"  onAction="#openCheckIn"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-            <Button fx:id="checkOutButton" text="  Check-out Guest"     onAction="#openCheckOut"
+            <Button fx:id="checkOutButton" text="  Check-out Guest" onAction="#openCheckOut"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
 
-           <Label fx:id="recordsLabel" text="RECORDS"
+            <!-- RECORDS -->
+            <Label fx:id="recordsLabel" text="RECORDS"
                    style="-fx-text-fill: #555577; -fx-font-size: 10; -fx-padding: 16 0 4 8;"/>
 
-            <Button fx:id="viewGuestsButton" text="  View Guests"         onAction="#openGuests"
+            <Button fx:id="viewGuestsButton" text="  View Guests" onAction="#openGuests"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-            <Button fx:id="viewRoomsButton" text="  View Rooms"          onAction="#openRooms"
+            <Button fx:id="viewRoomsButton"  text="  View Rooms"  onAction="#openRooms"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-            
-            <!-- CUSTOMER FEATURES -->
+
+            <!-- CUSTOMER – SELF SERVICE -->
             <Label fx:id="customerLabel" text="CUSTOMER - SELF SERVICE"
                    style="-fx-text-fill: #555577; -fx-font-size: 10; -fx-padding: 16 0 4 8;"/>
-            
-            <Button fx:id="bookRoomButton" text="  Book a Room"         onAction="#openRoomBooking"
+
+            <Button fx:id="bookRoomButton"       text="  Book a Room"     onAction="#openRoomBooking"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-            <Button fx:id="cancelBookingButton" text="  Cancel Booking"      onAction="#openCancelBooking"
+            <Button fx:id="cancelBookingButton"  text="  Cancel Booking"  onAction="#openCancelBooking"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-              <Button fx:id="availableRoomButton" text="  Available Rooms"      onAction="#openAvailableRooms"
-                    maxWidth="Infinity" alignment="CENTER_LEFT" 
+            <Button fx:id="availableRoomButton"  text="  Available Rooms" onAction="#openAvailableRooms"
+                    maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-           
-            <!-- ADMIN FEATURES -->
+
+            <!-- ADMIN -->
             <Label fx:id="adminLabel" text="ADMIN"
                    style="-fx-text-fill: #555577; -fx-font-size: 10; -fx-padding: 16 0 4 8;"/>
 
-            <Button fx:id="addUserButton" text="  Add User"           onAction="#openAddUser"
+            <Button fx:id="addUserButton"    text="  Add User"    onAction="#openAddUser"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-            <Button fx:id="deleteUserButton" text="  Delete User"        onAction="#openDeleteUser"
+            <Button fx:id="deleteUserButton" text="  Delete User" onAction="#openDeleteUser"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-            <Button fx:id="viewUsersButton" text="  View Users"         onAction="#openViewUsers"
+            <Button fx:id="viewUsersButton"  text="  View Users"  onAction="#openViewUsers"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
 
+            <!-- Spacer — pushes logout to the bottom -->
             <Region VBox.vgrow="ALWAYS"/>
 
             <Label fx:id="currentUserLabel" text="Logged in as: ..."
-                   style="-fx-text-fill: #555577; -fx-font-size: 11; -fx-padding: 0 0 0 8;"/>
+                   style="-fx-text-fill: #555577; -fx-font-size: 11; -fx-padding: 0 0 4 8;"/>
 
-            <Button text="  Logout"
-                    onAction="#logoutAction"
+            <Button text="  Logout" onAction="#logoutAction"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: #c41e3a; -fx-text-fill: white;
                            -fx-font-size: 12; -fx-cursor: hand; -fx-padding: 10 8;
@@ -89,11 +105,19 @@
         </VBox>
     </left>
 
-    <!-- MAIN CONTENT AREA -->
+    <!-- ═══════════════════════════════════════════════════════════
+         MAIN CONTENT AREA
+         • BorderPane's center region automatically takes ALL
+           remaining width AND height — no extra work needed.
+         • StackPane uses maxWidth/maxHeight="Infinity" to fill
+           every pixel the center region offers.
+         ═══════════════════════════════════════════════════════════ -->
     <center>
         <StackPane fx:id="contentPane"
+                   maxWidth="Infinity" maxHeight="Infinity"
                    style="-fx-background-color: #1e1e38; -fx-padding: 24;">
-            <!-- Default welcome screen -->
+
+            <!-- Default welcome screen — stays centred at any size -->
             <VBox alignment="CENTER" spacing="16">
                 <Label text="Welcome to WildCat Hotel"
                        style="-fx-text-fill: #e2b96f; -fx-font-size: 28; -fx-font-weight: bold;"/>
