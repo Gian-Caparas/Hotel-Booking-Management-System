@@ -65,7 +65,8 @@
                    style="-fx-background-color: #2a2a4a;                                               
                    -fx-control-inner-background: #2a2a4a;                                               
                    -fx-table-cell-border-color: transparent;                                               
-                   -fx-text-fill: white;">
+                   -fx-text-fill: white;
+                   -fx-text-background-color: white;">
             <columns>
                 <TableColumn fx:id="usernameColumn" 
                              prefWidth="369.5999862551689" 

@@ -5,8 +5,9 @@ import com.hotel.wildcat_hotel.project.DataBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import java.util.List;
 
 public class ViewUsersController {
 
@@ -21,16 +22,28 @@ public class ViewUsersController {
 
     @FXML
     public void initialize() {
-        // Link columns to User entity getters: getUsername(), getRole()
-        usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
-        roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
+        // Use explicit property extraction so table rendering does not depend on reflection.
+        usernameColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getUsername()));
+        roleColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getRole()));
 
         loadInitialData();
     }
 
     private void loadInitialData() {
-        // Fetch users from your Database helper
-        masterData.setAll(DataBase.getUsers());
+        // Keep the page visible even if the database is unreachable.
+        try {
+            List<User> users = DataBase.getUsers();
+            if (users != null) {
+                masterData.setAll(users);
+            } else {
+                masterData.clear();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            masterData.clear();
+        }
         usersTable.setItems(masterData);
     }
 
