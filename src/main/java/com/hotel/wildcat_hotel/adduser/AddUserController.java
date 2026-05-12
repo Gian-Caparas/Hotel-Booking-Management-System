@@ -17,31 +17,34 @@ import javafx.scene.control.ToggleGroup;
 
 public class AddUserController implements Initializable {
 
-    @FXML private TextField usernameField;
+    @FXML private TextField     usernameField;
     @FXML private PasswordField passwordField;
-    @FXML private TextField emailField;
-    @FXML private TextField phoneField;
-    @FXML private RadioButton adminRadio;
-    @FXML private RadioButton staffRadio;
-    @FXML private RadioButton customerRadio;
-    @FXML private ToggleGroup roleGroup;
-    @FXML private Label statusLabel;
+    @FXML private TextField     emailField;
+    @FXML private TextField     phoneField;
+    @FXML private RadioButton   adminRadio;
+    @FXML private RadioButton   staffRadio;
+    @FXML private RadioButton   customerRadio;
+    @FXML private ToggleGroup   roleGroup;
+    @FXML private Label         statusLabel;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         statusLabel.setText("");
-        staffRadio.setSelected(true);
+        staffRadio.setSelected(true); // default role
     }
 
     @FXML
     private void handleAddUser(ActionEvent event) {
+
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
         String email    = emailField.getText().trim();
         String phone    = phoneField.getText().trim();
 
-        // ================= VALIDATION =================
-        if (username.isEmpty() || password.isEmpty() || email.isEmpty() || phone.isEmpty()) {
+        // ── Validation ────────────────────────────────────────────────────────
+
+        if (username.isEmpty() || password.isEmpty()
+                || email.isEmpty() || phone.isEmpty()) {
             setStatus("⚠ All fields cannot be empty.", false);
             return;
         }
@@ -57,50 +60,49 @@ public class AddUserController implements Initializable {
             setStatus("⚠ Please enter a valid email address.", false);
             return;
         }
-        if (!phone.matches("^[0-9+\\-\\s]{7,15}$")) {
-            setStatus("⚠ Please enter a valid phone number.", false);
+        if (!phone.matches("^[0-9]{7,11}$")) {
+            setStatus("⚠ Phone number must be 7–11 digits.", false);
             return;
         }
 
-        // ================= ROLE SELECTION =================
+        // ── Role selection ────────────────────────────────────────────────────
+
         String role;
         if (adminRadio.isSelected()) {
             role = "Admin";
         } else if (customerRadio.isSelected()) {
             role = "Customer";
         } else {
-            role = "Staff";
+            role = "Staff"; // default
         }
 
-        // ================= CREATE USER =================
-        User newUser = new User(username, password, role);
-        newUser.setEmail(email);
-        newUser.setPhone(phone);
+        // ── Create & save user ────────────────────────────────────────────────
+        // Use the full constructor: (username, password, role, email, phoneNo)
+        User newUser = new User(username, password, role, email, phone);
 
-        // ================= SAVE USER =================
-        boolean success = DataBase.saveUser(newUser);
-        if (success) {
+        boolean saved = DataBase.saveUser(newUser);
+        if (saved) {
             setStatus("✓ User '" + username + "' added as " + role + ".", true);
             clearForm();
         } else {
-            setStatus("✗ Username already exists.", false);
+            setStatus("✗ Username '" + username + "' already exists.", false);
         }
     }
 
-    // ================= CLEAR FORM =================
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
     private void clearForm() {
         usernameField.clear();
         passwordField.clear();
         emailField.clear();
         phoneField.clear();
         staffRadio.setSelected(true);
+        statusLabel.setText("");
     }
 
-    // ================= STATUS MESSAGE =================
     private void setStatus(String message, boolean success) {
-        String color = success ? "#4CAF50" : "#FF6B6B";
         statusLabel.setStyle(
-                "-fx-text-fill: " + color + ";" +
+                "-fx-text-fill: " + (success ? "#4CAF50" : "#FF6B6B") + ";" +
                 "-fx-font-size: 13px;" +
                 "-fx-font-weight: bold;"
         );

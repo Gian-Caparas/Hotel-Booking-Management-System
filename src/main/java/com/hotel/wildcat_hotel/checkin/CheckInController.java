@@ -9,161 +9,168 @@ import javafx.event.ActionEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class CheckInController {
 
-    @FXML private TextField firstNameField;
-    @FXML private TextField lastNameField;
-    @FXML private TextField emailField;
-    @FXML private TextField phoneField;
-    @FXML private TextField cityField;
-    @FXML private TextField nationalityField;
+    @FXML private TextField     firstNameField;
+    @FXML private TextField     lastNameField;
+    @FXML private TextField     emailField;
+    @FXML private TextField     phoneField;
+    @FXML private TextField     cityField;
+    @FXML private TextField     nationalityField;
     @FXML private ComboBox<String> roomTypeComboBox;
     @FXML private ComboBox<String> roomCapacityComboBox;
-    @FXML private DatePicker checkInDatePicker;
-    @FXML private DatePicker checkOutDatePicker;
-    @FXML private Button checkInButton;
+    @FXML private DatePicker    checkInDatePicker;
+    @FXML private DatePicker    checkOutDatePicker;
+    @FXML private Button        checkInButton;
+
+    // ── Initialize ComboBoxes ─────────────────────────────────────────────────
+
+    @FXML
+    public void initialize() {
+        roomTypeComboBox.getItems().addAll("Economy", "Normal", "Vip");
+        roomCapacityComboBox.getItems().addAll("Single", "Double", "Triple");
+    }
+
+    // ── Handle Check-In ───────────────────────────────────────────────────────
 
     @FXML
     private void handleCheckIn(ActionEvent event) {
-        String firstName = firstNameField.getText().trim();
-        String lastName = lastNameField.getText().trim();
-        String email = emailField.getText().trim();
-        String phone = phoneField.getText().trim();
-        String city = cityField.getText().trim();
+
+        // --- Collect field values ---
+        String firstName   = firstNameField.getText().trim();
+        String lastName    = lastNameField.getText().trim();
+        String email       = emailField.getText().trim();
+        String phone       = phoneField.getText().trim();
+        String city        = cityField.getText().trim();
         String nationality = nationalityField.getText().trim();
-        String roomType = roomTypeComboBox.getValue();
-        String roomCapacity = roomCapacityComboBox.getValue();
-        LocalDate checkInDate = checkInDatePicker.getValue();
-        LocalDate checkOutDate = checkOutDatePicker.getValue();
+        String roomType    = roomTypeComboBox.getValue();
+        String roomCapacity= roomCapacityComboBox.getValue();
+        LocalDate checkIn  = checkInDatePicker.getValue();
+        LocalDate checkOut = checkOutDatePicker.getValue();
 
-        // ================= VALIDATION =================
-        if (
-                firstName.isEmpty() ||
-                lastName.isEmpty() ||
-                email.isEmpty() ||
-                phone.isEmpty() ||
-                city.isEmpty() ||
-                nationality.isEmpty() ||
-                roomType == null ||
-                roomCapacity == null ||
-                checkInDate == null ||
-                checkOutDate == null
-        ) {
-            showNotification(
-                    "Missing Information",
-                    "Please fill out all fields."
-            );
+        // --- Validation ---
+        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty()
+                || phone.isEmpty() || city.isEmpty() || nationality.isEmpty()
+                || roomType == null || roomCapacity == null
+                || checkIn == null || checkOut == null) {
+            showAlert("Missing Information", "Please fill out all fields.");
             return;
         }
 
-        if (checkOutDate.isBefore(checkInDate)) {
-            showNotification(
-                    "Date Error",
-                    "Check-out date cannot be before check-in date."
-            );
+        if (!checkOut.isAfter(checkIn)) {
+            showAlert("Date Error", "Check-out date must be after check-in date.");
             return;
         }
-        try {
-            Connection con = getDatabaseConnection();
-            // ================= GET AVAILABLE ROOM =================
+
+        try (Connection con = DataBase.getConnection()) {
+
+            // ── 1. Find an available room ─────────────────────────────────────
             String roomSQL =
-                    "SELECT * FROM room " +
+                    "SELECT roomID, room_rate FROM room " +
                     "WHERE status = 'AVAILABLE' " +
-                    "AND room_type = ? " +
-                    "AND room_capacity = ? " +
+                    "  AND room_type = ? " +
+                    "  AND room_capacity = ? " +
                     "LIMIT 1";
-            PreparedStatement roomStmt = con.prepareStatement(roomSQL);
-            roomStmt.setString(1, roomType);
-            roomStmt.setString(2, roomCapacity);
 
-            ResultSet rs = roomStmt.executeQuery();
-            if (!rs.next()) {
-                showNotification(
-                        "No Rooms",
-                        "No available rooms found."
-                );
-                return;
+            int    roomID   = -1;
+            double roomRate = 0;
+
+            try (PreparedStatement roomStmt = con.prepareStatement(roomSQL)) {
+                roomStmt.setString(1, roomType);
+                roomStmt.setString(2, roomCapacity);
+
+                try (ResultSet rs = roomStmt.executeQuery()) {
+                    if (!rs.next()) {
+                        showAlert("No Rooms Available",
+                                "No available " + roomType + " " + roomCapacity + " rooms.");
+                        return;
+                    }
+                    roomID   = rs.getInt("roomID");
+                    roomRate = rs.getDouble("room_rate");
+                }
             }
 
-            int roomID = rs.getInt("roomID");
-            double ratePerNight = rs.getDouble("rate_per_night");
-            long numberOfDays = ChronoUnit.DAYS.between( checkInDate, checkOutDate);
-            if (numberOfDays <= 0) {
-                numberOfDays = 1;
+            // ── 2. Compute stay length and cost ───────────────────────────────
+            long numberOfDays = ChronoUnit.DAYS.between(checkIn, checkOut);
+            if (numberOfDays <= 0) numberOfDays = 1;
+            double totalCost = roomRate * numberOfDays;
+
+            Timestamp tsCheckIn  = Timestamp.valueOf(checkIn.atStartOfDay());
+            Timestamp tsCheckOut = Timestamp.valueOf(checkOut.atStartOfDay());
+
+            // ── 3. Insert into guest (personal info only) ─────────────────────
+            String insertGuestSQL =
+                    "INSERT INTO guest " +
+                    "(roomID, first_name, last_name, email, phone_no, city, nationality) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+            int newGuestID;
+            try (PreparedStatement guestStmt = con.prepareStatement(
+                    insertGuestSQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                guestStmt.setInt(1, roomID);
+                guestStmt.setString(2, firstName);
+                guestStmt.setString(3, lastName);
+                guestStmt.setString(4, email);
+                guestStmt.setString(5, phone);
+                guestStmt.setString(6, city);
+                guestStmt.setString(7, nationality);
+                guestStmt.executeUpdate();
+
+                try (ResultSet keys = guestStmt.getGeneratedKeys()) {
+                    if (!keys.next()) {
+                        showAlert("Database Error", "Failed to retrieve new guest ID.");
+                        return;
+                    }
+                    newGuestID = keys.getInt(1);
+                }
             }
-            double totalFees =
-                    ratePerNight * numberOfDays;
-            // ================= INSERT GUEST =================
 
-           // Add room_type and room_capacity to the list (14 columns total)
-           String insertSQL =
-                "INSERT INTO guest (" +
-                "room_ID, first_name, last_name, email, phone_no, city, nationality, " +
-                "room_type, room_capacity, check_in_date, check_out_date, " + 
-                "number_of_days, rate_per_night, total_fees" +
-                ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"; // Use 14 placeholders
+            // ── 4. Insert into reservation (booking info) ─────────────────────
+            String insertReservationSQL =
+                    "INSERT INTO reservation " +
+                    "(guestID, roomID, check_in_date, check_out_date, number_of_days, total_cost) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
 
-            PreparedStatement insertStmt = con.prepareStatement(insertSQL);
-            insertStmt.setInt(1, roomID);
-            insertStmt.setString(2, firstName);
-            insertStmt.setString(3, lastName);
-            insertStmt.setString(4, email);
-            insertStmt.setString(5, phone);
-            insertStmt.setString(6, city);
-            insertStmt.setString(7, nationality);
-            insertStmt.setString(8, roomType);
-            insertStmt.setString(9, roomCapacity);
-            insertStmt.setDate(10, java.sql.Date.valueOf(checkInDate));
-            insertStmt.setDate(11, java.sql.Date.valueOf(checkOutDate));
-            insertStmt.setLong(12, numberOfDays);
-            insertStmt.setDouble(13, ratePerNight);
-            insertStmt.setDouble(14, totalFees);
-            insertStmt.executeUpdate();
+            try (PreparedStatement resStmt = con.prepareStatement(insertReservationSQL)) {
+                resStmt.setInt(1, newGuestID);
+                resStmt.setInt(2, roomID);
+                resStmt.setTimestamp(3, tsCheckIn);
+                resStmt.setTimestamp(4, tsCheckOut);
+                resStmt.setLong(5, numberOfDays);
+                resStmt.setDouble(6, totalCost);
+                resStmt.executeUpdate();
+            }
 
-            // ================= UPDATE ROOM STATUS =================
-
+            // ── 5. Mark room as OCCUPIED ──────────────────────────────────────
             String updateRoomSQL =
-                    "UPDATE room " +
-                    "SET status = 'OCCUPIED', " +
-                    "Check_In_Date = ?, " +
-                    "Check_Out_Date = ? " +
-                    "WHERE roomID = ?";
+                    "UPDATE room SET status = 'OCCUPIED' WHERE roomID = ?";
 
-            PreparedStatement updateStmt = con.prepareStatement(updateRoomSQL);
-            updateStmt.setDate(1, java.sql.Date.valueOf(checkInDate));
-            updateStmt.setDate(2, java.sql.Date.valueOf(checkOutDate));
-            updateStmt.setInt(3, roomID);
-            updateStmt.executeUpdate();
+            try (PreparedStatement updateStmt = con.prepareStatement(updateRoomSQL)) {
+                updateStmt.setInt(1, roomID);
+                updateStmt.executeUpdate();
+            }
 
-            // ================= SUCCESS =================
-            showNotification(
-                    "Check-In Successful",
-                    "Guest checked into Room #" +
-                    roomID +
-                    "\nTotal Fees: ₱" +
-                    totalFees
-            );
+            // ── 6. Success ────────────────────────────────────────────────────
+            showAlert("Check-In Successful",
+                    "Guest checked into Room #" + roomID +
+                    "\nDuration : " + numberOfDays + " night(s)" +
+                    "\nTotal Cost: ₱" + String.format("%.2f", totalCost));
 
             clearFields();
-            rs.close();
-            roomStmt.close();
-            insertStmt.close();
-            updateStmt.close();
-            con.close();
 
         } catch (Exception e) {
             e.printStackTrace();
-            showNotification(
-                    "Database Error",
-                    e.getMessage()
-            );
+            showAlert("Database Error", e.getMessage());
         }
     }
 
-    // ================= CLEAR =================
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
     private void clearFields() {
         firstNameField.clear();
         lastNameField.clear();
@@ -177,46 +184,11 @@ public class CheckInController {
         checkOutDatePicker.setValue(null);
     }
 
-    // ================= ALERT =================
-
-    private void showNotification(String title, String message) {
+    private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
-    
-    private Connection getDatabaseConnection() throws Exception {
-        DataBase dataBase = new DataBase();
-        String[] methodNames = {
-                "getConnection",
-                "getConnectionDB",
-                "connect",
-                "getConnect",
-                "getConn"
-        };
-        for (String methodName : methodNames) {
-                try {
-                Object result = DataBase.class.getMethod(methodName).invoke(dataBase);
-                        if (result instanceof Connection) {
-                                return (Connection) result;
-                        }
-                } catch (NoSuchMethodException ignored) {
-                        // Try the next possible method name.
-
-                }
-        }
-        throw new IllegalStateException(
-                "No compatible database connection method found in DataBase class."
-                );
-        }
-
-        @FXML public void initialize() {
-        // Populate Room Type ComboBox
-        roomTypeComboBox.getItems().addAll("Economy", "Normal", "Vip");
-
-        // Populate Room Capacity ComboBox
-        roomCapacityComboBox.getItems().addAll("Single", "Double", "Triple");
-        }
 }

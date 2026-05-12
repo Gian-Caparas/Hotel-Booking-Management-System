@@ -17,39 +17,39 @@
                    style="-fx-text-fill: #e2b96f; -fx-font-size: 18; -fx-font-weight: bold; -fx-padding: 0 0 16 8;"/>
 
              <!-- STAFF FEATURES -->
-            <Label text="OPERATIONS"
+            <Label fx:id="operationsLabel" text="OPERATIONS"
                    style="-fx-text-fill: #555577; -fx-font-size: 10; -fx-padding: 8 0 4 8;"/>
 
-            <Button text="  Check-in Guest"      onAction="#openCheckIn"
+            <Button fx:id="checkInButton" text="  Check-in Guest"      onAction="#openCheckIn"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-            <Button text="  Check-out Guest"     onAction="#openCheckOut"
+            <Button fx:id="checkOutButton" text="  Check-out Guest"     onAction="#openCheckOut"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
 
-           <Label text="RECORDS"
+           <Label fx:id="recordsLabel" text="RECORDS"
                    style="-fx-text-fill: #555577; -fx-font-size: 10; -fx-padding: 16 0 4 8;"/>
 
-            <Button text="  View Guests"         onAction="#openGuests"
+            <Button fx:id="viewGuestsButton" text="  View Guests"         onAction="#openGuests"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-            <Button text="  View Rooms"          onAction="#openRooms"
+            <Button fx:id="viewRoomsButton" text="  View Rooms"          onAction="#openRooms"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
             
-            <Label text="CUSTOMER - SELF SERVICE"
-                   style="-fx-text-fill: #555577; -fx-font-size: 10; -fx-padding: 16 0 4 8;"/>
-
             <!-- CUSTOMER FEATURES -->
-            <Button text="  Book a Room"         onAction="#openRoomBooking"
+            <Label fx:id="customerLabel" text="CUSTOMER - SELF SERVICE"
+                   style="-fx-text-fill: #555577; -fx-font-size: 10; -fx-padding: 16 0 4 8;"/>
+            
+            <Button fx:id="bookRoomButton" text="  Book a Room"         onAction="#openRoomBooking"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>
-            <Button text="  Cancel Booking"      onAction="#openCancelBooking"
+            <Button fx:id="cancelBookingButton" text="  Cancel Booking"      onAction="#openCancelBooking"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: #ccccee;
                            -fx-font-size: 13; -fx-cursor: hand; -fx-padding: 10 8;"/>

@@ -12,33 +12,117 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class HomePageController implements Initializable {
 
     @FXML private StackPane contentPane;
-    @FXML private Label currentUserLabel;
+    @FXML private Label     currentUserLabel;
 
-    //Admin buttons
+    // Staff-only controls
+    @FXML private Label  operationsLabel;
+    @FXML private Button checkInButton;
+    @FXML private Button checkOutButton;
+    @FXML private Label  recordsLabel;
+    @FXML private Button viewGuestsButton;
+    @FXML private Button viewRoomsButton;
+
+    // Customer-only controls
+    @FXML private Label  customerLabel;
+    @FXML private Button bookRoomButton;
+    @FXML private Button cancelBookingButton;
+
+    // Admin-only controls
+    @FXML private Label  adminLabel;
     @FXML private Button addUserButton;
     @FXML private Button deleteUserButton;
     @FXML private Button viewUsersButton;
-    @FXML private Label adminLabel;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        if (LoginController.currentUser != null) {
-            currentUserLabel.setText("Logged in as: "
-                + LoginController.currentUser.getUsername()
-                + " (" + LoginController.currentUser.getRole() + ")");
 
-                addUserButton.setVisible(LoginController.currentUser.isAdmin());
-                deleteUserButton.setVisible(LoginController.currentUser.isAdmin());
-                viewUsersButton.setVisible(LoginController.currentUser.isAdmin());
-                adminLabel.setVisible(LoginController.currentUser.isAdmin());
-        }       
+        // ── Step 1: Hide every role-specific control by default ───────────────
+        hideAll();
+
+        // ── Step 2: Show only what the current user's role allows ─────────────
+        if (LoginController.currentUser == null) return;
+
+        String role = LoginController.currentUser.getRole(); // "Admin" | "Staff" | "Customer"
+
+        currentUserLabel.setText(
+                "Logged in as: " + LoginController.currentUser.getUsername()
+                + " (" + role + ")"
+        );
+
+        switch (role) {
+
+            case "Admin":
+                // Admins see everything
+                showAdminControls();
+                showStaffControls();
+                showCustomerControls();
+                break;
+
+            case "Staff":
+                showStaffControls();
+                break;
+
+            case "Customer":
+                showCustomerControls();
+                break;
+
+            default:
+                // Unknown role — nothing extra shown
+                break;
+        }
     }
+
+    // ── Role-visibility helpers ───────────────────────────────────────────────
+
+    private void hideAll() {
+        // Admin
+        adminLabel.setVisible(false);
+        addUserButton.setVisible(false);
+        deleteUserButton.setVisible(false);
+        viewUsersButton.setVisible(false);
+        // Staff
+        operationsLabel.setVisible(false);
+        checkInButton.setVisible(false);
+        checkOutButton.setVisible(false);
+        recordsLabel.setVisible(false);
+        viewGuestsButton.setVisible(false);
+        viewRoomsButton.setVisible(false);
+        // Customer
+        customerLabel.setVisible(false);
+        bookRoomButton.setVisible(false);
+        cancelBookingButton.setVisible(false);
+    }
+
+    private void showAdminControls() {
+        adminLabel.setVisible(true);
+        addUserButton.setVisible(true);
+        deleteUserButton.setVisible(true);
+        viewUsersButton.setVisible(true);
+    }
+
+    private void showStaffControls() {
+        operationsLabel.setVisible(true);
+        checkInButton.setVisible(true);
+        checkOutButton.setVisible(true);
+        recordsLabel.setVisible(true);
+        viewGuestsButton.setVisible(true);
+        viewRoomsButton.setVisible(true);
+    }
+
+    private void showCustomerControls() {
+        customerLabel.setVisible(true);
+        bookRoomButton.setVisible(true);
+        cancelBookingButton.setVisible(true);
+    }
+
+    // ── Navigation handlers ───────────────────────────────────────────────────
 
     @FXML private void openCheckIn(ActionEvent e)       { loadView(Paths.CHECKINVIEW); }
     @FXML private void openCheckOut(ActionEvent e)      { loadView(Paths.CHECKOUTVIEW); }
@@ -56,16 +140,16 @@ public class HomePageController implements Initializable {
             contentPane.getChildren().setAll(view);
         } catch (Exception e) {
             e.printStackTrace();
-            // Show error label in content area
-            Label err = new Label("⚠ Could not load: " + fxmlPath
-                + "\n" + e.getMessage());
+            Label err = new Label("⚠ Could not load: " + fxmlPath + "\n" + e.getMessage());
             err.setStyle("-fx-text-fill: #ff6b6b; -fx-font-size: 13;");
             contentPane.getChildren().setAll(err);
         }
     }
 
-    @FXML private void logoutAction(ActionEvent event) {
-        // Clear current user and return to login screen
+    // ── Logout ────────────────────────────────────────────────────────────────
+
+    @FXML
+    private void logoutAction(ActionEvent event) {
         LoginController.currentUser = null;
         try {
             Parent loginView = FXMLLoader.load(getClass().getResource(Paths.LOGINVIEW));

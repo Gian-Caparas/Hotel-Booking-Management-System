@@ -1,80 +1,84 @@
 package com.hotel.wildcat_hotel.project;
 
+import jakarta.persistence.*;
 import java.util.List;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "user")
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "userID")
+    private int userID;
+
     @Column(name = "user_name", unique = true, nullable = false)
     private String username;
 
-    @Column(name = "user_pass")
+    @Column(name = "user_pass", nullable = false)
     private String password;
 
-    @Column(name = "is_admin")
-    private boolean isAdmin;
-
-    @Column(name = "role")
+    // ENUM in DB: 'Admin' | 'Staff' | 'Customer'
+    @Column(name = "role", nullable = false)
     private String role;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "phone")
-    private String phone;
+    @Column(name = "phone_no", nullable = false)
+    private String phoneNo;
 
-    @Column(name = "status")
-    private String status;
-
-    // Add getters for these new fields so TableView can access them
-    public String getEmail() { return email; }
-    public String getPhone() { return phone; }
-    public String getStatus() { return status; }
-    
-    
-    public void setEmail(String email) { this.email = email; }
-    public void setPhone(String phone) { this.phone = phone; }
-    public void setStatus(String status) { this.status = status; }
+    // ── Constructors ──────────────────────────────────────────────────────────
 
     public User() {}
 
-    // CLEANED CONSTRUCTOR
-    public User(String username, String password, String role) {
+    public User(String username, String password, String role,
+                String email, String phoneNo) {
         this.username = username;
         this.password = password;
-        this.role = role;
-        this.email = email;
-        this.phone = phone;
-        this.status = "Active";
+        this.email    = email;
+        this.phoneNo  = phoneNo;
+        setRole(role); // use validated setter
     }
 
-    // ================= GETTERS =================
+    // ── Getters ───────────────────────────────────────────────────────────────
+
+    public int    getUserID()   { return userID; }
     public String getUsername() { return username; }
     public String getPassword() { return password; }
-    public boolean isAdmin() { return isAdmin; }
-    public String getRole() { return role; }
+    public String getRole()     { return role; }
+    public String getEmail()    { return email; }
+    public String getPhoneNo()  { return phoneNo; }
 
-    // ================= SETTERS =================
-    public void setUsername(String username) { this.username = username; }
-    public void setPassword(String password) { this.password = password; }
+    /** Convenience helper — true when role is 'Admin' */
+    public boolean isAdmin()    { return "Admin".equalsIgnoreCase(role); }
+
+    // ── Setters ───────────────────────────────────────────────────────────────
+
+    public void setUserID(int userID)       { this.userID   = userID; }
+    public void setUsername(String username){ this.username  = username; }
+    public void setPassword(String password){ this.password  = password; }
+    public void setEmail(String email)      { this.email     = email; }
+    public void setPhoneNo(String phoneNo)  { this.phoneNo   = phoneNo; }
+
+    /**
+     * Only 'Admin', 'Staff', or 'Customer' are accepted (mirrors DB ENUM).
+     */
     public void setRole(String role) {
-        if (role == null) {
-            this.role = null;
-        } else {
-            this.role = "Customer";
+        if (role == null
+                || (!role.equalsIgnoreCase("Admin")
+                &&  !role.equalsIgnoreCase("Staff")
+                &&  !role.equalsIgnoreCase("Customer"))) {
+            throw new IllegalArgumentException(
+                    "Invalid role: '" + role + "'. Use 'Admin', 'Staff', or 'Customer'.");
         }
-        // Automatically determine admin status
-        this.isAdmin = this.role != null && this.role.equalsIgnoreCase("Admin");
+        // Normalize to exact DB ENUM casing
+        this.role = role.substring(0, 1).toUpperCase()
+                  + role.substring(1).toLowerCase();
     }
 
-    // ================= AUTH METHODS =================
+    // ── Auth helpers ──────────────────────────────────────────────────────────
+
     public static boolean isUserValid(User user) {
         List<User> users = DataBase.getUsers();
         for (User u : users) {
@@ -97,12 +101,13 @@ public class User {
         return false;
     }
 
+    // ── toString ──────────────────────────────────────────────────────────────
+
     @Override
     public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", role='" + role + '\'' +
-                ", isAdmin=" + isAdmin +
-                '}';
+        return "User{id=" + userID
+                + ", username='" + username + '\''
+                + ", role='" + role + '\''
+                + ", isAdmin=" + isAdmin() + "}";
     }
 }
