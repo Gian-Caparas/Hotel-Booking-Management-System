@@ -16,7 +16,9 @@
 <StackPane prefHeight="700.0" 
            prefWidth="960.0" 
            style="-fx-background-color: linear-gradient(to bottom right, #1e1e38, #2b2b52);" 
-           xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+           xmlns="http://javafx.com/javafx/25" 
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.hotel.wildcat_hotel.viewusers.UsersController">
     <children>
         <VBox alignment="CENTER" 
               maxHeight="-Infinity" 
@@ -79,9 +81,9 @@
                                            minWidth="300.0" />
                     </columnConstraints>
                     <children>
+                        <!-- Row Labels (left column) — unchanged -->
                         <Label style="-fx-font-weight: bold;" 
-                               text="User ID" 
-                               textFill="#FFD700" 
+                               text="User ID" textFill="#FFD700" 
                                GridPane.rowIndex="0">
                             <font><Font size="15.0" /></font>
                         </Label>
@@ -106,7 +108,9 @@
                             <font><Font size="15.0" /></font>
                         </Label>
 
-                        <Label maxWidth="Infinity" 
+                        <!-- Value Labels (right column) — fx:id ADDED -->
+                        <Label fx:id="userIDLabel"
+                               maxWidth="Infinity" 
                                style="-fx-background-color: #2b2b2b; 
                                -fx-background-radius: 12; 
                                -fx-border-color: #FFD700; 
@@ -117,7 +121,8 @@
                                GridPane.columnIndex="1" 
                                GridPane.rowIndex="0" />
 
-                        <Label maxWidth="Infinity" 
+                        <Label fx:id="nameLabel"
+                               maxWidth="Infinity" 
                                style="-fx-background-color: #2b2b2b; 
                                -fx-background-radius: 12; 
                                -fx-border-color: #FFD700; 
@@ -128,7 +133,9 @@
                                textFill="WHITE" 
                                GridPane.columnIndex="1" 
                                GridPane.rowIndex="1" />
-                        <Label maxWidth="Infinity" 
+
+                        <Label fx:id="emailLabel"
+                               maxWidth="Infinity" 
                                style="-fx-background-color: #2b2b2b; 
                                -fx-background-radius: 12; 
                                -fx-border-color: #FFD700; 
@@ -139,7 +146,9 @@
                                textFill="WHITE" 
                                GridPane.columnIndex="1" 
                                GridPane.rowIndex="2" />
-                        <Label maxWidth="Infinity" 
+
+                        <Label fx:id="phoneLabel"
+                               maxWidth="Infinity" 
                                style="-fx-background-color: #2b2b2b; 
                                -fx-background-radius: 12; 
                                -fx-border-color: #FFD700; 
@@ -150,7 +159,9 @@
                                textFill="WHITE" 
                                GridPane.columnIndex="1" 
                                GridPane.rowIndex="3" />
-                        <Label maxWidth="Infinity" 
+
+                        <Label fx:id="roleLabel"
+                               maxWidth="Infinity" 
                                style="-fx-background-color: #2b2b2b; 
                                -fx-background-radius: 12; 
                                -fx-border-color: #FFD700; 
@@ -162,7 +173,6 @@
                                GridPane.columnIndex="1" 
                                GridPane.rowIndex="4" />
                     </children>
-               
                 </GridPane>
             </children>
         </VBox>
