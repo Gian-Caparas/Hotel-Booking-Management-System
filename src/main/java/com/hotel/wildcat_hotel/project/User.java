@@ -1,16 +1,13 @@
 package com.hotel.wildcat_hotel.project;
 
+import com.hotel.wildcat_hotel.core.BaseEntity;
+
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "user")
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userID")
-    private int userID;
+@AttributeOverride(name = "entityId", column = @Column(name = "userID"))
+public class User extends BaseEntity {
 
     @Column(name = "user_name", unique = true, nullable = false)
     private String username;
@@ -43,7 +40,7 @@ public class User {
 
     // ── Getters ───────────────────────────────────────────────────────────────
 
-    public int    getUserID()   { return userID; }
+    public int    getUserID()   { return getEntityId(); }
     public String getUsername() { return username; }
     public String getPassword() { return password; }
     public String getRole()     { return role; }
@@ -55,7 +52,7 @@ public class User {
 
     // ── Setters ───────────────────────────────────────────────────────────────
 
-    public void setUserID(int userID)       { this.userID   = userID; }
+    public void setUserID(int userID)       { setEntityId(userID); }
     public void setUsername(String username){ this.username  = username; }
     public void setPassword(String password){ this.password  = password; }
     public void setEmail(String email)      { this.email     = email; }
@@ -77,35 +74,11 @@ public class User {
                   + role.substring(1).toLowerCase();
     }
 
-    // ── Auth helpers ──────────────────────────────────────────────────────────
-
-    public static boolean isUserValid(User user) {
-        List<User> users = DataBase.getUsers();
-        for (User u : users) {
-            if (u.getUsername().equals(user.getUsername())
-                    && u.getPassword().equals(user.getPassword())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean isUserAdmin(User user) {
-        List<User> users = DataBase.getUsers();
-        for (User u : users) {
-            if (u.getUsername().equals(user.getUsername())
-                    && u.getPassword().equals(user.getPassword())) {
-                return u.isAdmin();
-            }
-        }
-        return false;
-    }
-
     // ── toString ──────────────────────────────────────────────────────────────
 
     @Override
     public String toString() {
-        return "User{id=" + userID
+        return "User{id=" + getUserID()
                 + ", username='" + username + '\''
                 + ", role='" + role + '\''
                 + ", isAdmin=" + isAdmin() + "}";

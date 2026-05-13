@@ -1,8 +1,9 @@
 package com.hotel.wildcat_hotel.login;
 
-import com.hotel.wildcat_hotel.project.DataBase;
+import com.hotel.wildcat_hotel.core.HotelApplicationContext;
 import com.hotel.wildcat_hotel.project.Paths;
 import com.hotel.wildcat_hotel.project.User;
+import com.hotel.wildcat_hotel.service.UserService;
 
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -23,6 +24,16 @@ public class LoginController implements Initializable {
     /** Holds the currently logged-in user — accessible by all controllers. */
     public static User currentUser;
 
+    private final UserService userService;
+
+    public LoginController() {
+        this(HotelApplicationContext.getDefault().getUserService());
+    }
+
+    public LoginController(UserService userService) {
+        this.userService = userService;
+    }
+
     @FXML private TextField     usernameField;
     @FXML private PasswordField passwordField;
 
@@ -34,7 +45,7 @@ public class LoginController implements Initializable {
 
         // ── 1. Check DB connection first ──────────────────────────────────────
         try {
-            DataBase.checkConnection();
+            HotelApplicationContext.getDefault().checkConnection();
         } catch (Exception e) {
             showAlert("Connection Error",
                     "Cannot connect to the database.\n" +
@@ -52,8 +63,7 @@ public class LoginController implements Initializable {
         }
 
         // ── 3. Authenticate via DB ────────────────────────────────────────────
-        // DataBase.validateLogin runs the query directly — no need to load all users
-        User loggedInUser = DataBase.validateLogin(username, password);
+        User loggedInUser = userService.authenticate(username, password).orElse(null);
 
         if (loggedInUser != null) {
             currentUser = loggedInUser;

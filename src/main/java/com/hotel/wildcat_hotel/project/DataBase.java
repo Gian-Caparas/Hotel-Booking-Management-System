@@ -109,7 +109,9 @@ public class DataBase {
     public static List<Guest> getGuests() {
         try (Session session = getFactory().openSession()) {
             session.beginTransaction();
-            List<Guest> guests = session.createQuery("from Guest", Guest.class).list();
+            List<Guest> guests = session.createQuery(
+                    "select distinct g from Guest g join Reservation r on r.guestID = g.guestID",
+                    Guest.class).list();
             session.getTransaction().commit();
             return guests;
         }

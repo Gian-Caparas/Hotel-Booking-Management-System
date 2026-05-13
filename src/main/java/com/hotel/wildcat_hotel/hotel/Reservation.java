@@ -1,16 +1,14 @@
 package com.hotel.wildcat_hotel.hotel;
 
+import com.hotel.wildcat_hotel.core.BaseEntity;
+
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "reservation")
-public class Reservation {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "reservationID")
-    private int reservationID;
+@AttributeOverride(name = "entityId", column = @Column(name = "reservationID"))
+public class Reservation extends BaseEntity {
 
     // FK → guest(guestID)
     @Column(name = "guestID", nullable = false)
@@ -49,7 +47,7 @@ public class Reservation {
 
     // ── Getters ───────────────────────────────────────────────────────────────
 
-    public int       getReservationID() { return reservationID; }
+    public int       getReservationID() { return getEntityId(); }
     public int       getGuestID()       { return guestID; }
     public int       getRoomID()        { return roomID; }
     public Timestamp getCheckInDate()   { return checkInDate; }
@@ -59,7 +57,7 @@ public class Reservation {
 
     // ── Setters ───────────────────────────────────────────────────────────────
 
-    public void setReservationID(int reservationID)   { this.reservationID = reservationID; }
+    public void setReservationID(int reservationID)   { setEntityId(reservationID); }
     public void setGuestID(int guestID)               { this.guestID       = guestID; }
     public void setRoomID(int roomID)                 { this.roomID        = roomID; }
     public void setCheckInDate(Timestamp checkInDate) { this.checkInDate   = checkInDate; }
@@ -71,7 +69,7 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Reservation{id=" + reservationID
+        return "Reservation{id=" + getReservationID()
                 + ", guestID=" + guestID
                 + ", roomID=" + roomID
                 + ", checkIn=" + checkInDate

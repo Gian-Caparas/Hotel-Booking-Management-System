@@ -1,15 +1,13 @@
 package com.hotel.wildcat_hotel.hotel;
 
+import com.hotel.wildcat_hotel.core.BaseEntity;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "room")
-public class Room {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "roomID")
-    private int roomID;
+@AttributeOverride(name = "entityId", column = @Column(name = "roomID"))
+public class Room extends BaseEntity {
 
     @Column(name = "room_type", nullable = false)
     private String roomType;
@@ -30,16 +28,16 @@ public class Room {
 
     public Room(int roomID, String roomType, String roomCapacity,
                 double roomRate, String status) {
-        this.roomID       = roomID;
+        setRoomID(roomID);
         this.roomType     = roomType;
         this.roomCapacity = roomCapacity;
         this.roomRate     = roomRate;
-        this.status       = status;
+        setStatus(status);
     }
 
     // ── Getters ───────────────────────────────────────────────────────────────
 
-    public int    getRoomID()       { return roomID; }
+    public int    getRoomID()       { return getEntityId(); }
     public String getRoomType()     { return roomType; }
     public String getRoomCapacity() { return roomCapacity; }
     public double getRoomRate()     { return roomRate; }
@@ -50,7 +48,7 @@ public class Room {
 
     // ── Setters ───────────────────────────────────────────────────────────────
 
-    public void setRoomID(int roomID)               { this.roomID       = roomID; }
+    public void setRoomID(int roomID)               { setEntityId(roomID); }
     public void setRoomType(String roomType)         { this.roomType     = roomType; }
     public void setRoomCapacity(String roomCapacity) { this.roomCapacity = roomCapacity; }
     public void setRoomRate(double roomRate)         { this.roomRate     = roomRate; }
@@ -70,7 +68,7 @@ public class Room {
 
     @Override
     public String toString() {
-        return "Room{id=" + roomID
+        return "Room{id=" + getRoomID()
                 + ", type=" + roomType
                 + ", capacity=" + roomCapacity
                 + ", rate=" + roomRate

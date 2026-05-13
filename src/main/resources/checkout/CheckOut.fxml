@@ -22,7 +22,7 @@
                     text="Guest Check-Out"
                     style="-fx-text-fill: #e2b96f; -fx-font-size: 32; -fx-font-weight: bold;" />
                 <Label
-                    text="Settle accounts and process room departure"
+                    text="Search by Room ID to load reservation details"
                     style="-fx-text-fill: #888899; -fx-font-size: 14;" />
             </children>
         </VBox>
@@ -32,83 +32,157 @@
             <children>
                 <VBox spacing="8">
                     <children>
-                        <Label text="Search Room Number" style="-fx-text-fill: #cccccc;" />
-                        <TextField fx:id="roomSearchField" promptText="e.g. 301" prefHeight="40" prefWidth="250"/>
+                        <Label text="Room ID" style="-fx-text-fill: #cccccc;" />
+                        <TextField
+                            fx:id="roomSearchField"
+                            promptText="e.g. 101"
+                            prefHeight="40"
+                            prefWidth="210"
+                            style="-fx-background-color: #2a2a4a;
+                                   -fx-text-fill: white;
+                                -fx-font-size: 13px;
+                                   -fx-prompt-text-fill: #666688;
+                                   -fx-border-color: #4444aa;
+                                   -fx-border-radius: 6;
+                                   -fx-background-radius: 6;"/>
                     </children>
                 </VBox>
                 <VBox spacing="8" alignment="BOTTOM_CENTER">
                     <children>
-                        <Button 
-                            text="Search" 
+                        <Button
+                            text="Search"
                             onAction="#handleSearch"
-                            prefHeight="40" 
-                            prefWidth="100"
-                            style="-fx-background-color: #444466; -fx-text-fill: white; -fx-cursor: hand;"/>
+                            prefHeight="40"
+                            prefWidth="110"
+                            style="-fx-background-color: #e2b96f;
+                                   -fx-text-fill: #1e1e38;
+                                   -fx-font-weight: bold;
+                                   -fx-cursor: hand;
+                                   -fx-background-radius: 6;"/>
                     </children>
                 </VBox>
             </children>
         </HBox>
 
-        <Separator opacity="0.1" prefWidth="600"/>
+        <Separator opacity="0.15" prefWidth="660"/>
 
-        <!-- SUMMARY GRID -->
+        <!-- DETAILS GRID -->
         <GridPane alignment="CENTER" hgap="30" vgap="20">
             <columnConstraints>
-                <ColumnConstraints prefWidth="320"/>
-                <ColumnConstraints prefWidth="320"/>
+                <ColumnConstraints prefWidth="300"/>
+                <ColumnConstraints prefWidth="300"/>
             </columnConstraints>
 
             <children>
-                <!-- Row 0: Guest Info -->
-                <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <!-- Row 0: Guest Name (full) -->
+                <VBox spacing="8" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
                     <children>
                         <Label text="Guest Name" style="-fx-text-fill: #cccccc;" />
-                        <TextField fx:id="guestNameField" editable="false" style="-fx-opacity: 0.8;" prefHeight="40"/>
+                        <TextField
+                            fx:id="guestNameField"
+                            editable="false"
+                            prefHeight="40"
+                            style="-fx-background-color: #2a2a4a;
+                                   -fx-text-fill: white;
+                                   -fx-opacity: 0.9;"/>
                     </children>
                 </VBox>
 
-                <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                    <children>
-                        <Label text="Stay Duration" style="-fx-text-fill: #cccccc;" />
-                        <TextField fx:id="stayDurationField" editable="false" style="-fx-opacity: 0.8;" prefHeight="40"/>
-                    </children>
-                </VBox>
-
-                <!-- Row 1: Financials -->
+                <!-- Row 1: Check-In Date -->
                 <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="1">
                     <children>
-                        <Label text="Room Charges" style="-fx-text-fill: #cccccc;" />
-                        <TextField fx:id="roomChargesField" editable="false" text="₱ 0.00" prefHeight="40"/>
+                        <Label text="Check-In Date" style="-fx-text-fill: #cccccc;" />
+                        <TextField
+                            fx:id="checkInField"
+                            editable="false"
+                            prefHeight="40"
+                            style="-fx-background-color: #2a2a4a;
+                                   -fx-text-fill: white;
+                                   -fx-opacity: 0.9;"/>
                     </children>
                 </VBox>
 
+                <!-- Row 1: Check-Out Date -->
                 <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
-                        <Label text="Additional Services / Minibar" style="-fx-text-fill: #cccccc;" />
-                        <TextField fx:id="additionalChargesField" promptText="0.00" prefHeight="40"/>
+                        <Label text="Check-Out Date" style="-fx-text-fill: #cccccc;" />
+                        <TextField
+                            fx:id="checkOutField"
+                            editable="false"
+                            prefHeight="40"
+                            style="-fx-background-color: #2a2a4a;
+                                   -fx-text-fill: white;
+                                   -fx-opacity: 0.9;"/>
                     </children>
                 </VBox>
 
-                <!-- Row 2: Total -->
-                <VBox spacing="8" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                <!-- Row 2: Room Type -->
+                <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="2">
                     <children>
-                        <Label text="Total Outstanding Balance" style="-fx-text-fill: #e2b96f; -fx-font-weight: bold;" />
-                        <TextField fx:id="totalBalanceField" editable="false" 
-                                   style="-fx-font-size: 18; -fx-text-fill: #e2b96f; -fx-background-color: #2a2a45;" 
-                                   prefHeight="50"/>
+                        <Label text="Room Type" style="-fx-text-fill: #cccccc;" />
+                        <TextField
+                            fx:id="roomTypeField"
+                            editable="false"
+                            prefHeight="40"
+                            style="-fx-background-color: #2a2a4a;
+                                   -fx-text-fill: white;
+                                   -fx-opacity: 0.9;"/>
                     </children>
                 </VBox>
+
+                <!-- Row 2: Room Capacity -->
+                <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <children>
+                        <Label text="Room Capacity" style="-fx-text-fill: #cccccc;" />
+                        <TextField
+                            fx:id="roomCapacityField"
+                            editable="false"
+                            prefHeight="40"
+                            style="-fx-background-color: #2a2a4a;
+                                   -fx-text-fill: white;
+                                   -fx-opacity: 0.9;"/>
+                    </children>
+                </VBox>
+
+                <!-- Row 3: Number of Days -->
+                <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                    <children>
+                        <Label text="Number of Days" style="-fx-text-fill: #cccccc;" />
+                        <TextField
+                            fx:id="numberOfDaysField"
+                            editable="false"
+                            prefHeight="40"
+                            style="-fx-background-color: #2a2a4a;
+                                   -fx-text-fill: white;
+                                   -fx-opacity: 0.9;"/>
+                    </children>
+                </VBox>
+
+                <!-- Row 3: Total Cost -->
+                <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                    <children>
+                        <Label text="Total Cost" style="-fx-text-fill: #cccccc;" />
+                        <TextField
+                            fx:id="totalCostField"
+                            editable="false"
+                            prefHeight="40"
+                            style="-fx-background-color: #2a2a4a;
+                                   -fx-text-fill: white;
+                                   -fx-opacity: 0.9;"/>
+                    </children>
+                </VBox>
+
             </children>
         </GridPane>
 
         <!-- FINAL ACTIONS -->
-        <Region prefHeight="10"/>
+        <Region prefHeight="20"/>
 
         <VBox alignment="CENTER" spacing="15">
             <children>
                 <Button
                     fx:id="checkOutButton"
-                    text="Finalize Check-Out &amp; Pay"
+                    text="Finalize Check-Out"
                     onAction="#handleCheckOut"
                     prefWidth="350"
                     prefHeight="50"
@@ -116,12 +190,8 @@
                            -fx-text-fill: #1e1e38;
                            -fx-font-weight: bold;
                            -fx-font-size: 16;
-                           -fx-cursor: hand;" />
-                
-                <Button
-                    text="Cancel"
-                    prefWidth="150"
-                    style="-fx-background-color: transparent; -fx-text-fill: #888899; -fx-border-color: #444466; -fx-border-radius: 5;" />
+                           -fx-cursor: hand;
+                           -fx-background-radius: 8;" />
             </children>
         </VBox>
 

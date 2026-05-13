@@ -1,15 +1,13 @@
 package com.hotel.wildcat_hotel.hotel;
 
+import com.hotel.wildcat_hotel.core.BaseEntity;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "guest")
-public class Guest {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "guestID")
-    private int guestID;
+@AttributeOverride(name = "entityId", column = @Column(name = "guestID"))
+public class Guest extends BaseEntity {
 
     // FK → room(roomID)
     @Column(name = "roomID", nullable = false)
@@ -50,7 +48,7 @@ public class Guest {
 
     // ── Getters ───────────────────────────────────────────────────────────────
 
-    public int    getGuestID()     { return guestID; }
+    public int    getGuestID()     { return getEntityId(); }
     public int    getRoomID()      { return roomID; }
     public String getFirstName()   { return firstName; }
     public String getLastName()    { return lastName; }
@@ -61,7 +59,7 @@ public class Guest {
 
     // ── Setters ───────────────────────────────────────────────────────────────
 
-    public void setGuestID(int guestID)           { this.guestID     = guestID; }
+    public void setGuestID(int guestID)           { setEntityId(guestID); }
     public void setRoomID(int roomID)             { this.roomID      = roomID; }
     public void setFirstName(String firstName)    { this.firstName   = firstName; }
     public void setLastName(String lastName)      { this.lastName    = lastName; }
@@ -74,7 +72,7 @@ public class Guest {
 
     @Override
     public String toString() {
-        return "Guest{id=" + guestID
+        return "Guest{id=" + getGuestID()
                 + ", name=" + firstName + " " + lastName
                 + ", room=" + roomID + "}";
     }
