@@ -15,7 +15,7 @@
       style="-fx-background-color: #1e1e38;" 
       xmlns="http://javafx.com/javafx/25" 
       xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="com.hotel.wildcat_hotel.guests.GuestsController">
+      fx:controller="com.hotel.wildcat_hotel.rooms.RoomsController">
 
     <children>
 
