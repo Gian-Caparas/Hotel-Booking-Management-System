@@ -22,4 +22,12 @@ public class ReservationService extends AbstractCrudService<Reservation> {
     public Optional<Reservation> findLatestByGuestId(int guestId) {
         return repository.findLatestByGuestId(guestId);
     }
+
+    public Optional<Reservation> findLatestByUserId(int userId) {
+        return repository.findLatestByUserId(userId);
+    }
+
+    public boolean deleteByIdAndUserId(int reservationId, int userId) {
+        return repository.deleteByIdAndUserId(reservationId, userId);
+    }
 }

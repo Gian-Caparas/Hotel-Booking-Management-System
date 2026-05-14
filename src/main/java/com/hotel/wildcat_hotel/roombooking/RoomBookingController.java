@@ -11,6 +11,7 @@ import com.hotel.wildcat_hotel.hotel.Room;
 import com.hotel.wildcat_hotel.service.GuestService;
 import com.hotel.wildcat_hotel.service.ReservationService;
 import com.hotel.wildcat_hotel.service.RoomService;
+import com.hotel.wildcat_hotel.login.LoginController;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -96,6 +97,12 @@ public class RoomBookingController {
     @FXML
     private void handleBookRoom(ActionEvent event) { // Gi-match sa onAction="#handleBookRoom"
 
+        // Must be logged in to create a booking tied to a user
+        if (LoginController.currentUser == null) {
+            showAlert("Authentication Required", "Please login before booking a room.");
+            return;
+        }
+
         // --- Collect field values ---
         String firstName    = firstNameField.getText().trim();
         String lastName     = lastNameField.getText().trim();
@@ -156,9 +163,20 @@ public class RoomBookingController {
                 return;
             }
 
-            Reservation reservation = new Reservation(
+                // Resolve persisted user ID to ensure validator passes
+                int userId = 0;
+                if (LoginController.currentUser != null) {
+                userId = HotelApplicationContext.getDefault()
+                    .getUserService()
+                    .findByUsername(LoginController.currentUser.getUsername())
+                    .map(u -> u.getUserID())
+                    .orElse(LoginController.currentUser.getUserID());
+                }
+
+                Reservation reservation = new Reservation(
                     createdGuest.getGuestID(),
                     selectedRoom.getRoomID(),
+                    userId,
                     tsCheckIn,
                     tsCheckOut,
                     (int) numberOfDays,

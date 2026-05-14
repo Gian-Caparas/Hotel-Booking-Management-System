@@ -11,6 +11,7 @@ import com.hotel.wildcat_hotel.hotel.Room;
 import com.hotel.wildcat_hotel.service.GuestService;
 import com.hotel.wildcat_hotel.service.ReservationService;
 import com.hotel.wildcat_hotel.service.RoomService;
+import com.hotel.wildcat_hotel.login.LoginController;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -101,6 +102,12 @@ public class CheckInController {
     @FXML
     private void handleCheckIn(ActionEvent event) {
 
+        // Must be logged in to create a booking tied to a user
+        if (LoginController.currentUser == null) {
+            showAlert("Authentication Required", "Please login before checking in a guest.");
+            return;
+        }
+
         // --- Collect field values ---
         String firstName   = firstNameField.getText().trim();
         String lastName    = lastNameField.getText().trim();
@@ -169,9 +176,18 @@ public class CheckInController {
                 return;
             }
 
-            Reservation reservation = new Reservation(
+                int userId = 0;
+                if (LoginController.currentUser != null) {
+                    userId = HotelApplicationContext.getDefault()
+                            .getUserService()
+                            .findByUsername(LoginController.currentUser.getUsername())
+                            .map(u -> u.getUserID())
+                            .orElse(LoginController.currentUser.getUserID());
+                }
+
+                Reservation reservation = new Reservation(
                     createdGuest.getGuestID(),
-                    selectedRoom.getRoomID(),
+                    selectedRoom.getRoomID(), userId,
                     tsCheckIn,
                     tsCheckOut,
                     (int) numberOfDays,

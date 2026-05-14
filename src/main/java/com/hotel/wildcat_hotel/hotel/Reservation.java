@@ -18,6 +18,9 @@ public class Reservation extends BaseEntity {
     @Column(name = "roomID", nullable = false)
     private int roomID;
 
+    @Column(name = "userID", nullable = false)
+    private int userID;
+
     @Column(name = "check_in_date", nullable = false)
     private Timestamp checkInDate;
 
@@ -43,6 +46,19 @@ public class Reservation extends BaseEntity {
         this.checkOutDate = checkOutDate;
         this.numberOfDays = numberOfDays;
         this.totalCost    = totalCost;
+        this.userID       = 0; // default (should be set by callers when a user is available)
+    }
+
+    public Reservation(int guestID, int roomID, int userID,
+                       Timestamp checkInDate, Timestamp checkOutDate,
+                       int numberOfDays, double totalCost) {
+        this.guestID      = guestID;
+        this.roomID       = roomID;
+        this.userID       = userID;
+        this.checkInDate  = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.numberOfDays = numberOfDays;
+        this.totalCost    = totalCost;
     }
 
     // ── Getters ───────────────────────────────────────────────────────────────
@@ -50,6 +66,7 @@ public class Reservation extends BaseEntity {
     public int       getReservationID() { return getEntityId(); }
     public int       getGuestID()       { return guestID; }
     public int       getRoomID()        { return roomID; }
+    public int       getUserID()        { return userID; }
     public Timestamp getCheckInDate()   { return checkInDate; }
     public Timestamp getCheckOutDate()  { return checkOutDate; }
     public int       getNumberOfDays()  { return numberOfDays; }
@@ -60,6 +77,7 @@ public class Reservation extends BaseEntity {
     public void setReservationID(int reservationID)   { setEntityId(reservationID); }
     public void setGuestID(int guestID)               { this.guestID       = guestID; }
     public void setRoomID(int roomID)                 { this.roomID        = roomID; }
+    public void setUserID(int userID)                 { this.userID        = userID; }
     public void setCheckInDate(Timestamp checkInDate) { this.checkInDate   = checkInDate; }
     public void setCheckOutDate(Timestamp checkOutDate){ this.checkOutDate  = checkOutDate; }
     public void setNumberOfDays(int numberOfDays)     { this.numberOfDays  = numberOfDays; }
@@ -72,6 +90,7 @@ public class Reservation extends BaseEntity {
         return "Reservation{id=" + getReservationID()
                 + ", guestID=" + guestID
                 + ", roomID=" + roomID
+                + ", userID=" + userID
                 + ", checkIn=" + checkInDate
                 + ", checkOut=" + checkOutDate
                 + ", days=" + numberOfDays

@@ -13,6 +13,9 @@ public class ReservationValidator implements Validator<Reservation> {
         if (reservation.getGuestID() <= 0 || reservation.getRoomID() <= 0) {
             throw new IllegalArgumentException("Reservation must reference valid guest and room IDs.");
         }
+        if (reservation.getUserID() <= 0) {
+            throw new IllegalArgumentException("Reservation must reference the user who created it.");
+        }
         if (reservation.getCheckInDate() == null || reservation.getCheckOutDate() == null) {
             throw new IllegalArgumentException("Reservation dates must not be null.");
         }

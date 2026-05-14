@@ -26,7 +26,8 @@ import com.hotel.wildcat_hotel.validation.UserValidator;
 
 public final class HotelApplicationContext {
 
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/hotelDB"
+    // Use the same database name as in hibernate.cfg.xml (lowercase 'hoteldb')
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/hoteldb"
             + "?useSSL=false"
             + "&serverTimezone=UTC"
             + "&allowPublicKeyRetrieval=true";

@@ -122,17 +122,8 @@ public class CancelBookingController {
             confirmCancelButton.setDisable(true);
             return;
         }
-
-        String email = LoginController.currentUser.getEmail();
-        Optional<Guest> maybeGuest = guestService.findByEmail(email);
-
-        if (maybeGuest.isEmpty()) {
-            showAlert(AlertType.INFORMATION, "No Booking", "You have no recorded guest profile.");
-            confirmCancelButton.setDisable(true);
-            return;
-        }
-
-        Optional<Reservation> maybeReservation = reservationService.findLatestByGuestId(maybeGuest.get().getGuestID());
+        int userId = LoginController.currentUser.getUserID();
+        Optional<Reservation> maybeReservation = reservationService.findLatestByUserId(userId);
         if (maybeReservation.isEmpty()) {
             showAlert(AlertType.INFORMATION, "No Booking", "You have no active reservation.");
             confirmCancelButton.setDisable(true);
@@ -168,7 +159,18 @@ public class CancelBookingController {
             return;
         }
 
-        boolean deleted = reservationService.delete(loadedReservationId);
+        boolean deleted;
+        String role = getCurrentUserRole();
+        if ("CUSTOMER".equalsIgnoreCase(role)) {
+            if (LoginController.currentUser == null) {
+                showAlert(AlertType.WARNING, "Session Error", "No logged-in user.");
+                return;
+            }
+            int userId = LoginController.currentUser.getUserID();
+            deleted = reservationService.deleteByIdAndUserId(loadedReservationId, userId);
+        } else {
+            deleted = reservationService.delete(loadedReservationId);
+        }
         if (!deleted) {
             showAlert(AlertType.ERROR, "Cancellation Failed",
                     "Unable to cancel reservation #" + loadedReservationId + ".");

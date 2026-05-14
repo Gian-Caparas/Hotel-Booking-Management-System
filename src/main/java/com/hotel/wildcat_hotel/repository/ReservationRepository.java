@@ -40,4 +40,31 @@ public class ReservationRepository extends AbstractHibernateRepository<Reservati
             return Optional.ofNullable(reservation);
         }
     }
+
+    public Optional<Reservation> findLatestByUserId(int userId) {
+        try (Session session = getSessionFactory().openSession()) {
+            session.beginTransaction();
+            Reservation reservation = session.createQuery(
+                            "from Reservation r where r.userID = :userId order by r.entityId desc",
+                            Reservation.class)
+                    .setParameter("userId", userId)
+                    .setMaxResults(1)
+                    .uniqueResult();
+            session.getTransaction().commit();
+            return Optional.ofNullable(reservation);
+        }
+    }
+
+    public boolean deleteByIdAndUserId(int reservationId, int userId) {
+        try (Session session = getSessionFactory().openSession()) {
+            session.beginTransaction();
+            int deleted = session.createMutationQuery(
+                            "delete from Reservation where entityId = :id and userID = :userId")
+                    .setParameter("id", reservationId)
+                    .setParameter("userId", userId)
+                    .executeUpdate();
+            session.getTransaction().commit();
+            return deleted > 0;
+        }
+    }
 }

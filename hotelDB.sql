@@ -150,6 +150,7 @@ CREATE TABLE `guest` (
 -- ============================================================
 CREATE TABLE `reservation` (
   `reservationID`   INT(3)       NOT NULL AUTO_INCREMENT,
+  `userID`          INT(3)       NOT NULL,
   `guestID`         INT(3)       NOT NULL,
   `roomID`          INT(3)       NOT NULL,
   `check_in_date`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -157,6 +158,10 @@ CREATE TABLE `reservation` (
   `number_of_days`  INT          NOT NULL DEFAULT 1,
   `total_cost`      DOUBLE       NOT NULL DEFAULT 0,
   PRIMARY KEY (`reservationID`),
+  CONSTRAINT `fk_reservation_user`
+    FOREIGN KEY (`userID`) REFERENCES `user`(`userID`)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
   CONSTRAINT `fk_reservation_guest`
     FOREIGN KEY (`guestID`) REFERENCES `guest`(`guestID`)
     ON UPDATE CASCADE
