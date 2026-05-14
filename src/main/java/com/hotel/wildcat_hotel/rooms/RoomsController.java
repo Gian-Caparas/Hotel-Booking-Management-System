@@ -1,10 +1,16 @@
 package com.hotel.wildcat_hotel.rooms;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+
+import com.hotel.wildcat_hotel.core.HotelApplicationContext;
+import com.hotel.wildcat_hotel.hotel.Reservation;
+import com.hotel.wildcat_hotel.hotel.Room;
+import com.hotel.wildcat_hotel.service.GuestService;
+import com.hotel.wildcat_hotel.service.ReservationService;
+import com.hotel.wildcat_hotel.service.RoomService;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,14 +33,19 @@ public class RoomsController {
     @FXML private TableColumn<RoomModel, String>   usernameColumn4;  // Check-in
     @FXML private TableColumn<RoomModel, String>   usernameColumn5;  // Check-out
 
-    // ── DB credentials ──────────────────────────────────────────────
-    private static final String DB_URL  = "jdbc:mysql://localhost:3306/hoteldb";
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = "";          // your phpMyAdmin password (usually blank for XAMPP)
+    private RoomService roomService;
+    private ReservationService reservationService;
+    private GuestService guestService;
+
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     // ── Auto-called when the FXML loads ─────────────────────────────
     @FXML
     public void initialize() {
+        roomService = HotelApplicationContext.getDefault().getRoomService();
+        reservationService = HotelApplicationContext.getDefault().getReservationService();
+        guestService = HotelApplicationContext.getDefault().getGuestService();
+
         usernameColumn .setCellValueFactory(new PropertyValueFactory<>("roomId"));
         roleColumn     .setCellValueFactory(new PropertyValueFactory<>("roomType"));
         usernameColumn1.setCellValueFactory(new PropertyValueFactory<>("roomCapacity"));
@@ -53,63 +64,42 @@ public class RoomsController {
         loadRooms(keyword.isEmpty() ? null : keyword);
     }
 
-    // ── Main query ───────────────────────────────────────────────────
+    // ── Main query using service/repository abstraction ──────────────
     private void loadRooms(String keyword) {
+        List<Room> rooms = roomService.getAll();
+        String lowerKeyword = keyword == null ? null : keyword.toLowerCase(Locale.ROOT);
+
         ObservableList<RoomModel> data = FXCollections.observableArrayList();
 
-        // LEFT JOIN so rooms with NO reservation still appear
-        String sql = """
-                SELECT
-                    r.roomID,
-                    r.room_type,
-                    r.room_capacity,
-                    r.status,
-                    CASE
-                        WHEN res.guestID IS NOT NULL
-                        THEN CONCAT(g.first_name, ' ', g.last_name)
-                        ELSE 'NULL'
-                    END AS occupied_by,
-                    COALESCE(DATE_FORMAT(res.check_in_date,  '%Y-%m-%d'), '') AS checkin,
-                    COALESCE(DATE_FORMAT(res.check_out_date, '%Y-%m-%d'), '') AS checkout
-                FROM room r
-                LEFT JOIN reservation res ON res.roomID = r.roomID
-                LEFT JOIN guest g         ON g.guestID  = res.guestID
-                """;
+        for (Room room : rooms) {
+            Optional<Reservation> maybeReservation = reservationService.findLatestByRoomId(room.getRoomID());
+            String occupiedBy = "NULL";
+            String checkin   = "";
+            String checkout  = "";
 
-        // Optional search filter
-        if (keyword != null) {
-            sql += """
-                    WHERE r.roomID   LIKE ?
-                       OR r.room_type LIKE ?
-                       OR CONCAT(g.first_name, ' ', g.last_name) LIKE ?
-                    """;
-        }
-
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            if (keyword != null) {
-                String like = "%" + keyword + "%";
-                ps.setString(1, like);
-                ps.setString(2, like);
-                ps.setString(3, like);
+            if (maybeReservation.isPresent()) {
+                Reservation reservation = maybeReservation.get();
+                occupiedBy = guestService.getById(reservation.getGuestID())
+                        .map(guest -> guest.getFirstName() + " " + guest.getLastName())
+                        .orElse("NULL");
+                checkin = reservation.getCheckInDate().toLocalDateTime().toLocalDate().format(DATE_FORMATTER);
+                checkout = reservation.getCheckOutDate().toLocalDateTime().toLocalDate().format(DATE_FORMATTER);
             }
 
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
+            if (lowerKeyword == null
+                    || String.valueOf(room.getRoomID()).contains(lowerKeyword)
+                    || room.getRoomType().toLowerCase(Locale.ROOT).contains(lowerKeyword)
+                    || occupiedBy.toLowerCase(Locale.ROOT).contains(lowerKeyword)) {
                 data.add(new RoomModel(
-                        rs.getInt("roomID"),
-                        rs.getString("room_type"),
-                        rs.getString("room_capacity"),
-                        rs.getString("status"),
-                        rs.getString("occupied_by"),
-                        rs.getString("checkin"),
-                        rs.getString("checkout")
+                        room.getRoomID(),
+                        room.getRoomType(),
+                        room.getRoomCapacity(),
+                        room.getStatus(),
+                        occupiedBy,
+                        checkin,
+                        checkout
                 ));
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         usersTable.setItems(data);

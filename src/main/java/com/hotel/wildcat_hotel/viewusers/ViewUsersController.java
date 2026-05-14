@@ -2,7 +2,8 @@ package com.hotel.wildcat_hotel.viewusers;
 
 import java.util.List;
 
-import com.hotel.wildcat_hotel.project.DataBase;
+import com.hotel.wildcat_hotel.core.HotelApplicationContext;
+import com.hotel.wildcat_hotel.core.Service;
 import com.hotel.wildcat_hotel.project.User;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -24,13 +25,19 @@ public class ViewUsersController {
 
     private ObservableList<User> masterData = FXCollections.observableArrayList();
 
+    // ✓ NEW: Polymorphic service reference
+    private Service<User> userService;
+
     @FXML public void initialize() {
+        // ✓ NEW: Inject service
+        userService = HotelApplicationContext.getDefault().getUserService();
+
         usernameColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getUsername()));
         roleColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getRole()));
         usernameColumn1.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getPhoneNo())); // ← getPhoneNo()
+                new SimpleStringProperty(cellData.getValue().getPhoneNo()));
         usernameColumn2.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getEmail()));
 
@@ -39,7 +46,7 @@ public class ViewUsersController {
 
     private void loadInitialData() {
         try {
-            List<User> users = DataBase.getUsers();
+            List<User> users = userService.getAll();
             if (users != null) {
                 masterData.setAll(users);
             } else {

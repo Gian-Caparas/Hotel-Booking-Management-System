@@ -1,13 +1,16 @@
 package com.hotel.wildcat_hotel.cancelbooking;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.Optional;
 
+import com.hotel.wildcat_hotel.core.HotelApplicationContext;
 import com.hotel.wildcat_hotel.guests.GuestsController;
+import com.hotel.wildcat_hotel.hotel.Guest;
+import com.hotel.wildcat_hotel.hotel.Reservation;
+import com.hotel.wildcat_hotel.hotel.Room;
 import com.hotel.wildcat_hotel.login.LoginController;
+import com.hotel.wildcat_hotel.service.GuestService;
+import com.hotel.wildcat_hotel.service.ReservationService;
+import com.hotel.wildcat_hotel.service.RoomService;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -32,10 +35,9 @@ public class CancelBookingController {
     @FXML private TextField numDaysField;
     @FXML private Button    confirmCancelButton;
 
-    // ── DB credentials ───────────────────────────────────────────────
-    private static final String DB_URL  = "jdbc:mysql://localhost:3306/hoteldb";
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = "";
+    private RoomService roomService;
+    private GuestService guestService;
+    private ReservationService reservationService;
 
     // Holds IDs for the cancel action
     private int loadedReservationId = -1;
@@ -55,6 +57,10 @@ public class CancelBookingController {
     // ── Auto-called when FXML loads ──────────────────────────────────
     @FXML
     public void initialize() {
+        roomService = HotelApplicationContext.getDefault().getRoomService();
+        guestService = HotelApplicationContext.getDefault().getGuestService();
+        reservationService = HotelApplicationContext.getDefault().getReservationService();
+
         confirmCancelButton.setDisable(true);
 
         // ── Role check ───────────────────────────────────────────────
@@ -93,113 +99,65 @@ public class CancelBookingController {
 
     // ── Shared: load reservation by roomID ──────────────────────────
     private void loadReservationByRoomId(int roomId) {
-        String sql = """
-                SELECT
-                    res.reservationID,
-                    res.roomID,
-                    g.first_name,
-                    g.last_name,
-                    r.room_type,
-                    r.room_capacity,
-                    DATE_FORMAT(res.check_in_date,  '%Y-%m-%d') AS checkin,
-                    DATE_FORMAT(res.check_out_date, '%Y-%m-%d') AS checkout,
-                    res.total_cost,
-                    res.number_of_days
-                FROM reservation res
-                JOIN guest g ON g.guestID = res.guestID
-                JOIN room  r ON r.roomID  = res.roomID
-                WHERE res.roomID = ?
-                ORDER BY res.reservationID DESC
-                LIMIT 1
-                """;
+        Optional<Reservation> maybeReservation = reservationService.findLatestByRoomId(roomId);
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, roomId);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                populateFields(rs);
-                confirmCancelButton.setDisable(false);
-            } else {
-                clearFields();
-                loadedReservationId = -1;
-                loadedRoomId        = -1;
-                confirmCancelButton.setDisable(true);
-                showAlert(AlertType.INFORMATION, "Not Found",
-                        "No active reservation found for Room ID: " + roomId);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert(AlertType.ERROR, "DB Error", "Could not load reservation: " + e.getMessage());
+        if (maybeReservation.isEmpty()) {
+            clearFields();
+            loadedReservationId = -1;
+            loadedRoomId = -1;
+            confirmCancelButton.setDisable(true);
+            showAlert(AlertType.INFORMATION, "Not Found",
+                    "No active reservation found for Room ID: " + roomId);
+            return;
         }
+
+        populateFields(maybeReservation.get());
+        confirmCancelButton.setDisable(false);
     }
 
     // ── CUSTOMER: auto-load their own latest reservation ────────────
     private void loadReservationForCurrentCustomer() {
-        int guestId = getCurrentGuestId();
-
-        if (guestId == -1) {
-            showAlert(AlertType.WARNING, "Session Error", "Could not determine logged-in guest.");
+        if (LoginController.currentUser == null) {
+            showAlert(AlertType.WARNING, "Session Error", "No logged-in user.");
             confirmCancelButton.setDisable(true);
             return;
         }
 
-        String sql = """
-                SELECT
-                    res.reservationID,
-                    res.roomID,
-                    g.first_name,
-                    g.last_name,
-                    r.room_type,
-                    r.room_capacity,
-                    DATE_FORMAT(res.check_in_date,  '%Y-%m-%d') AS checkin,
-                    DATE_FORMAT(res.check_out_date, '%Y-%m-%d') AS checkout,
-                    res.total_cost,
-                    res.number_of_days
-                FROM reservation res
-                JOIN guest g ON g.guestID = res.guestID
-                JOIN room  r ON r.roomID  = res.roomID
-                WHERE res.guestID = ?
-                ORDER BY res.reservationID DESC
-                LIMIT 1
-                """;
+        String email = LoginController.currentUser.getEmail();
+        Optional<Guest> maybeGuest = guestService.findByEmail(email);
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, guestId);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                populateFields(rs);
-                confirmCancelButton.setDisable(false);
-            } else {
-                showAlert(AlertType.INFORMATION, "No Booking", "You have no active reservation.");
-                confirmCancelButton.setDisable(true);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert(AlertType.ERROR, "DB Error", "Could not load your reservation: " + e.getMessage());
+        if (maybeGuest.isEmpty()) {
+            showAlert(AlertType.INFORMATION, "No Booking", "You have no recorded guest profile.");
+            confirmCancelButton.setDisable(true);
+            return;
         }
+
+        Optional<Reservation> maybeReservation = reservationService.findLatestByGuestId(maybeGuest.get().getGuestID());
+        if (maybeReservation.isEmpty()) {
+            showAlert(AlertType.INFORMATION, "No Booking", "You have no active reservation.");
+            confirmCancelButton.setDisable(true);
+            return;
+        }
+
+        populateFields(maybeReservation.get());
+        confirmCancelButton.setDisable(false);
     }
 
-    // ── Shared: fill all form fields from a ResultSet row ───────────
-    private void populateFields(ResultSet rs) throws SQLException {
-        loadedReservationId = rs.getInt("reservationID");
-        loadedRoomId        = rs.getInt("roomID");
+    private void populateFields(Reservation reservation) {
+        loadedReservationId = reservation.getReservationID();
+        loadedRoomId = reservation.getRoomID();
 
-        firstNameField   .setText(rs.getString("first_name"));
-        lastNameField    .setText(rs.getString("last_name"));
-        roomTypeField    .setText(rs.getString("room_type"));
-        roomCapacityField.setText(rs.getString("room_capacity"));
-        checkInField     .setText(rs.getString("checkin"));
-        checkOutField    .setText(rs.getString("checkout"));
-        totalCostField   .setText(String.valueOf(rs.getDouble("total_cost")));
-        numDaysField     .setText(String.valueOf(rs.getInt("number_of_days")));
+        Optional<Guest> maybeGuest = guestService.getById(reservation.getGuestID());
+        Optional<Room> maybeRoom = roomService.getById(reservation.getRoomID());
+
+        firstNameField.setText(maybeGuest.map(Guest::getFirstName).orElse(""));
+        lastNameField.setText(maybeGuest.map(Guest::getLastName).orElse(""));
+        roomTypeField.setText(maybeRoom.map(Room::getRoomType).orElse(""));
+        roomCapacityField.setText(maybeRoom.map(Room::getRoomCapacity).orElse(""));
+        checkInField.setText(reservation.getCheckInDate().toLocalDateTime().toLocalDate().toString());
+        checkOutField.setText(reservation.getCheckOutDate().toLocalDateTime().toLocalDate().toString());
+        totalCostField.setText(String.valueOf(reservation.getTotalCost()));
+        numDaysField.setText(String.valueOf(reservation.getNumberOfDays()));
     }
 
     // ── Confirm Cancel ───────────────────────────────────────────────
@@ -210,41 +168,30 @@ public class CancelBookingController {
             return;
         }
 
-        String deleteResSql  = "DELETE FROM reservation WHERE reservationID = ?";
-        String updateRoomSql = "UPDATE room SET status = 'AVAILABLE' WHERE roomID = ?";
-
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
-
-            try (PreparedStatement ps = conn.prepareStatement(deleteResSql)) {
-                ps.setInt(1, loadedReservationId);
-                ps.executeUpdate();
-            }
-
-            if (loadedRoomId != -1) {
-                try (PreparedStatement ps = conn.prepareStatement(updateRoomSql)) {
-                    ps.setInt(1, loadedRoomId);
-                    ps.executeUpdate();
-                }
-            }
-
-            showAlert(AlertType.INFORMATION, "Cancelled",
-                    "Booking #" + loadedReservationId + " has been successfully cancelled.");
-
-            clearFields();
-            loadedReservationId = -1;
-            loadedRoomId        = -1;
-            confirmCancelButton.setDisable(true);
-
-            // ── Refresh the Guests view so the cancelled guest disappears ──
-            if (guestsController != null) {
-                guestsController.refresh();
-            }
-            GuestsController.refreshOpenView();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert(AlertType.ERROR, "DB Error", "Could not cancel booking: " + e.getMessage());
+        boolean deleted = reservationService.delete(loadedReservationId);
+        if (!deleted) {
+            showAlert(AlertType.ERROR, "Cancellation Failed",
+                    "Unable to cancel reservation #" + loadedReservationId + ".");
+            return;
         }
+
+        roomService.getById(loadedRoomId).ifPresent(room -> {
+            room.setStatus("AVAILABLE");
+            roomService.update(room);
+        });
+
+        showAlert(AlertType.INFORMATION, "Cancelled",
+                "Booking #" + loadedReservationId + " has been successfully cancelled.");
+
+        clearFields();
+        loadedReservationId = -1;
+        loadedRoomId = -1;
+        confirmCancelButton.setDisable(true);
+
+        if (guestsController != null) {
+            guestsController.refresh();
+        }
+        GuestsController.refreshOpenView();
     }
 
     // ── Helpers: replace with your real Session class calls ─────────
@@ -257,41 +204,6 @@ public class CancelBookingController {
             return "";
         }
         return LoginController.currentUser.getRole();
-    }
-
-    /**
-     * Returns the guestID linked to the currently logged-in customer.
-     * The project does not store a direct user-to-guest relation, so the
-     * latest reservation matching the logged-in user's email is used.
-     */
-    private int getCurrentGuestId() {
-        if (LoginController.currentUser == null) {
-            return -1;
-        }
-
-        String sql = """
-                SELECT g.guestID
-                FROM reservation res
-                JOIN guest g ON g.guestID = res.guestID
-                WHERE LOWER(g.email) = LOWER(?)
-                ORDER BY res.reservationID DESC
-                LIMIT 1
-                """;
-
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, LoginController.currentUser.getEmail());
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("guestID");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return -1;
     }
 
     private void clearFields() {

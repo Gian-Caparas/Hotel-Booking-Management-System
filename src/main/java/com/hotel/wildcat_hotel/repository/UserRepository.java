@@ -26,4 +26,29 @@ public class UserRepository extends AbstractHibernateRepository<User> {
             return Optional.ofNullable(user);
         }
     }
+
+    // ✓ NEW: Find user by username
+    public Optional<User> findByUsername(String username) {
+        try (Session session = getSessionFactory().openSession()) {
+            User user = session.createQuery(
+                            "from User u where u.username = :username",
+                            User.class)
+                    .setParameter("username", username)
+                    .uniqueResult();
+            return Optional.ofNullable(user);
+        }
+    }
+
+    // ✓ NEW: Delete user by username
+    public boolean deleteByUsername(String username) {
+        try (Session session = getSessionFactory().openSession()) {
+            session.beginTransaction();
+            int deleted = session.createMutationQuery(
+                            "delete from User where username = :username")
+                    .setParameter("username", username)
+                    .executeUpdate();
+            session.getTransaction().commit();
+            return deleted > 0;
+        }
+    }
 }

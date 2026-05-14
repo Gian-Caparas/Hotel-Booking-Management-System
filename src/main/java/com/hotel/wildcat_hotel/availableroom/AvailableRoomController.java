@@ -1,10 +1,11 @@
 package com.hotel.wildcat_hotel.availableroom;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.hotel.wildcat_hotel.core.HotelApplicationContext;
+import com.hotel.wildcat_hotel.hotel.Room;
+import com.hotel.wildcat_hotel.service.RoomService;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,14 +25,13 @@ public class AvailableRoomController {
     @FXML private TableColumn<RoomModel, String>  usernameColumn1;  // Room Capacity
     @FXML private TableColumn<RoomModel, Double>  usernameColumn2;  // Room Rate
 
-    // ── DB credentials ───────────────────────────────────────────────
-    private static final String DB_URL  = "jdbc:mysql://localhost:3306/hoteldb";
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = "";
+    private RoomService roomService;
 
     // ── Auto-called when FXML loads ──────────────────────────────────
     @FXML
     public void initialize() {
+        roomService = HotelApplicationContext.getDefault().getRoomService();
+
         usernameColumn .setCellValueFactory(new PropertyValueFactory<>("roomId"));
         roleColumn     .setCellValueFactory(new PropertyValueFactory<>("roomType"));
         usernameColumn1.setCellValueFactory(new PropertyValueFactory<>("roomCapacity"));
@@ -47,44 +47,26 @@ public class AvailableRoomController {
         loadAvailableRooms(keyword.isEmpty() ? null : keyword);
     }
 
-    // ── Query: only rooms with status = 'AVAILABLE' ──────────────────
+    // ── Query using repository/service abstraction ───────────────────
     private void loadAvailableRooms(String keyword) {
-        ObservableList<RoomModel> data = FXCollections.observableArrayList();
-
-        String sql = """
-                SELECT roomID, room_type, room_capacity, room_rate
-                FROM room
-                WHERE status = 'AVAILABLE'
-                """;
+        List<Room> rooms = roomService.getAvailableRooms();
 
         if (keyword != null) {
-            sql += """
-                    AND (roomID    LIKE ?
-                      OR room_type LIKE ?)
-                    """;
+            String lower = keyword.toLowerCase();
+            rooms = rooms.stream()
+                    .filter(room -> String.valueOf(room.getRoomID()).contains(lower)
+                                 || room.getRoomType().toLowerCase().contains(lower))
+                    .collect(Collectors.toList());
         }
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            if (keyword != null) {
-                String like = "%" + keyword + "%";
-                ps.setString(1, like);
-                ps.setString(2, like);
-            }
-
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                data.add(new RoomModel(
-                        rs.getInt("roomID"),
-                        rs.getString("room_type"),
-                        rs.getString("room_capacity"),
-                        rs.getDouble("room_rate")
-                ));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        ObservableList<RoomModel> data = FXCollections.observableArrayList();
+        for (Room room : rooms) {
+            data.add(new RoomModel(
+                    room.getRoomID(),
+                    room.getRoomType(),
+                    room.getRoomCapacity(),
+                    room.getRoomRate()
+            ));
         }
 
         usersTable.setItems(data);

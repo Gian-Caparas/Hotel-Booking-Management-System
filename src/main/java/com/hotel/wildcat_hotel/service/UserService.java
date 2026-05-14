@@ -18,4 +18,14 @@ public class UserService extends AbstractCrudService<User> {
     public Optional<User> authenticate(String username, String password) {
         return repository.authenticate(username, password);
     }
+
+    // ✓ NEW: Find user by username
+    public Optional<User> findByUsername(String username) {
+        return repository.findByUsername(username);
+    }
+
+    // ✓ NEW: Delete user by username (used by DeleteUserController)
+    public boolean deleteByUsername(String username) {
+        return repository.deleteByUsername(username);
+    }
 }

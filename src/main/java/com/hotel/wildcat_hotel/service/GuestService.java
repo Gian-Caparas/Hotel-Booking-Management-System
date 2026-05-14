@@ -1,6 +1,7 @@
 package com.hotel.wildcat_hotel.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.hotel.wildcat_hotel.hotel.Guest;
 import com.hotel.wildcat_hotel.repository.GuestRepository;
@@ -17,5 +18,9 @@ public class GuestService extends AbstractCrudService<Guest> {
 
     public List<Guest> getActiveGuests() {
         return repository.findActiveGuests();
+    }
+
+    public Optional<Guest> findByEmail(String email) {
+        return repository.findByEmail(email);
     }
 }

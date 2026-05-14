@@ -3,7 +3,8 @@ package com.hotel.wildcat_hotel.adduser;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.hotel.wildcat_hotel.project.DataBase;
+import com.hotel.wildcat_hotel.core.HotelApplicationContext;
+import com.hotel.wildcat_hotel.core.Service;
 import com.hotel.wildcat_hotel.project.User;
 
 import javafx.event.ActionEvent;
@@ -27,10 +28,16 @@ public class AddUserController implements Initializable {
     @FXML private ToggleGroup   roleGroup;
     @FXML private Label         statusLabel;
 
+    // ✓ NEW: Polymorphic service reference
+    private Service<User> userService;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         statusLabel.setText("");
         staffRadio.setSelected(true); // default role
+        
+        // ✓ NEW: Inject service from context (Service Locator pattern)
+        userService = HotelApplicationContext.getDefault().getUserService();
     }
 
     @FXML
@@ -80,12 +87,14 @@ public class AddUserController implements Initializable {
         // Use the full constructor: (username, password, role, email, phoneNo)
         User newUser = new User(username, password, role, email, phone);
 
-        boolean saved = DataBase.saveUser(newUser);
-        if (saved) {
+        try {
+            // ✓ POLYMORPHIC call via Service<User> interface
+            User created = userService.create(newUser);
+            
             setStatus("✓ User '" + username + "' added as " + role + ".", true);
             clearForm();
-        } else {
-            setStatus("✗ Username '" + username + "' already exists.", false);
+        } catch (IllegalArgumentException ex) {
+            setStatus("✗ " + ex.getMessage(), false);
         }
     }
 

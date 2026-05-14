@@ -4,7 +4,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import com.hotel.wildcat_hotel.project.DataBase;
+import com.hotel.wildcat_hotel.core.HotelApplicationContext;
+import com.hotel.wildcat_hotel.core.Service;
 import com.hotel.wildcat_hotel.project.User;
 
 import javafx.collections.FXCollections;
@@ -29,8 +30,14 @@ public class DeleteUserController implements Initializable {
 
     private ObservableList<User> tableData = FXCollections.observableArrayList();
 
+    // ✓ NEW: Polymorphic service reference
+    private Service<User> userService;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // ✓ NEW: Inject service
+        userService = HotelApplicationContext.getDefault().getUserService();
+        
         // Encapsulation - accessing User data only through getters
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
 
@@ -66,12 +73,11 @@ public class DeleteUserController implements Initializable {
             return;
         }
 
-        List<User> allUsers = DataBase.getUsers();
+        // ✓ POLYMORPHIC call via Service<User>
+        List<User> allUsers = userService.getAll();
         if (allUsers == null) return;
 
-        for (int i = 0; i < allUsers.size(); i++) {
-            User user = allUsers.get(i);
-            // Encapsulation - using getter to access username
+        for (User user : allUsers) {
             String username = user.getUsername().toLowerCase();
             if (username.contains(input.toLowerCase())) {
                 tableData.add(user);
@@ -85,7 +91,6 @@ public class DeleteUserController implements Initializable {
 
     @FXML
     private void handleDeleteUser() {
-        // Encapsulation - getting selected user through TableView's method
         User selectedUser = usersTable.getSelectionModel().getSelectedItem();
 
         if (selectedUser == null) {
@@ -93,8 +98,15 @@ public class DeleteUserController implements Initializable {
             return;
         }
 
-        // Encapsulation - accessing username only through getter
-        boolean deleted = DataBase.deleteUser(selectedUser.getUsername());
+        boolean deleted = false;
+        try {
+            com.hotel.wildcat_hotel.service.UserService userServiceImpl =
+                    (com.hotel.wildcat_hotel.service.UserService) userService;
+            deleted = userServiceImpl.deleteByUsername(selectedUser.getUsername());
+        } catch (ClassCastException ex) {
+            setStatus("Service cast error: " + ex.getMessage());
+            return;
+        }
 
         if (deleted) {
             tableData.remove(selectedUser);
@@ -114,7 +126,9 @@ public class DeleteUserController implements Initializable {
     // Abstraction - hiding the data loading logic behind a method
     private void loadAllUsers() {
         tableData.clear();
-        List<User> allUsers = DataBase.getUsers();
+
+        // ✓ POLYMORPHIC call via Service<User>
+        List<User> allUsers = userService.getAll();
 
         if (allUsers != null && !allUsers.isEmpty()) {
             tableData.addAll(allUsers);

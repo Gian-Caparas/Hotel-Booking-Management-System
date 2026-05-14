@@ -1,6 +1,7 @@
 package com.hotel.wildcat_hotel.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -21,6 +22,16 @@ public class GuestRepository extends AbstractHibernateRepository<Guest> {
                     Guest.class).list();
             session.getTransaction().commit();
             return guests;
+        }
+    }
+
+    public Optional<Guest> findByEmail(String email) {
+        try (Session session = getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "from Guest g where lower(g.email) = :email",
+                    Guest.class)
+                    .setParameter("email", email.toLowerCase())
+                    .uniqueResultOptional();
         }
     }
 }

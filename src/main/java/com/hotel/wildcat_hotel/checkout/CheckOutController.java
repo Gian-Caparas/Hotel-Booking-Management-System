@@ -1,19 +1,21 @@
 package com.hotel.wildcat_hotel.checkout;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.Optional;
 
+import com.hotel.wildcat_hotel.core.HotelApplicationContext;
+import com.hotel.wildcat_hotel.guests.GuestsController;
+import com.hotel.wildcat_hotel.hotel.Reservation;
+import com.hotel.wildcat_hotel.hotel.Room;
+import com.hotel.wildcat_hotel.service.GuestService;
+import com.hotel.wildcat_hotel.service.ReservationService;
+import com.hotel.wildcat_hotel.service.RoomService;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.event.ActionEvent;
-
-import com.hotel.wildcat_hotel.guests.GuestsController;
 
 public class CheckOutController {
 
@@ -27,13 +29,21 @@ public class CheckOutController {
     @FXML private TextField totalCostField;
     @FXML private Button    checkOutButton;
 
-    private static final String DB_URL  = "jdbc:mysql://localhost:3306/hoteldb";
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = "";
+    private RoomService roomService;
+    private ReservationService reservationService;
+    private GuestService guestService;
 
     // Holds loaded IDs for the checkout action
     private int loadedReservationId = -1;
     private int loadedRoomId        = -1;
+
+    @FXML
+    public void initialize() {
+        roomService = HotelApplicationContext.getDefault().getRoomService();
+        reservationService = HotelApplicationContext.getDefault().getReservationService();
+        guestService = HotelApplicationContext.getDefault().getGuestService();
+        checkOutButton.setDisable(true);
+    }
 
     @FXML
     void handleSearch(ActionEvent event) {
@@ -52,57 +62,36 @@ public class CheckOutController {
             return;
         }
 
-        String sql = """
-                SELECT
-                    res.reservationID,
-                    res.roomID,
-                    CONCAT(g.first_name, ' ', g.last_name) AS guest_full_name,
-                    DATE_FORMAT(res.check_in_date,  '%Y-%m-%d') AS checkin,
-                    DATE_FORMAT(res.check_out_date, '%Y-%m-%d') AS checkout,
-                    r.room_type AS room_type,
-                    r.room_capacity AS room_capacity,
-                    res.number_of_days AS number_of_days,
-                    res.total_cost AS total_cost
-                FROM reservation res
-                JOIN guest g ON g.guestID = res.guestID
-                JOIN room  r ON r.roomID  = res.roomID
-                WHERE res.roomID = ?
-                ORDER BY res.reservationID DESC
-                LIMIT 1
-                """;
-
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, roomId);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                loadedReservationId = rs.getInt("reservationID");
-                loadedRoomId        = rs.getInt("roomID");
-
-                guestNameField.setText(rs.getString("guest_full_name"));
-                checkInField  .setText(rs.getString("checkin"));
-                checkOutField .setText(rs.getString("checkout"));
-                roomTypeField.setText(rs.getString("room_type"));
-                roomCapacityField.setText(rs.getString("room_capacity"));
-                numberOfDaysField.setText(rs.getString("number_of_days"));
-                totalCostField.setText(String.format("₱%.2f", rs.getDouble("total_cost")));
-
-                checkOutButton.setDisable(false);
-            } else {
-                clearFields();
-                loadedReservationId = -1;
-                loadedRoomId        = -1;
-                checkOutButton.setDisable(true);
-                showAlert(AlertType.INFORMATION, "Not Found",
-                        "No active reservation found for Room ID: " + roomId);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert(AlertType.ERROR, "DB Error", "Could not search reservation: " + e.getMessage());
+        Optional<Reservation> maybeReservation = reservationService.findLatestByRoomId(roomId);
+        if (maybeReservation.isEmpty()) {
+            clearFields();
+            loadedReservationId = -1;
+            loadedRoomId = -1;
+            checkOutButton.setDisable(true);
+            showAlert(AlertType.INFORMATION, "Not Found",
+                    "No active reservation found for Room ID: " + roomId);
+            return;
         }
+
+        Reservation reservation = maybeReservation.get();
+        loadedReservationId = reservation.getReservationID();
+        loadedRoomId = reservation.getRoomID();
+
+        String guestName = guestService.getById(reservation.getGuestID())
+                .map(guest -> guest.getFirstName() + " " + guest.getLastName())
+                .orElse("");
+
+        Optional<Room> maybeRoom = roomService.getById(reservation.getRoomID());
+
+        guestNameField.setText(guestName);
+        checkInField.setText(reservation.getCheckInDate().toLocalDateTime().toLocalDate().toString());
+        checkOutField.setText(reservation.getCheckOutDate().toLocalDateTime().toLocalDate().toString());
+        roomTypeField.setText(maybeRoom.map(Room::getRoomType).orElse(""));
+        roomCapacityField.setText(maybeRoom.map(Room::getRoomCapacity).orElse(""));
+        numberOfDaysField.setText(String.valueOf(reservation.getNumberOfDays()));
+        totalCostField.setText(String.format("₱%.2f", reservation.getTotalCost()));
+
+        checkOutButton.setDisable(false);
     }
 
     @FXML
@@ -112,42 +101,32 @@ public class CheckOutController {
             return;
         }
 
-        String deleteResSql  = "DELETE FROM reservation WHERE reservationID = ?";
-        String updateRoomSql = "UPDATE room SET status = 'AVAILABLE' WHERE roomID = ?";
-
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
-
-            try (PreparedStatement ps = conn.prepareStatement(deleteResSql)) {
-                ps.setInt(1, loadedReservationId);
-                ps.executeUpdate();
-            }
-
-            if (loadedRoomId != -1) {
-                try (PreparedStatement ps = conn.prepareStatement(updateRoomSql)) {
-                    ps.setInt(1, loadedRoomId);
-                    ps.executeUpdate();
-                }
-            }
-
-            showAlert(AlertType.INFORMATION, "Check-Out Complete",
-                    "Guest has been successfully checked out from Room " + roomSearchField.getText().trim() + ".");
-
-            clearFields();
-            loadedReservationId = -1;
-            loadedRoomId        = -1;
-            checkOutButton.setDisable(true);
-            GuestsController.refreshOpenView();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert(AlertType.ERROR, "DB Error", "Could not complete check-out: " + e.getMessage());
+        boolean deleted = reservationService.delete(loadedReservationId);
+        if (!deleted) {
+            showAlert(AlertType.ERROR, "Check-Out Failed",
+                    "Unable to delete the reservation record for Room ID " + loadedRoomId + ".");
+            return;
         }
+
+        roomService.getById(loadedRoomId).ifPresent(room -> {
+            room.setStatus("AVAILABLE");
+            roomService.update(room);
+        });
+
+        showAlert(AlertType.INFORMATION, "Check-Out Complete",
+                "Guest has been successfully checked out from Room " + roomSearchField.getText().trim() + ".");
+
+        clearFields();
+        loadedReservationId = -1;
+        loadedRoomId = -1;
+        checkOutButton.setDisable(true);
+        GuestsController.refreshOpenView();
     }
 
     private void clearFields() {
         guestNameField.clear();
-        checkInField  .clear();
-        checkOutField .clear();
+        checkInField.clear();
+        checkOutField.clear();
         roomTypeField.clear();
         roomCapacityField.clear();
         numberOfDaysField.clear();
