@@ -10,6 +10,9 @@ import java.sql.Timestamp;
 @AttributeOverride(name = "entityId", column = @Column(name = "reservationID"))
 public class Reservation extends BaseEntity {
 
+    public static final String STATUS_ACTIVE = "Active";
+    public static final String STATUS_CANCELLED = "Cancelled";
+
     // FK → guest(guestID)
     @Column(name = "guestID", nullable = false)
     private int guestID;
@@ -33,6 +36,9 @@ public class Reservation extends BaseEntity {
     @Column(name = "total_cost", nullable = false)
     private double totalCost;
 
+    @Column(name = "status", nullable = false)
+    private String status = STATUS_ACTIVE;
+
     // ── Constructors ──────────────────────────────────────────────────────────
 
     public Reservation() {}
@@ -47,6 +53,7 @@ public class Reservation extends BaseEntity {
         this.numberOfDays = numberOfDays;
         this.totalCost    = totalCost;
         this.userID       = 0; // default (should be set by callers when a user is available)
+        this.status       = STATUS_ACTIVE;
     }
 
     public Reservation(int guestID, int roomID, int userID,
@@ -59,6 +66,20 @@ public class Reservation extends BaseEntity {
         this.checkOutDate = checkOutDate;
         this.numberOfDays = numberOfDays;
         this.totalCost    = totalCost;
+        this.status       = STATUS_ACTIVE;
+    }
+
+    public Reservation(int guestID, int roomID, int userID,
+                       Timestamp checkInDate, Timestamp checkOutDate,
+                       int numberOfDays, double totalCost, String status) {
+        this.guestID      = guestID;
+        this.roomID       = roomID;
+        this.userID       = userID;
+        this.checkInDate  = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.numberOfDays = numberOfDays;
+        this.totalCost    = totalCost;
+        setStatus(status);
     }
 
     // ── Getters ───────────────────────────────────────────────────────────────
@@ -71,6 +92,7 @@ public class Reservation extends BaseEntity {
     public Timestamp getCheckOutDate()  { return checkOutDate; }
     public int       getNumberOfDays()  { return numberOfDays; }
     public double    getTotalCost()     { return totalCost; }
+    public String    getStatus()        { return status; }
 
     // ── Setters ───────────────────────────────────────────────────────────────
 
@@ -82,6 +104,20 @@ public class Reservation extends BaseEntity {
     public void setCheckOutDate(Timestamp checkOutDate){ this.checkOutDate  = checkOutDate; }
     public void setNumberOfDays(int numberOfDays)     { this.numberOfDays  = numberOfDays; }
     public void setTotalCost(double totalCost)        { this.totalCost     = totalCost; }
+    public void setStatus(String status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Reservation status must not be null.");
+        }
+        if (STATUS_ACTIVE.equalsIgnoreCase(status)) {
+            this.status = STATUS_ACTIVE;
+            return;
+        }
+        if (STATUS_CANCELLED.equalsIgnoreCase(status)) {
+            this.status = STATUS_CANCELLED;
+            return;
+        }
+        throw new IllegalArgumentException("Reservation status must be Active or Cancelled.");
+    }
 
     // ── toString ──────────────────────────────────────────────────────────────
 
@@ -94,6 +130,7 @@ public class Reservation extends BaseEntity {
                 + ", checkIn=" + checkInDate
                 + ", checkOut=" + checkOutDate
                 + ", days=" + numberOfDays
+                + ", status=" + status
                 + ", total=₱" + totalCost + "}";
     }
 }

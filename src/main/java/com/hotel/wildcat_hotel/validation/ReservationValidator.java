@@ -25,5 +25,10 @@ public class ReservationValidator implements Validator<Reservation> {
         if (reservation.getTotalCost() < 0) {
             throw new IllegalArgumentException("Reservation total cost must not be negative.");
         }
+        if (reservation.getStatus() == null
+                || (!Reservation.STATUS_ACTIVE.equalsIgnoreCase(reservation.getStatus())
+                && !Reservation.STATUS_CANCELLED.equalsIgnoreCase(reservation.getStatus()))) {
+            throw new IllegalArgumentException("Reservation status must be Active or Cancelled.");
+        }
     }
 }

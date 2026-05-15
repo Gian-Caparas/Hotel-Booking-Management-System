@@ -17,9 +17,10 @@ public class ReservationRepository extends AbstractHibernateRepository<Reservati
         try (Session session = getSessionFactory().openSession()) {
             session.beginTransaction();
             Reservation reservation = session.createQuery(
-                            "from Reservation r where r.roomID = :roomId order by r.entityId desc",
+                            "from Reservation r where r.roomID = :roomId and r.status = :status order by r.entityId desc",
                             Reservation.class)
                     .setParameter("roomId", roomId)
+                    .setParameter("status", Reservation.STATUS_ACTIVE)
                     .setMaxResults(1)
                     .uniqueResult();
             session.getTransaction().commit();
@@ -31,9 +32,10 @@ public class ReservationRepository extends AbstractHibernateRepository<Reservati
         try (Session session = getSessionFactory().openSession()) {
             session.beginTransaction();
             Reservation reservation = session.createQuery(
-                            "from Reservation r where r.guestID = :guestId order by r.entityId desc",
+                            "from Reservation r where r.guestID = :guestId and r.status = :status order by r.entityId desc",
                             Reservation.class)
                     .setParameter("guestId", guestId)
+                    .setParameter("status", Reservation.STATUS_ACTIVE)
                     .setMaxResults(1)
                     .uniqueResult();
             session.getTransaction().commit();
@@ -45,9 +47,10 @@ public class ReservationRepository extends AbstractHibernateRepository<Reservati
         try (Session session = getSessionFactory().openSession()) {
             session.beginTransaction();
             Reservation reservation = session.createQuery(
-                            "from Reservation r where r.userID = :userId order by r.entityId desc",
+                            "from Reservation r where r.userID = :userId and r.status = :status order by r.entityId desc",
                             Reservation.class)
                     .setParameter("userId", userId)
+                    .setParameter("status", Reservation.STATUS_ACTIVE)
                     .setMaxResults(1)
                     .uniqueResult();
             session.getTransaction().commit();
@@ -55,16 +58,48 @@ public class ReservationRepository extends AbstractHibernateRepository<Reservati
         }
     }
 
-    public boolean deleteByIdAndUserId(int reservationId, int userId) {
+    public Optional<Reservation> findLatestByRoomIdAndUserId(int roomId, int userId) {
         try (Session session = getSessionFactory().openSession()) {
             session.beginTransaction();
-            int deleted = session.createMutationQuery(
-                            "delete from Reservation where entityId = :id and userID = :userId")
-                    .setParameter("id", reservationId)
+            Reservation reservation = session.createQuery(
+                            "from Reservation r where r.roomID = :roomId and r.userID = :userId and r.status = :status order by r.entityId desc",
+                            Reservation.class)
+                    .setParameter("roomId", roomId)
                     .setParameter("userId", userId)
+                    .setParameter("status", Reservation.STATUS_ACTIVE)
+                    .setMaxResults(1)
+                    .uniqueResult();
+            session.getTransaction().commit();
+            return Optional.ofNullable(reservation);
+        }
+    }
+
+    public boolean markCancelledById(int reservationId) {
+        try (Session session = getSessionFactory().openSession()) {
+            session.beginTransaction();
+            int updated = session.createMutationQuery(
+                            "update Reservation r set r.status = :cancelledStatus where r.entityId = :id and r.status = :activeStatus")
+                    .setParameter("cancelledStatus", Reservation.STATUS_CANCELLED)
+                    .setParameter("id", reservationId)
+                    .setParameter("activeStatus", Reservation.STATUS_ACTIVE)
                     .executeUpdate();
             session.getTransaction().commit();
-            return deleted > 0;
+            return updated > 0;
+        }
+    }
+
+    public boolean markCancelledByIdAndUserId(int reservationId, int userId) {
+        try (Session session = getSessionFactory().openSession()) {
+            session.beginTransaction();
+            int updated = session.createMutationQuery(
+                            "update Reservation r set r.status = :cancelledStatus where r.entityId = :id and r.userID = :userId and r.status = :activeStatus")
+                    .setParameter("cancelledStatus", Reservation.STATUS_CANCELLED)
+                    .setParameter("id", reservationId)
+                    .setParameter("userId", userId)
+                    .setParameter("activeStatus", Reservation.STATUS_ACTIVE)
+                    .executeUpdate();
+            session.getTransaction().commit();
+            return updated > 0;
         }
     }
 }

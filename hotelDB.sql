@@ -157,6 +157,7 @@ CREATE TABLE `reservation` (
   `check_out_date`  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `number_of_days`  INT          NOT NULL DEFAULT 1,
   `total_cost`      DOUBLE       NOT NULL DEFAULT 0,
+  `status`          ENUM('Active','Cancelled') NOT NULL DEFAULT 'Active',
   PRIMARY KEY (`reservationID`),
   CONSTRAINT `fk_reservation_user`
     FOREIGN KEY (`userID`) REFERENCES `user`(`userID`)

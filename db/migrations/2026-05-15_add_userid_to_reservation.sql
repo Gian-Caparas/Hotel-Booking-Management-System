@@ -23,7 +23,26 @@ PREPARE stmt FROM @add_col_sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- 2) Backfill userID for existing rows if needed
+-- 2) Add status column if missing
+SET @status_col_exists := (
+  SELECT COUNT(*)
+  FROM information_schema.COLUMNS
+  WHERE TABLE_SCHEMA = DATABASE()
+    AND TABLE_NAME = 'reservation'
+    AND COLUMN_NAME = 'status'
+);
+
+SET @add_status_col_sql := IF(
+  @status_col_exists = 0,
+  'ALTER TABLE `reservation` ADD COLUMN `status` ENUM("Active", "Cancelled") NOT NULL DEFAULT "Active" AFTER `total_cost`',
+  'SELECT "column status already exists"'
+);
+
+PREPARE stmt_status FROM @add_status_col_sql;
+EXECUTE stmt_status;
+DEALLOCATE PREPARE stmt_status;
+
+-- 3) Backfill userID for existing rows if needed
 -- Uses the first admin user as fallback owner for old historical rows.
 SET @fallback_user_id := (
     SELECT userID
@@ -37,7 +56,11 @@ SET `userID` = @fallback_user_id
 WHERE (`userID` IS NULL OR `userID` = 0)
   AND @fallback_user_id IS NOT NULL;
 
--- 3) Add FK if missing
+UPDATE `reservation`
+SET `status` = 'Active'
+WHERE `status` IS NULL OR `status` = '';
+
+-- 4) Add FK if missing
 SET @fk_exists := (
     SELECT COUNT(*)
     FROM information_schema.REFERENTIAL_CONSTRAINTS

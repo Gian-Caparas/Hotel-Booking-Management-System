@@ -27,7 +27,15 @@ public class ReservationService extends AbstractCrudService<Reservation> {
         return repository.findLatestByUserId(userId);
     }
 
-    public boolean deleteByIdAndUserId(int reservationId, int userId) {
-        return repository.deleteByIdAndUserId(reservationId, userId);
+    public Optional<Reservation> findLatestByRoomIdAndUserId(int roomId, int userId) {
+        return repository.findLatestByRoomIdAndUserId(roomId, userId);
+    }
+
+    public boolean cancelById(int reservationId) {
+        return repository.markCancelledById(reservationId);
+    }
+
+    public boolean cancelByIdAndUserId(int reservationId, int userId) {
+        return repository.markCancelledByIdAndUserId(reservationId, userId);
     }
 }

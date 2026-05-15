@@ -67,11 +67,8 @@ public class CancelBookingController {
         String role = getCurrentUserRole();
 
         if ("CUSTOMER".equalsIgnoreCase(role)) {
-            // Hide the search row entirely so it takes no space
-            searchRow.setVisible(false);
-            searchRow.setManaged(false);
-            // Auto-load the customer's own reservation
-            loadReservationForCurrentCustomer();
+            searchRow.setVisible(true);
+            searchRow.setManaged(true);
         }
         // Admin / Staff leave the view open — they must search manually
     }
@@ -79,6 +76,11 @@ public class CancelBookingController {
     // ── ADMIN / STAFF: search by Room ID ────────────────────────────
     @FXML
     private void handleSearch() {
+        if (LoginController.currentUser == null) {
+            showAlert(AlertType.WARNING, "Session Error", "No logged-in user.");
+            return;
+        }
+
         String roomIdText = roomIdSearchField.getText().trim();
 
         if (roomIdText.isEmpty()) {
@@ -91,6 +93,12 @@ public class CancelBookingController {
             roomId = Integer.parseInt(roomIdText);
         } catch (NumberFormatException e) {
             showAlert(AlertType.WARNING, "Invalid Input", "Room ID must be a number.");
+            return;
+        }
+
+        String role = getCurrentUserRole();
+        if ("CUSTOMER".equalsIgnoreCase(role)) {
+            loadReservationByRoomIdForCurrentCustomer(roomId);
             return;
         }
 
@@ -115,18 +123,21 @@ public class CancelBookingController {
         confirmCancelButton.setDisable(false);
     }
 
-    // ── CUSTOMER: auto-load their own latest reservation ────────────
-    private void loadReservationForCurrentCustomer() {
+    private void loadReservationByRoomIdForCurrentCustomer(int roomId) {
         if (LoginController.currentUser == null) {
             showAlert(AlertType.WARNING, "Session Error", "No logged-in user.");
             confirmCancelButton.setDisable(true);
             return;
         }
         int userId = LoginController.currentUser.getUserID();
-        Optional<Reservation> maybeReservation = reservationService.findLatestByUserId(userId);
+        Optional<Reservation> maybeReservation = reservationService.findLatestByRoomIdAndUserId(roomId, userId);
         if (maybeReservation.isEmpty()) {
-            showAlert(AlertType.INFORMATION, "No Booking", "You have no active reservation.");
+            clearFields();
+            loadedReservationId = -1;
+            loadedRoomId = -1;
             confirmCancelButton.setDisable(true);
+            showAlert(AlertType.INFORMATION, "No Booking",
+                    "No active reservation was found for your account and the selected Room ID.");
             return;
         }
 
@@ -167,9 +178,9 @@ public class CancelBookingController {
                 return;
             }
             int userId = LoginController.currentUser.getUserID();
-            deleted = reservationService.deleteByIdAndUserId(loadedReservationId, userId);
+            deleted = reservationService.cancelByIdAndUserId(loadedReservationId, userId);
         } else {
-            deleted = reservationService.delete(loadedReservationId);
+            deleted = reservationService.cancelById(loadedReservationId);
         }
         if (!deleted) {
             showAlert(AlertType.ERROR, "Cancellation Failed",
